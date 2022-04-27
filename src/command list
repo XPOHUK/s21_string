@@ -1,0 +1,18 @@
+9
+int strcmp(const char *str1, const char *str2)
+Compares the string pointed to, by str1 to the string pointed to by str2.
+
+
+10
+int strncmp(const char *str1, const char *str2, size_t n)
+Compares at most the first n bytes of str1 and str2.
+
+
+11
+char *strcpy(char *dest, const char *src)
+Copies the string pointed to, by src to dest.
+
+
+12
+char *strncpy(char *dest, const char *src, size_t n)
+Copies up to n characters from the string pointed to, by src to dest.
