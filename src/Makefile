@@ -13,9 +13,17 @@ s21_string.a: $(LIBOBJ)
 %.o: %.c
 	gcc $(CFLAGS) -c -o $@ $<
 
-test:
+test: test_memchr
 
-gcov_report:
+test_memchr: memchr_obj test_s21_memchr.o
+	gcc $(CFLAGS) s21_memchr.o test_s21_memchr.o -lcheck -lm -lpthread -lgcov -o $@
+	./$@
+
+memchr_obj: s21_memchr.c
+	gcc $(CFLAGS) -c -fprofile-arcs -ftest-coverage $<
+
+gcov_report: test
+	gcovr -r . --html --html-details -o coverage_report.html
 
 clean:
 	rm -f $(LIBOBJ) $(TESTOBJ)
