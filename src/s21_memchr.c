@@ -19,14 +19,14 @@ void *s21_memchr(const void *str, int c, size_t n) {
 }
 
 // Тест функции
-int main() {
-    char s[] = "21school";
-    char *ptr = s21_memchr(s, 's', sizeof(s));
-    if (ptr != NULL) {
-        printf("'s' found at position %ld\n", ptr - s + 1);
-        printf("search character found: %s\n", ptr);
-    } else {
-        printf("search character not found\n");
-    }
-    return 0;
-}
+// int main() {
+//    char s[] = "21school";
+//    char *ptr = s21_memchr(s, 's', sizeof(s));
+//    if (ptr != NULL) {
+//        printf("'s' found at position %ld\n", ptr - s + 1);
+//        printf("search character found: %s\n", ptr);
+//    } else {
+//        printf("search character not found\n");
+//    }
+//    return 0;
+//}

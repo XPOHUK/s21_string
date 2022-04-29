@@ -1,8 +1,8 @@
-#ifndef SRC_S21_STRING_H_
-#define SRC_S21_STRING_H_
-#endif  // SRC_S21_STRING_H_
+#ifndef _SRC_S21_STRING_H_
+#define _SRC_S21_STRING_H_
 
-#define NULL 0
+#include <stddef.h>
+//  #define NULL 0
 
 typedef long unsigned s21_size_t;
 
@@ -34,3 +34,5 @@ void *s21_to_upper(const char *str);
 void *s21_to_lower(const char *str);
 void *s21_insert(const char *src, const char *str, size_t start_index);
 void *s21_trim(const char *src, const char *trim_chars);
+
+#endif  // _SRC_S21_STRING_H_
