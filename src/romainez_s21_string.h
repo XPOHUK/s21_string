@@ -1,6 +1,6 @@
-#ifdef __ROMAINEZ_S21_STRING__
-#define __ROMAINEZ_S21_STRING__
+#ifndef SRC_ROMAINEZ_S21_STRING_H_
+#define SRC_ROMAINEZ_S21_STRING_H_
 
-int strcmp(const char *str1,const char *str2);
+int strcmp(const char *str1, const char *str2);
 
-#endif
+#endif  // SRC_ROMAINEZ_S21_STRING_H_
