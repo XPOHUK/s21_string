@@ -34,6 +34,18 @@ int s21_strncmp(const char *str1, const char *str2, size_t n) {
     return 0;
 }
 
+// Копирует строку, на которую указывает src в dest
+char *s21_strcpy(char *dest, const char *src) {
+    dest = (char *)dest;
+    src = (const char *)src;
+    int i = 0;
+    while (src[i] != '\0') {
+        dest[i] = src[i];
+        i++;
+    }
+    return (dest);
+}
+
 int main() {
 // Тест для функции s21_strcmp
     char str1[1024]= "school21";
@@ -53,5 +65,11 @@ int main() {
     } else {
         printf("Первые %d символов строк отличаются\n", n);
     }
+
+// Тест для функции s21_strcpy
+    char src[25] = "Hello world!";
+    char dest[25] = {0};
+    s21_strcpy(dest, src);
+    printf("%s\n", dest);
     return 0;
 }
