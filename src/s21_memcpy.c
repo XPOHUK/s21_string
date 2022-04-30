@@ -1,6 +1,5 @@
 // Copyright [2022] <isleanna>
-// #include "s21_string.h"
-#include <stdio.h>  // Библиотека для теста
+#include "s21_string.h"
 
 // Копирует n символов из src в dest.
 void *s21_memcpy(void *dest, const void *src, size_t n) {
@@ -16,13 +15,4 @@ void *s21_memcpy(void *dest, const void *src, size_t n) {
         i++;
     }
     return(dest);
-}
-
-// Тест функции
-int main() {
-    char s[25] = "Deadline is approaching!";
-    char d[25] = {0};
-    s21_memcpy(d, s, sizeof(s));
-    printf("%s\n", d);
-    return 0;
 }
