@@ -43,7 +43,7 @@ START_TEST(test_memcpy) {
     ck_assert_str_eq(s21_memcpy(d, s, 8), memcpy(d, s, 8));
 } END_TEST
 
-Suite *memchr_suite(void) {
+Suite *test_suite(void) {
     Suite *s;
     TCase *tc_memchr;
     TCase *tc_memcmp;
@@ -71,7 +71,7 @@ int main(void) {
     Suite *s;
     SRunner *runner;
 
-    s = memchr_suite();
+    s = test_suite();
     runner = srunner_create(s);
 
     srunner_run_all(runner, CK_VERBOSE); // CK_SILENT CK_MINIMAL CK_NORMAL CK_VERBOSE
