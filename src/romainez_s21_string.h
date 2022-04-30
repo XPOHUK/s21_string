@@ -8,5 +8,7 @@ int s21_strcmp(const char *str1, const char *str2);
 int s21_strncmp(const char *str1, const char *str2, size_t n);
 // Копирует строку, на которую указывает src, в dest
 char *s21_strcpy(char *dest, const char *src);
+// Копирует не более n символов строки, на которую указывает src в dest
+char *s21_strncpy(char *dest, const char *src, size_t n);
 
 #endif  // SRC_ROMAINEZ_S21_STRING_H_

@@ -46,6 +46,17 @@ char *s21_strcpy(char *dest, const char *src) {
     return (dest);
 }
 
+// Копирует не более n символов строки, на которую указывает src в dest
+char *s21_strncpy(char *dest, const char *src, size_t n) {
+    dest = (char *)dest;
+    src = (const char *)src;
+    size_t i = 0;
+    while (i < n) {
+        dest[i] = src[i];
+        i++;
+    }
+    return (dest);
+}
 int main() {
 // Тест для функции s21_strcmp
     char str1[1024]= "school21";
@@ -71,5 +82,12 @@ int main() {
     char dest[25] = {0};
     s21_strcpy(dest, src);
     printf("%s\n", dest);
+
+// Тест для функции s21_strncpy
+    char src1[25] = "Hello world!";
+    char dest1[25] = {0};
+    int n1 = 8;
+    s21_strncpy(dest1, src1, n1);
+    printf("%s\n", dest1);
     return 0;
 }
