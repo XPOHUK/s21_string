@@ -1,12 +1,7 @@
 #include "s21_string.h"
-#include <string.h>  // Удалить при начале разработки эту заглушку
 
 // Сравнивает первые n байтов str1 и str2.
 int s21_memcmp(const void *str1, const void *str2, size_t n) {
-<<<<<<< HEAD
-    return memcmp(*str1, *str2, n);  // Удалить при начале разработки эту заглушку
-}
-=======
     const unsigned char *p1;
     const unsigned char *p2;
     size_t i;
@@ -23,7 +18,6 @@ int s21_memcmp(const void *str1, const void *str2, size_t n) {
     return 0;
 }
 
-//// Тест функции
 //int main() {
 //    int result = 0;
 //    // If str1 and str2 are equal
@@ -37,4 +31,3 @@ int s21_memcmp(const void *str1, const void *str2, size_t n) {
 //    printf("result = %d\n", result);
 //    return 0;
 //}
->>>>>>> 09d9fb4 (Fix merge & working Makefile)

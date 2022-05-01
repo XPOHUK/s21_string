@@ -1,12 +1,9 @@
 #include "s21_string.h"
-#include <string.h>  // Удалить при начале разработки эту заглушку
+#include "s21_sprintf.h"
+#include <stdlib.h>
 
 // Отправляет форматированный вывод в строку, на которую указывает str.
 int s21_sprintf(char *str, const char *format, ...) {
-<<<<<<< HEAD
-    return sprintf(*str, *format, ...);  // Удалить при начале разработки эту заглушку
-}
-=======
     *str = '\0';
     while (*format != '\0') {
         if (*format != '%') {
@@ -50,5 +47,3 @@ fmt* _new_fmt() {
     s->specifier = 0;
     return s;
 }
-
->>>>>>> 09d9fb4 (Fix merge & working Makefile)

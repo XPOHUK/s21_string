@@ -1,12 +1,7 @@
 #include "s21_string.h"
-#include <string.h>  // Удалить при начале разработки эту заглушку
 
 // Еще одна функция для копирования n символов из str2 в str1.
 void *s21_memmove(void *dest, const void *src, size_t n) {
-<<<<<<< HEAD
-    *memmove(*dest, *src, n);  // Удалить при начале разработки эту заглушку
-}
-=======
     char *d;
     const char *s;
     size_t i;
@@ -31,7 +26,6 @@ void *s21_memmove(void *dest, const void *src, size_t n) {
     return (dest);
 }
 
-//// Тест функции
 //int main() {
 //    char str[42] = "I am relocating from California to Texas.";
 //    printf("Original:\t%s\n", str);
@@ -41,4 +35,3 @@ void *s21_memmove(void *dest, const void *src, size_t n) {
 //    printf("Result:\t\t%s\n", str);
 //    return 0;
 //}
->>>>>>> 09d9fb4 (Fix merge & working Makefile)
