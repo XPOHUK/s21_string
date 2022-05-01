@@ -1,6 +1,6 @@
 #include "s21_string.h"
 #include "s21_sprintf.h"
-#include <stdlib.h>  // Удалить при начале разработки эту заглушку
+#include <stdlib.h>
 
 // Отправляет форматированный вывод в строку, на которую указывает str.
 int s21_sprintf(char *str, const char *format, ...) {
