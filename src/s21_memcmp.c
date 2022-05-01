@@ -1,3 +1,4 @@
+// Copyright [2022] <isleanna>
 #include "s21_string.h"
 
 // Сравнивает первые n байтов str1 и str2.

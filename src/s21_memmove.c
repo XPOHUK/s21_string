@@ -1,3 +1,4 @@
+// Copyright [2022] <isleanna>
 #include "s21_string.h"
 
 // Еще одна функция для копирования n символов из str2 в str1.
