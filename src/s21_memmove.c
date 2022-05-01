@@ -1,6 +1,5 @@
 // Copyright [2022] <isleanna>
 #include "s21_string.h"
-#include <stdio.h>  // Библиотека для теста
 
 // Еще одна функция для копирования n символов из str2 в str1.
 void *s21_memmove(void *dest, const void *src, size_t n) {
@@ -28,13 +27,12 @@ void *s21_memmove(void *dest, const void *src, size_t n) {
     return (dest);
 }
 
-// Тест функции
-int main() {
-    char str[42] = "I am relocating from California to Texas.";
-    printf("Original:\t%s\n", str);
-    printf("Source:\t\t%s\n", str + 5);
-    printf("Destination:\t%s\n", str + 16);
-    s21_memmove(str + 16, str + 5, 37);
-    printf("Result:\t\t%s\n", str);
-    return 0;
-}
+//int main() {
+//    char str[42] = "I am relocating from California to Texas.";
+//    printf("Original:\t%s\n", str);
+//    printf("Source:\t\t%s\n", str + 5);
+//    printf("Destination:\t%s\n", str + 16);
+//    s21_memmove(str + 16, str + 5, 37);
+//    printf("Result:\t\t%s\n", str);
+//    return 0;
+//}
