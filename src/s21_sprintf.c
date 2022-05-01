@@ -4,6 +4,7 @@
 
 // Отправляет форматированный вывод в строку, на которую указывает str.
 int s21_sprintf(char *str, const char *format, ...) {
+    *str = '\0';
     while (*format != '\0') {
         if (*format != '%') {
             *str++ = *format++;
