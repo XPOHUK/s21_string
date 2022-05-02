@@ -1,6 +1,5 @@
 #include <check.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "s21_string.h"
 
@@ -43,11 +42,62 @@ START_TEST(test_memcpy) {
     ck_assert_str_eq(s21_memcpy(d, s, 8), memcpy(d, s, 8));
 } END_TEST
 
+START_TEST(test_strcmp) {
+    int result;
+    char *str1 = "school21";
+    char *str2 = "school21";
+    char *str3 = "school42";
+    extern int s21_strcmp(const char *str1, const char *str2);
+    
+    result = s21_strcmp(str1, str2);
+    ck_assert_int_eq(result, 0);
+    
+    result = s21_strcmp(str1, str3);
+    ck_assert_int_ne(result, 0);
+} END_TEST
+
+START_TEST(test_strncmp) {
+    int result;
+    char *str1 = "1234567890";
+    char *str2 = "1234507890";
+    int n1 = 5;
+    int n2 = 6;
+    
+    result = s21_strncmp(str1, str2, n1);
+    ck_assert_int_eq(result, 0);
+    
+    result = s21_strncmp(str1, str2, n2);
+    ck_assert_int_ne(result, 0);
+} END_TEST
+
+START_TEST(test_strcpy) {
+    char src[25] = "Hello world!";
+    char dest[25] = "";
+    char result[25] = "Hello world!";
+
+    s21_strcpy(dest, src);
+    ck_assert_str_eq(result, dest);
+} END_TEST
+
+START_TEST(test_strncpy) {
+    char src[25] = "Hello world!";
+    char dest[25] = "";
+    char result[25] = "Hello w";
+    int n = 7;
+    
+    s21_strncpy(dest, src, n);
+    ck_assert_str_eq(result, dest);
+} END_TEST
+
 Suite *test_suite(void) {
     Suite *s;
     TCase *tc_memchr;
     TCase *tc_memcmp;
     TCase *tc_memcpy;
+    TCase *tc_strcmp;
+    TCase *tc_strncmp;
+    TCase *tc_strcpy;
+    TCase *tc_strncpy;
 
     s = suite_create("String lib tests");
 
@@ -62,6 +112,22 @@ Suite *test_suite(void) {
     tc_memcpy = tcase_create("Memcpy");
     tcase_add_test(tc_memcpy, test_memcpy);
     suite_add_tcase(s, tc_memcpy);
+    
+    tc_strcmp = tcase_create("Strcmp");
+    tcase_add_test(tc_strcmp, test_strcmp);
+    suite_add_tcase(s, tc_strcmp);
+    
+    tc_strncmp = tcase_create("Strncmp");
+    tcase_add_test(tc_strncmp, test_strncmp);
+    suite_add_tcase(s, tc_strncmp);
+
+    tc_strcpy = tcase_create("Strcpy");
+    tcase_add_test(tc_strcpy, test_strcpy);
+    suite_add_tcase(s, tc_strcpy);
+    
+    tc_strncpy = tcase_create("Strncpy");
+    tcase_add_test(tc_strncpy, test_strncpy);
+    suite_add_tcase(s, tc_strncpy);
 
     return s;
 }
