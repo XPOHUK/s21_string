@@ -3,7 +3,10 @@
 
 #include <stdarg.h>
 
-typedef struct {
+typedef struct fmt{
+    fmt* next;
+    char* begin;
+    char* end;
     int flag_left;
     int flag_sign;
     int flag_space;
@@ -11,10 +14,11 @@ typedef struct {
     int precision;
     char length;
     char specifier;
-} fmt;
+} fmt_t;
 
-int _parse_fmt(fmt* parsed, char** from);
+int _parse_fmt(fmt* fmt, const char** from);
 fmt* _new_fmt();
+int _get_flags(fmt* fmt, const char** from);
 int _out_int(fmt* fmt, va_list ptr, char* str);
 int _out_float(fmt* fmt, va_list ptr, char* str);
 int _out_char(fmt* fmt, va_list ptr, char* str);
