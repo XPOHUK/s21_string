@@ -1,7 +1,20 @@
+// Copyright [2022] <romainez>
 #include "s21_string.h"
-#include <string.h>  // Удалить при начале разработки эту заглушку
 
 // Сравнивает не более первых n байтов str1 и str2.
 int s21_strncmp(const char *str1, const char *str2, size_t n) {
-    return strncmp(str1, str2, n);  // Удалить при начале разработки эту заглушку
+    const unsigned char *p1;
+    const unsigned char *p2;
+    size_t i;
+
+    p1 = (const unsigned char *)str1;
+    p2 = (const unsigned char *)str2;
+    i = 0;
+    while (i < n) {
+        if (p1[i] != p2[i]) {
+            return (p1[i] - p2[i]);
+        }
+        i++;
+    }
+    return 0;
 }

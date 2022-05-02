@@ -1,7 +1,14 @@
+// Copyright [2022] <romainez>
 #include "s21_string.h"
-#include <string.h>  // Удалить при начале разработки эту заглушку
 
 // Копирует до n символов из строки, на которую указывает src, в dest.
 char *s21_strncpy(char *dest, const char *src, size_t n) {
-    return strncpy(dest, src, n);  // Удалить при начале разработки эту заглушку
+    dest = (char *)dest;
+    src = (const char *)src;
+    size_t i = 0;
+    while (i < n) {
+        dest[i] = src[i];
+        i++;
+    }
+    return (dest);
 }
