@@ -3,7 +3,7 @@ LIBSRC = $(wildcard ./s21_*.c)
 LIBOBJ = $(LIBSRC:.c=.o)
 LIB = libs21_string.a
 
-all: s21_string.a test gcov_report
+all: s21_string.a cpplint test gcov_report
 
 s21_string.a: $(LIBOBJ)
 	ar rcs $(LIB) $(LIBOBJ)
@@ -18,11 +18,15 @@ test: tests_obj test_s21_string.o
 tests_obj: $(LIBSRC)
 	gcc $(CFLAGS) -c -fprofile-arcs -ftest-coverage $^
 
+cpplint: $(LIBSRC)
+	cp ../materials/linters/CPPLINT.cfg ./
+	python3 ../materials/linters/cpplint.py --extensions=c $^
+
 gcov_report: test
 	gcovr -r . --html --html-details -o coverage_report.html
 
 clean:
-	rm -f $(LIBOBJ) coverage* test *.gcda *.gcno test_s21_string.o 
+	rm -f $(LIBOBJ) coverage* test *.gcda *.gcno test_s21_string.o CPPLINT.cfg
 
 fclean: clean
 	rm -f $(LIB)

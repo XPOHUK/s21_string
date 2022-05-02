@@ -11,10 +11,10 @@ int s21_sprintf(char *str, const char *format, ...) {
         } else {
             fmt* fmt = _new_fmt();
             _parse_fmt(fmt, (char **)&format);
-            switch(fmt->specifier) {
+            switch (fmt->specifier) {
                 case 'd':
                 case 'i':
-                    //_out_int(&str, fmt);
+                    // _out_int(&str, fmt);
                     break;
                 case 'c':
                 case 's':
