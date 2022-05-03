@@ -1,3 +1,4 @@
+// Copyright [2022] <isleanna>
 #include "s21_string.h"
 #include <stdio.h>  // Библиотека для теста
 
