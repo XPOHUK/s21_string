@@ -17,12 +17,3 @@ void *s21_memcpy(void *dest, const void *src, size_t n) {
     }
     return (dest);
 }
-
-// Тест функции
-int main() {
-    char s[25] = "Deadline is approaching!";
-    char d[25] = {0};
-    s21_memcpy(d, s, sizeof(s));
-    printf("%s\n", d);
-    return 0;
-}
