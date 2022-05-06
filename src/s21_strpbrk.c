@@ -5,14 +5,12 @@
 // Находит первый символ в строке str1, который соответствует любому символу,
 // указанному в str2.
 char *s21_strpbrk(const char *str1, const char *str2) {
+    char *res;
+
     int i = 0;
     int j = 0;
     int pos = 0;
     int flag = 0;
-
-    if ((str1 == NULL) || (str2 == NULL)) {
-        return (NULL);
-    }
     while (*(str1 + i)) {
         i++;
     }
@@ -32,9 +30,9 @@ char *s21_strpbrk(const char *str1, const char *str2) {
         i++;
     }
     if (flag == 1) {
-        return ((char *)&str1[pos]);
+        res = ((char *)&str1[pos]);
     }
-    return (NULL);
+    return ((char *)res);
 }
 
 // Тест функции

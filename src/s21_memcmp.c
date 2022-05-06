@@ -10,11 +10,8 @@ int s21_memcmp(const void *str1, const void *str2, size_t n) {
     p1 = (const unsigned char *)str1;
     p2 = (const unsigned char *)str2;
     i = 0;
-    while (i < n) {
-        if (p1[i] != p2[i]) {
-            return (p1[i] - p2[i]);
-        }
+    while (i < n && p1[i] == p2[i]) {
         i++;
     }
-    return 0;
+    return (p1[i] - p2[i]);
 }
