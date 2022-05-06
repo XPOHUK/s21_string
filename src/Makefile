@@ -9,14 +9,14 @@ s21_string.a: $(LIBOBJ)
 	ar rcs $(LIB) $(LIBOBJ)
 
 %.o: %.c
-	gcc $(CFLAGS) -c -o $@ $<
+	gcc $(CFLAGS) -g -c -o $@ $<
 
 test: tests_obj test_s21_string.o
 	gcc $(CFLAGS) $(LIBOBJ) test_s21_string.o -lcheck -lm -lpthread -lgcov -o $@
 	./$@
 
 tests_obj: $(LIBSRC)
-	gcc $(CFLAGS) -c -fprofile-arcs -ftest-coverage $^
+	gcc $(CFLAGS) -c -g -fprofile-arcs -ftest-coverage $^
 
 cpplint: $(LIBSRC)
 	cp ../materials/linters/CPPLINT.cfg ./

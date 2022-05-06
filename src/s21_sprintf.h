@@ -16,11 +16,11 @@ typedef struct fmt {
     char specifier;
 } fmt_t;
 
-int _parse(const char *format, fmt_t** fmt);
+int _parse(const char* format, fmt_t** fmt);
 int _parse_fmt(fmt_t* fmt, const char** from);
 fmt_t* _new_fmt();
 int _get_flags(fmt_t* fmt, const char** from);
-int _do_output(char* str, const char *format, va_list p, fmt_t* fmt);
+int _do_output(char* str, const char* format, va_list p, fmt_t* fmt);
 char* _int_to_str(va_list p, fmt_t* fmt);
 char* _uint_to_str(va_list p, fmt_t* fmt);
 char* _float_to_str(va_list p, fmt_t* fmt);
@@ -28,5 +28,6 @@ char* _char_to_str(va_list p, fmt_t* fmt);
 char* _str_to_str(va_list p, fmt_t* fmt);
 char* _itoa(long long int i);
 double _round_double(double arg, int precision);
+void _clear_list(fmt_t* fmt);
 
-#endif // _SRC_S21_SPRINTF_H_ 
+#endif  // _SRC_S21_SPRINTF_H_
