@@ -10,10 +10,10 @@ START_TEST(test_memchr) {
     char *s = "21school";
     extern void *s21_memchr(const void *str, int c, size_t n);
 
-    ch = s21_memchr(s, 's', sizeof(s));
+    ch = s21_memchr(s, 's', strlen(s));
     ck_assert_str_eq(ch, "school");
     ck_assert_str_eq(ch, memchr(s, 's', 8));
-    ch = s21_memchr(s, 'k', sizeof(s));
+    ch = s21_memchr(s, 'k', strlen(s));
     ck_assert_pstr_eq(ch, NULL);
     ck_assert_pstr_eq(ch, memchr(s, 'k', 8));
 }
@@ -26,13 +26,13 @@ START_TEST(test_memcmp) {
     char *str3 = "42school";
     extern int s21_memcmp(const void *str1, const void *str2, size_t n);
 
-    result = s21_memcmp(str1, str2, sizeof(str1));
+    result = s21_memcmp(str1, str2, strlen(str1));
     ck_assert_int_eq(result, 0);
     ck_assert_int_eq(result, memcmp(str1, str2, 8));
-    result = s21_memcmp(str1, str3, sizeof(str1));
+    result = s21_memcmp(str1, str3, strlen(str1));
     ck_assert_int_lt(result, 0);
     ck_assert(result < 0 && memcmp(str1, str3, 8) < 0);
-    result = s21_memcmp(str3, str1, sizeof(str1));
+    result = s21_memcmp(str3, str1, strlen(str1));
     ck_assert_int_gt(result, 0);
     ck_assert(result > 0 && memcmp(str3, str1, 8) > 0);
 }
@@ -184,6 +184,14 @@ START_TEST(test_strrchr) {
 }
 END_TEST
 
+START_TEST(test_strchr) {
+    char *string = "Snickersnee";
+    char search_for = 'n';
+
+    ck_assert_str_eq(s21_strchr(string, search_for), strchr(string, search_for));
+}
+END_TEST
+
 START_TEST(test_sprintf) {
     char orig[100] = {0};
     char res[100] = {0};
@@ -271,6 +279,7 @@ Suite *test_suite(void) {
     TCase *tc_insert;
     TCase *tc_strpbrk;
     TCase *tc_strrchr;
+    TCase *tc_strchr;
     TCase *tc_sprintf;
 
     s = suite_create("String lib tests");
@@ -330,6 +339,10 @@ Suite *test_suite(void) {
     tc_strrchr = tcase_create("strrchr");
     tcase_add_test(tc_strrchr, test_strrchr);
     suite_add_tcase(s, tc_strrchr);
+    
+    tc_strchr = tcase_create("strchr");
+    tcase_add_test(tc_strchr, test_strchr);
+    suite_add_tcase(s, tc_strchr);
 
     tc_sprintf = tcase_create("sprintf");
     tcase_add_test(tc_sprintf, test_sprintf);
