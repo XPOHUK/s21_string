@@ -2,24 +2,6 @@
 #include "s21_string.h"
 #include <stdio.h>  // Библиотека для теста
 
-// Выполняет поиск первого вхождения символа c (беззнаковый тип) в строке,
-// на которую указывает аргумент str.
-char *s21_strchr(const char *str, int c) {
-    const char *first_occ;
-    unsigned char ch;
-
-    first_occ = NULL;
-    ch = c;
-    while (*str != '\0') {
-        if (*str == ch) {
-        first_occ = (char *)str;
-        break;
-        }
-        ++str;
-    }
-    return ((char *)first_occ);
-}
-
 // Находит первый символ в строке str1, который соответствует любому символу,
 // указанному в str2.
 char *s21_strpbrk(const char *str1, const char *str2) {

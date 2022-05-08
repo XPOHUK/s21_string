@@ -12,8 +12,9 @@ size_t s21_strcspn(const char *str1, const char *str2) {
     i = 0;
     for (s1 = str1; *s1 != '\0'; ++s1) {
         for (s2 = str2; *s2 != '\0'; ++s2) {
-        if (*s1 == *s2)
-            return (i);
+            if (*s1 == *s2) {
+                return (i);
+            }
         }
         ++i;
     }
