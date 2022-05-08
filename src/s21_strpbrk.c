@@ -2,50 +2,51 @@
 #include "s21_string.h"
 #include <stdio.h>  // Библиотека для теста
 
+// Выполняет поиск первого вхождения символа c (беззнаковый тип) в строке,
+// на которую указывает аргумент str.
+char *s21_strchr(const char *str, int c) {
+    const char *first_occ;
+    unsigned char ch;
+
+    first_occ = NULL;
+    ch = c;
+    while (*str != '\0') {
+        if (*str == ch) {
+        first_occ = (char *)str;
+        break;
+        }
+        ++str;
+    }
+    return ((char *)first_occ);
+}
+
 // Находит первый символ в строке str1, который соответствует любому символу,
 // указанному в str2.
 char *s21_strpbrk(const char *str1, const char *str2) {
-    char *res;
-
-    int i = 0;
-    int j = 0;
-    int pos = 0;
-    int flag = 0;
-    while (*(str1 + i)) {
-        i++;
-    }
-    pos = i;
-    i = 0;
-    while (*(str2 + i)) {
-        j = 0;
-        while (*(str1 + j)) {
-            if (str2[i] == str1[j]) {
-                if (j <= pos) {
-                    pos = j;
-                    flag = 1;
-                }
-            }
-            j++;
+    char *res = NULL;
+    while (*str1 != '\0') {
+        if (s21_strchr(str2, *str1)) {
+            res = ((char *)str1);
+            break;
+            } else {
+            ++str1;
         }
-        i++;
     }
-    if (flag == 1) {
-        res = ((char *)&str1[pos]);
-    }
-    return ((char *)res);
+    return (res);
 }
 
 // Тест функции
 int main() {
     char string[] = "Functions that will make our lives easier!";
-    char chars[] = "rsaf";
+    char chars[] = "rasf";
     printf("Find the first matching char in '%s'\n", string);
     printf("Chars '%s'\n", chars);
     char *ptr = s21_strpbrk(string, chars);
     if (ptr != NULL) {
         printf("The first matching char within the string is '%c'\n", *ptr);
+        printf("Found at %ld\n", ptr - string + 1);
     } else {
         printf("No matching chars were found within the string\n");
-        }
-        return 0;
+    }
+    return 0;
 }
