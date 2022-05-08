@@ -17,7 +17,7 @@ void *s21_memmove(void *dest, const void *src, size_t n) {
         }
         for (i = 0; i < n; ++i) {
             *(d + i) = *(tmp + i);
-            }
-            free(tmp);
-            return (dest);
+        }
+    free(tmp);
+    return (dest);
 }
