@@ -234,6 +234,7 @@ char *_char_to_str(va_list p, fmt_t *fmt) {
         res = (char *)str;
         res = res + sizeof(wint_t);
         *res = '\0';
+        res = (char *)str;
     } else {
         res = malloc(sizeof(char) * 2);
         res[0] = va_arg(p, int);
