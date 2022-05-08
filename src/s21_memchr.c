@@ -5,7 +5,7 @@
 // в первых n байтах строки, на которую указывает аргумент str.
 void *s21_memchr(const void *str, int c, size_t n) {
     unsigned char *p;
-    unsigned char *res;
+    unsigned char *res = NULL;
     size_t i;
 
     i = 0;

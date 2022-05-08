@@ -144,6 +144,46 @@ START_TEST(test_strncpy) {
 }
 END_TEST
 
+START_TEST(test_strlen) {
+    char str[25] = "Hello world!";
+
+    ck_assert_int_eq(s21_strlen(str), strlen(str));
+}
+END_TEST
+
+START_TEST(test_strcspn) {
+    char str[25] = "Hello world!";
+    char rej[5] = "ab cd";
+
+    ck_assert_int_eq(s21_strcspn(str, rej), strcspn(str, rej));
+}
+END_TEST
+
+START_TEST(test_insert) {
+    char string[41] = "Error. Press F1 to continue";
+    char to_insert[20] = "No keyboard. ";
+    char expected[100] = "Error. No keyboard. Press F1 to continue";
+
+    ck_assert_str_eq(expected, s21_insert(string, to_insert, 7));
+}
+END_TEST
+
+START_TEST(test_strpbrk) {
+    char string[] = "Functions that will make our lives easier!";
+    char chars[] = "rsaf";
+
+    ck_assert_str_eq(s21_strpbrk(string, chars), strpbrk(string, chars));
+}
+END_TEST
+
+START_TEST(test_strrchr) {
+    char *string = "Snickersnee";
+    char search_for = 'n';
+
+    ck_assert_str_eq(s21_strrchr(string, search_for), strrchr(string, search_for));
+}
+END_TEST
+
 START_TEST(test_sprintf) {
     char orig[100] = {0};
     char res[100] = {0};
@@ -226,6 +266,11 @@ Suite *test_suite(void) {
     TCase *tc_strncmp;
     TCase *tc_strcpy;
     TCase *tc_strncpy;
+    TCase *tc_strlen;
+    TCase *tc_strcspn;
+    TCase *tc_insert;
+    TCase *tc_strpbrk;
+    TCase *tc_strrchr;
     TCase *tc_sprintf;
 
     s = suite_create("String lib tests");
@@ -265,6 +310,26 @@ Suite *test_suite(void) {
     tc_strncpy = tcase_create("Strncpy");
     tcase_add_test(tc_strncpy, test_strncpy);
     suite_add_tcase(s, tc_strncpy);
+
+    tc_strlen = tcase_create("strlen");
+    tcase_add_test(tc_strlen, test_strlen);
+    suite_add_tcase(s, tc_strlen);
+
+    tc_strcspn = tcase_create("strcspn");
+    tcase_add_test(tc_strcspn, test_strcspn);
+    suite_add_tcase(s, tc_strcspn);
+
+    tc_insert = tcase_create("insert");
+    tcase_add_test(tc_insert, test_insert);
+    suite_add_tcase(s, tc_insert);
+
+    tc_strpbrk = tcase_create("strpbrk");
+    tcase_add_test(tc_strpbrk, test_strpbrk);
+    suite_add_tcase(s, tc_strpbrk);
+
+    tc_strrchr = tcase_create("strrchr");
+    tcase_add_test(tc_strrchr, test_strrchr);
+    suite_add_tcase(s, tc_strrchr);
 
     tc_sprintf = tcase_create("sprintf");
     tcase_add_test(tc_sprintf, test_sprintf);

@@ -1,5 +1,6 @@
 // Copyright [2022] <isleanna>
-// #include "s21_string.h"
+#include <stdlib.h>
+#include "s21_string.h"
 
 // Еще одна функция для копирования n символов из str2 в str1.
 void *s21_memmove(void *dest, const void *src, size_t n) {
