@@ -233,6 +233,12 @@ START_TEST(test_sprintf) {
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
+    s21_sprintf(res, "%% %5.2u %-5.2u %%", 123, 123);
+    sprintf(orig, "%% %5.2u %-5.2u %%", 123, 123);
+    ck_assert_str_eq(res, orig);
+
+    memset(orig, 0, sizeof(orig));
+    memset(res, 0, sizeof(res));
     s21_sprintf(res, "%f %-f %+f % f", 1.123f, 1.123f, 1.123f, 1.123f);
     sprintf(orig, "%f %-f %+f % f", 1.123f, 1.123f, 1.123f, 1.123f);
     ck_assert_str_eq(res, orig);
@@ -259,6 +265,24 @@ START_TEST(test_sprintf) {
     memset(res, 0, sizeof(res));
     s21_sprintf(res, "%10s %-10.s %10.2s %10.0s", "-1.123f", "-1.123f", "-1.125f", "-1.123f");
     sprintf(orig, "%10s %-10.s %10.2s %10.0s", "-1.123f", "-1.123f", "-1.125f", "-1.123f");
+    ck_assert_str_eq(res, orig);
+
+    memset(orig, 0, sizeof(orig));
+    memset(res, 0, sizeof(res));
+    s21_sprintf(res, "%c %-c", 'a', 'b');
+    sprintf(orig, "%c %-c", 'a', 'b');
+    ck_assert_str_eq(res, orig);
+
+    memset(orig, 0, sizeof(orig));
+    memset(res, 0, sizeof(res));
+    s21_sprintf(res, "%5c %-5c %-5lc", 'a', 'b', L'c');
+    sprintf(orig, "%5c %-5c %-5lc", 'a', 'b', L'c');
+    ck_assert_str_eq(res, orig);
+
+    memset(orig, 0, sizeof(orig));
+    memset(res, 0, sizeof(res));
+    s21_sprintf(res, "Test string");
+    sprintf(orig, "Test string");
     ck_assert_str_eq(res, orig);
 }
 END_TEST
@@ -339,7 +363,7 @@ Suite *test_suite(void) {
     tc_strrchr = tcase_create("strrchr");
     tcase_add_test(tc_strrchr, test_strrchr);
     suite_add_tcase(s, tc_strrchr);
-    
+
     tc_strchr = tcase_create("strchr");
     tcase_add_test(tc_strchr, test_strchr);
     suite_add_tcase(s, tc_strchr);
