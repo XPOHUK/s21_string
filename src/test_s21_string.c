@@ -192,6 +192,26 @@ START_TEST(test_strchr) {
 }
 END_TEST
 
+START_TEST(test_to_upper) {
+    char str[] = "this is sparta!";
+    char *expected = "THIS IS SPARTA!";
+    char str2[] = "";
+
+    ck_assert_pstr_eq(s21_to_upper(str), expected);
+    ck_assert_pstr_eq(s21_to_upper(str2), NULL);
+}
+END_TEST
+
+START_TEST(test_to_lower) {
+    char str[] = "THIS IS SPARTA!";
+    char *expected = "this is sparta!";
+    char str2[] = "";
+
+    ck_assert_pstr_eq(s21_to_lower(str), expected);
+    ck_assert_pstr_eq(s21_to_lower(str2), NULL);
+}
+END_TEST
+
 START_TEST(test_sprintf) {
     char orig[100] = {0};
     char res[100] = {0};
@@ -251,14 +271,14 @@ START_TEST(test_sprintf) {
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%10f %-10.f %+10.2f % 10.0f", 1.123f, 1.123f, 1.125f, 1.123f);
-    sprintf(orig, "%10f %-10.f %+10.2f % 10.0f", 1.123f, 1.123f, 1.125f, 1.123f);
+    s21_sprintf(res, "%10f %-10.f %+10.2f % 10.0f", 1.123f, 1.523f, 1.125f, 1.123f);
+    sprintf(orig, "%10f %-10.f %+10.2f % 10.0f", 1.123f, 1.523f, 1.125f, 1.123f);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%10f %-10.f %+10.2f % 10.0f", -1.123f, -1.123f, -1.125f, -1.123f);
-    sprintf(orig, "%10f %-10.f %+10.2f % 10.0f", -1.123f, -1.123f, -1.125f, -1.123f);
+    s21_sprintf(res, "%10f %-10.f %+10.2f % 10.0f", -1.123f, -2.123f, -1.125f, -1.123f);
+    sprintf(orig, "%10f %-10.f %+10.2f % 10.0f", -1.123f, -2.123f, -1.125f, -1.123f);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
@@ -304,6 +324,8 @@ Suite *test_suite(void) {
     TCase *tc_strpbrk;
     TCase *tc_strrchr;
     TCase *tc_strchr;
+    TCase *tc_to_upper;
+    TCase *tc_to_lower;
     TCase *tc_sprintf;
 
     s = suite_create("String lib tests");
@@ -367,6 +389,14 @@ Suite *test_suite(void) {
     tc_strchr = tcase_create("strchr");
     tcase_add_test(tc_strchr, test_strchr);
     suite_add_tcase(s, tc_strchr);
+
+    tc_to_upper = tcase_create("to_upper");
+    tcase_add_test(tc_to_upper, test_to_upper);
+    suite_add_tcase(s, tc_to_upper);
+
+    tc_to_lower = tcase_create("to_lower");
+    tcase_add_test(tc_to_lower, test_to_lower);
+    suite_add_tcase(s, tc_to_lower);
 
     tc_sprintf = tcase_create("sprintf");
     tcase_add_test(tc_sprintf, test_sprintf);
