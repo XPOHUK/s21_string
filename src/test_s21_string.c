@@ -226,6 +226,17 @@ START_TEST(test_to_lower) {
 }
 END_TEST
 
+START_TEST(test_strstr) {
+    char *haystack = "This is Sparta!";
+    char *haystack2 = "";
+    char *needle = "is S";
+    char *needle2 = "is S";
+
+    ck_assert_pstr_eq(s21_strstr(haystack, needle), strstr(haystack, needle));
+    ck_assert_pstr_eq(s21_strstr(haystack, needle2), strstr(haystack, needle2));
+    ck_assert_pstr_eq(s21_strstr(haystack2, needle), strstr(haystack2, needle));
+}
+
 START_TEST(test_sprintf) {
     char orig[100] = {0};
     char res[100] = {0};
@@ -341,6 +352,7 @@ Suite *test_suite(void) {
     TCase *tc_strchr;
     TCase *tc_to_upper;
     TCase *tc_to_lower;
+    TCase *tc_strstr;
     TCase *tc_sprintf;
 
     s = suite_create("String lib tests");
@@ -416,6 +428,10 @@ Suite *test_suite(void) {
     tc_to_lower = tcase_create("to_lower");
     tcase_add_test(tc_to_lower, test_to_lower);
     suite_add_tcase(s, tc_to_lower);
+
+    tc_strstr = tcase_create("strstr");
+    tcase_add_test(tc_strstr, test_strstr);
+    suite_add_tcase(s, tc_strstr);
 
     tc_sprintf = tcase_create("sprintf");
     tcase_add_test(tc_sprintf, test_sprintf);
