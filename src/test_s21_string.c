@@ -162,6 +162,17 @@ START_TEST(test_strcspn) {
 }
 END_TEST
 
+START_TEST(test_strspn) {
+    char str[25] = "Hello world!";
+    char acc[5] = "eollH";
+    char empty[] = "";
+
+    ck_assert_int_eq(s21_strspn(str, acc), strspn(str, acc));
+    ck_assert_int_eq(s21_strspn(empty, acc), strspn(empty, acc));
+    ck_assert_int_eq(s21_strspn(str, empty), strspn(str, empty));
+}
+END_TEST
+
 START_TEST(test_insert) {
     char string[41] = "Error. Press F1 to continue";
     char to_insert[20] = "No keyboard. ";
@@ -323,6 +334,7 @@ Suite *test_suite(void) {
     TCase *tc_strncpy;
     TCase *tc_strlen;
     TCase *tc_strcspn;
+    TCase *tc_strspn;
     TCase *tc_insert;
     TCase *tc_strpbrk;
     TCase *tc_strrchr;
@@ -376,6 +388,10 @@ Suite *test_suite(void) {
     tc_strcspn = tcase_create("strcspn");
     tcase_add_test(tc_strcspn, test_strcspn);
     suite_add_tcase(s, tc_strcspn);
+
+    tc_strspn = tcase_create("strspn");
+    tcase_add_test(tc_strspn, test_strspn);
+    suite_add_tcase(s, tc_strspn);
 
     tc_insert = tcase_create("insert");
     tcase_add_test(tc_insert, test_insert);
