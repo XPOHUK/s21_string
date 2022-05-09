@@ -237,6 +237,14 @@ START_TEST(test_strstr) {
     ck_assert_pstr_eq(s21_strstr(haystack2, needle), strstr(haystack2, needle));
 }
 
+START_TEST(test_strcat) {
+    char dst[100] = "Hello";
+    char dst2[100] = "Hello";
+    char *src = " World!";
+
+    ck_assert_str_eq(s21_strcat(dst, src), strcat(dst2, src));
+}
+
 START_TEST(test_sprintf) {
     char orig[100] = {0};
     char res[100] = {0};
@@ -266,14 +274,18 @@ START_TEST(test_sprintf) {
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%5.2ld %-5.2ld %+5.2ld % 5.2ld", (long int)123, (long int)123, (long int)123, (long int)123);
-    sprintf(orig, "%5.2ld %-5.2ld %+5.2ld % 5.2ld", (long int)123, (long int)123, (long int)123, (long int)123);
+    s21_sprintf(res, "%5.2ld %-5.2ld %+5.2ld % 5.2ld", (long int)123, (long int)123, (long int)123,
+                (long int)123);
+    sprintf(orig, "%5.2ld %-5.2ld %+5.2ld % 5.2ld", (long int)123, (long int)123, (long int)123,
+            (long int)123);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%5.2hd %-5.2hd %+5.2hd % 5.2hd", (short int)123, (short int)123, (short int)123, (short int)123);
-    sprintf(orig, "%5.2hd %-5.2hd %+5.2hd % 5.2hd", (short int)123, (short int)123, (short int)123, (short int)123);
+    s21_sprintf(res, "%5.2hd %-5.2hd %+5.2hd % 5.2hd", (short int)123, (short int)123, (short int)123,
+                (short int)123);
+    sprintf(orig, "%5.2hd %-5.2hd %+5.2hd % 5.2hd", (short int)123, (short int)123, (short int)123,
+            (short int)123);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
@@ -353,6 +365,7 @@ Suite *test_suite(void) {
     TCase *tc_to_upper;
     TCase *tc_to_lower;
     TCase *tc_strstr;
+    TCase *tc_strcat;
     TCase *tc_sprintf;
 
     s = suite_create("String lib tests");
@@ -432,6 +445,10 @@ Suite *test_suite(void) {
     tc_strstr = tcase_create("strstr");
     tcase_add_test(tc_strstr, test_strstr);
     suite_add_tcase(s, tc_strstr);
+
+    tc_strcat = tcase_create("strcat");
+    tcase_add_test(tc_strcat, test_strcat);
+    suite_add_tcase(s, tc_strcat);
 
     tc_sprintf = tcase_create("sprintf");
     tcase_add_test(tc_sprintf, test_sprintf);
