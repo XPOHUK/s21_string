@@ -236,6 +236,7 @@ START_TEST(test_strstr) {
     ck_assert_pstr_eq(s21_strstr(haystack, needle2), strstr(haystack, needle2));
     ck_assert_pstr_eq(s21_strstr(haystack2, needle), strstr(haystack2, needle));
 }
+END_TEST
 
 START_TEST(test_strcat) {
     char dst[100] = "Hello";
@@ -244,6 +245,16 @@ START_TEST(test_strcat) {
 
     ck_assert_str_eq(s21_strcat(dst, src), strcat(dst2, src));
 }
+END_TEST
+
+START_TEST(test_strncat) {
+    char dst[100] = "Hello";
+    char dst2[100] = "Hello";
+    char *src = " World!";
+
+    ck_assert_str_eq(s21_strncat(dst, src, 3), strncat(dst2, src, 3));
+}
+END_TEST
 
 START_TEST(test_sprintf) {
     char orig[100] = {0};
@@ -366,6 +377,7 @@ Suite *test_suite(void) {
     TCase *tc_to_lower;
     TCase *tc_strstr;
     TCase *tc_strcat;
+    TCase *tc_strncat;
     TCase *tc_sprintf;
 
     s = suite_create("String lib tests");
@@ -449,6 +461,10 @@ Suite *test_suite(void) {
     tc_strcat = tcase_create("strcat");
     tcase_add_test(tc_strcat, test_strcat);
     suite_add_tcase(s, tc_strcat);
+
+    tc_strncat = tcase_create("strncat");
+    tcase_add_test(tc_strncat, test_strncat);
+    suite_add_tcase(s, tc_strncat);
 
     tc_sprintf = tcase_create("sprintf");
     tcase_add_test(tc_sprintf, test_sprintf);
