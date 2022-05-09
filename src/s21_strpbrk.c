@@ -13,5 +13,5 @@ char *s21_strpbrk(const char *str1, const char *str2) {
             ++str1;
         }
     }
-    return (res);
+    return ((char *)res);
 }

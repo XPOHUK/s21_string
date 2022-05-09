@@ -26,7 +26,7 @@ void *s21_insert(const char *src, const char *str, size_t start_index) {
     } else if (start_index == 0) {
         result = str;
     }
-    return (void *)result;
+    return ((void *)result);
 }
 
 // Тест функции

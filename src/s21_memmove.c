@@ -18,5 +18,5 @@ void *s21_memmove(void *dest, const void *src, size_t n) {
             *(d + i) = *(tmp + i);
         }
     free(tmp);
-    return (dest);
+    return ((void *)dest);
 }
