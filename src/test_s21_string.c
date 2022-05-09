@@ -154,8 +154,11 @@ END_TEST
 START_TEST(test_strcspn) {
     char str[25] = "Hello world!";
     char rej[5] = "ab cd";
+    char empty[] = "";
 
     ck_assert_int_eq(s21_strcspn(str, rej), strcspn(str, rej));
+    ck_assert_int_eq(s21_strcspn(empty, rej), strcspn(empty, rej));
+    ck_assert_int_eq(s21_strcspn(str, empty), strcspn(str, empty));
 }
 END_TEST
 
