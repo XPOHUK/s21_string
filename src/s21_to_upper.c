@@ -11,7 +11,12 @@ void *s21_to_upper(const char *str) {
         if (*copy >= 'a' && *copy <= 'z') {
             *copy = *copy - 32;
         }
-        ++copy;
+        ++to_upper;
     }
-    return ((void *)start);
+
+    const char *result = NULL;
+    if (s21_strlen(str) > 0) {
+        result = str;
+    }
+    return (void *)result;
 }

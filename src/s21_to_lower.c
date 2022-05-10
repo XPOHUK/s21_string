@@ -11,7 +11,12 @@ void *s21_to_lower(const char *str) {
         if (*copy >= 'A' && *copy <= 'Z') {
             *copy = *copy + 32;
         }
-        ++copy;
+        ++to_lower;
     }
-    return ((void *)start);
+
+    const char *result = NULL;
+    if (s21_strlen(str) > 0) {
+        result = str;
+    }
+    return (void *)result;
 }
