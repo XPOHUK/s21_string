@@ -1,7 +1,13 @@
+// Copyright [2022] <isleanna>
 #include "s21_string.h"
-#include <string.h>  // Удалить при начале разработки эту заглушку
 
 // Вычисляет длину строки str, не включая завершающий нулевой символ.
 size_t s21_strlen(const char *str) {
-    return strlen(str);  // Удалить при начале разработки эту заглушку
+    size_t i;
+
+    i = 0;
+    while (str[i] != '\0') {
+        i++;
+    }
+    return (i);
 }

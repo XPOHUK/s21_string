@@ -1,13 +1,22 @@
+// Copyright [2022] <isleanna>
 #include "s21_string.h"
 
 // Возвращает копию строки (str), преобразованной в верхний регистр.
 // В случае какой-либо ошибки следует вернуть значение NULL
 void *s21_to_upper(const char *str) {
-    // При начале разработки содержимое функции, которое ниже
+    char *to_upper;
+
+    to_upper = (char *)str;
+    while (*to_upper != '\0') {
+        if (*to_upper >= 'a' && *to_upper <= 'z') {
+            *to_upper = *to_upper - 32;
+        }
+        ++to_upper;
+    }
+
     const char *result = NULL;
     if (s21_strlen(str) > 0) {
         result = str;
     }
     return (void *)result;
-    // При начале разработки содержимое функции, которое выше
 }
