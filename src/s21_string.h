@@ -2,6 +2,7 @@
 #define _SRC_S21_STRING_H_
 
 #include <stddef.h>
+#include <stdlib.h>
 
 typedef long unsigned s21_size_t;
 

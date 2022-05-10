@@ -6,17 +6,19 @@
 void *s21_to_upper(const char *str) {
     char *copy = malloc(s21_strlen(str) + 1);
     char *start = copy;
+    char *end = copy + s21_strlen(str);
+    *end = '\0';
     s21_strcpy(copy, str);
     while (*copy != '\0') {
         if (*copy >= 'a' && *copy <= 'z') {
             *copy = *copy - 32;
         }
-        ++to_upper;
+        ++copy;
     }
-
     const char *result = NULL;
     if (s21_strlen(str) > 0) {
-        result = str;
+        result = start;
     }
     return (void *)result;
+    free(start);
 }
