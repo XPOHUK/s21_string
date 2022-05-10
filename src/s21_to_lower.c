@@ -5,6 +5,7 @@
 // В случае какой-либо ошибки следует вернуть значение NULL
 void *s21_to_lower(const char *str) {
     char *copy = malloc(s21_strlen(str) + 1);
+    char *start = copy;
     s21_strcpy(copy, str);
     while (*copy != '\0') {
         if (*copy >= 'A' && *copy <= 'Z') {
@@ -12,5 +13,5 @@ void *s21_to_lower(const char *str) {
         }
         ++copy;
     }
-    return ((void *)copy);
+    return ((void *)start);
 }
