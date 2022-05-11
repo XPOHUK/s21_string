@@ -329,11 +329,11 @@ START_TEST(test_sprintf) {
     sprintf(orig, "%10f %-10.f %+10.2f % 10.0f", -1.123f, -2.123f, -1.125f, -1.123f);
     ck_assert_str_eq(res, orig);
 
-//    memset(orig, 0, sizeof(orig));
-//    memset(res, 0, sizeof(res));
-//    s21_sprintf(res, "%10s %-10.s %10.2s %10.0s", "-1.123f", "-1.123f", "-1.125f", "-1.123f");
-//    sprintf(orig, "%10s %-10.s %10.2s %10.0s", "-1.123f", "-1.123f", "-1.125f", "-1.123f");
-//    ck_assert_str_eq(res, orig);
+    memset(orig, 0, sizeof(orig));
+    memset(res, 0, sizeof(res));
+    s21_sprintf(res, "%10s %-10.s %10.2s %10.0s", "-1.123f", "-1.123f", "-1.125f", "-1.123f");
+    sprintf(orig, "%10s %-10.s %10.2s %10.0s", "-1.123f", "-1.123f", "-1.125f", "-1.123f");
+    ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
