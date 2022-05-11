@@ -10,5 +10,6 @@ char *s21_strcpy(char *dest, const char *src) {
         dest[i] = src[i];
         i++;
     }
+    dest[i] = '\0';
     return (dest);
 }
