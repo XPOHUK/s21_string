@@ -211,8 +211,12 @@ START_TEST(test_to_upper) {
     char *expected = "THIS IS SPARTA!";
     char str2[] = "";
 
-    ck_assert_pstr_eq(s21_to_upper(str), expected);
-    ck_assert_pstr_eq(s21_to_upper(str2), NULL);
+    char *res1 = s21_to_upper(str);
+    char *res2 = s21_to_upper(str2);
+    ck_assert_pstr_eq(res1, expected);
+    ck_assert_pstr_eq(res2, "");
+    if (res1) free(res1);
+    if (res2) free(res2);
 }
 END_TEST
 
@@ -221,8 +225,12 @@ START_TEST(test_to_lower) {
     char *expected = "this is sparta!";
     char str2[] = "";
 
-    ck_assert_pstr_eq(s21_to_lower(str), expected);
-    ck_assert_pstr_eq(s21_to_lower(str2), NULL);
+    char *res1 = s21_to_lower(str);
+    char *res2 = s21_to_lower(str2);
+    ck_assert_pstr_eq(res1, expected);
+    ck_assert_pstr_eq(res2, "");
+    if (res1) free(res1);
+    if (res2) free(res2);
 }
 END_TEST
 
@@ -481,6 +489,7 @@ int main(void) {
     s = test_suite();
     runner = srunner_create(s);
 
+    srunner_set_fork_status(runner, CK_NOFORK);
     srunner_run_all(runner, CK_VERBOSE);  // CK_SILENT CK_MINIMAL CK_NORMAL CK_VERBOSE
     no_failed = srunner_ntests_failed(runner);
     srunner_free(runner);
