@@ -1,12 +1,12 @@
-#include "s21_string.h"
 #include <stdarg.h>
 
+#include "s21_string.h"
 
 // Считывает форматированный ввод из строки.
 int s21_sscanf(const char *str, const char *format, ...) {
     va_list args;
-    char *specs[1000];
-    char *temp;
+    char *specs[1000] = {0};
+    char *temp = NULL;
     int args_count = 0;
     int start = 0;
     int result = 0;

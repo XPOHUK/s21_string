@@ -172,7 +172,7 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
         // Копируем обычные символы до формата
         s21_strncat(str, format, fmt->begin - format);
         format = fmt->end + 1;
-        char *to_append;
+        char *to_append = NULL;
         if (fmt->end - fmt->begin == 1 && fmt->specifier == '0') {
             to_append = malloc(sizeof(char) * 2);
             to_append[0] = '%';
@@ -200,8 +200,7 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
                 // Добавить пробелы слева или справа
                 int spaces_len = fmt->width - s21_strlen(to_append);
                 char *spaces = malloc(sizeof(char) * (spaces_len + 1));
-                for (int i = 0; i < spaces_len; i++)
-                    spaces[i] = ' ';
+                for (int i = 0; i < spaces_len; i++) spaces[i] = ' ';
                 spaces[spaces_len] = '\0';
                 char *new_str = malloc(sizeof(char) * (fmt->width + 1));
                 new_str[0] = '\0';
@@ -252,10 +251,8 @@ char *_int_to_str(va_list p, fmt_t *fmt) {
     }
     char *str = (arg < 0) ? _itoa(-arg) : _itoa(arg);
     int len = s21_strlen(str);
-    if (fmt->precision > len)
-        len = len + (fmt->precision - len);
-    if ((arg >= 0 && (fmt->flag_sign || fmt->flag_space)) || arg < 0)
-        len++;
+    if (fmt->precision > len) len = len + (fmt->precision - len);
+    if ((arg >= 0 && (fmt->flag_sign || fmt->flag_space)) || arg < 0) len++;
     char *res = malloc(sizeof(char) * (len + 1));
     *res = '\0';
     if (arg < 0) {
@@ -269,8 +266,7 @@ char *_int_to_str(va_list p, fmt_t *fmt) {
     }
     // Записать нули если надо
     if (fmt->precision > (int)s21_strlen(str)) {
-        for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++)
-            s21_strcat(res, "0");
+        for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
     }
     s21_strcat(res, str);
     free(str);
@@ -286,13 +282,11 @@ char *_uint_to_str(va_list p, fmt_t *fmt) {
     }
     char *str = _itoa(arg);
     int len = s21_strlen(str);
-    if (fmt->precision > len)
-        len = len + (fmt->precision - len);
+    if (fmt->precision > len) len = len + (fmt->precision - len);
     char *res = malloc(sizeof(char) * (len + 1));
     *res = '\0';
     if (fmt->precision > (int)s21_strlen(str)) {
-        for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++)
-            s21_strcat(res, "0");
+        for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
     }
     s21_strcat(res, str);
     free(str);
@@ -331,8 +325,7 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
     char *float_part_str = NULL;
     if (precision != 0) {
         float_part = float_part * pow(10, precision);
-        float_part_str =
-            (float_part >= 0) ? _itoa((int)float_part) : _itoa((int)-float_part);
+        float_part_str = (float_part >= 0) ? _itoa((int)float_part) : _itoa((int)-float_part);
         len += s21_strlen(float_part_str) + 1;
     }
     char *res = malloc(sizeof(char) * (len + 2));

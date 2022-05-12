@@ -1,5 +1,5 @@
 CFLAGS = -Wall -Wextra -Werror
-LIBSRC = $(wildcard ./s21_*.c)
+LIBSRC = $(wildcard s21_*.c)
 LIBOBJ = $(LIBSRC:.c=.o)
 LIB = libs21_string.a
 
@@ -9,14 +9,14 @@ s21_string.a: $(LIBOBJ)
 	ar rcs $(LIB) $(LIBOBJ)
 
 %.o: %.c
-	gcc $(CFLAGS) -g -c -o $@ $<
+	gcc $(CFLAGS) -c -o $@ $<
 
 test: tests_obj test_s21_string.o
 	gcc $(CFLAGS) $(LIBOBJ) test_s21_string.o -lcheck -lm -lpthread -lgcov -o $@
 	./$@
 
 tests_obj: $(LIBSRC)
-	gcc $(CFLAGS) -c -g -fprofile-arcs -ftest-coverage $^
+	gcc $(CFLAGS) -O2 -std=c11 -pedantic -Wno-stringop-truncation -ftrapv -Wfloat-equal -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $^
 
 cpplint: $(LIBSRC)
 	cp ../materials/linters/CPPLINT.cfg ./
