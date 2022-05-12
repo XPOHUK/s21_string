@@ -3,22 +3,6 @@
 #include <stdio.h>  // Библиотека для теста
 #include <stdlib.h>  // Библиотека для теста
 
-size_t s21_strlen(const char *str) {
-    size_t i;
-
-    i = 0;
-    while (str[i] != '\0') {
-        i++;
-    }
-    return (i);
-}
-
-char *s21_strchr(const char *str, int c) {
-    while (*str != '\0' && *str != (char)c)
-        str++;
-    return (*str == '\0' && (char)c != '\0') ? NULL : (char*)str;
-}
-
 // Возвращает новую строку, в которой удаляются все начальные и конечные
 // вхождения набора заданных символов (trim_chars) из данной строки (src).
 // В случае какой-либо ошибки следует вернуть значение NULL
