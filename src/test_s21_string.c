@@ -264,6 +264,16 @@ START_TEST(test_strncat) {
 }
 END_TEST
 
+START_TEST(test_strtok) {
+    char p[15] = "VK is Bad Guy";
+    char exp[15] = "VK is Bad Guy";
+    char *delim = "B";
+
+    ck_assert_pstr_eq(s21_strtok(p, delim), strtok(exp, delim));
+    ck_assert_pstr_eq(s21_strtok(NULL, delim), strtok(NULL, delim));
+}
+END_TEST
+
 START_TEST(test_sprintf) {
     char orig[100] = {0};
     char res[100] = {0};
@@ -386,6 +396,7 @@ Suite *test_suite(void) {
     TCase *tc_strstr;
     TCase *tc_strcat;
     TCase *tc_strncat;
+    TCase *tc_strtok;
     TCase *tc_sprintf;
 
     s = suite_create("String lib tests");
@@ -473,6 +484,10 @@ Suite *test_suite(void) {
     tc_strncat = tcase_create("strncat");
     tcase_add_test(tc_strncat, test_strncat);
     suite_add_tcase(s, tc_strncat);
+
+    tc_strtok = tcase_create("strtok");
+    tcase_add_test(tc_strtok, test_strtok);
+    suite_add_tcase(s, tc_strtok);
 
     tc_sprintf = tcase_create("sprintf");
     tcase_add_test(tc_sprintf, test_sprintf);
