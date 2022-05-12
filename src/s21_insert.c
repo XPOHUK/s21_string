@@ -12,7 +12,7 @@ void *s21_insert(const char *src, const char *str, size_t start_index) {
     *(res + start_index) = '\0';
     s21_strcat(res, str);
     s21_strcat(res, src + start_index);
-    return ((void *)res);
+    return (res);
 }
 
 // Тест функции

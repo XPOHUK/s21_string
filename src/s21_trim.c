@@ -22,7 +22,7 @@ void *s21_trim(const char *src, const char *trim_chars) {
         res[i++] = src[lead++];
     }
     res[i] = '\0';
-    return ((void *)res);
+    return (res);
 }
 
 // Тест функции
