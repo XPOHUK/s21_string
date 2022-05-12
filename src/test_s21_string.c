@@ -274,6 +274,13 @@ START_TEST(test_strtok) {
 }
 END_TEST
 
+START_TEST(test_trim) {
+    char string[] = "./Nincompooper";
+    char trim_chars[] = "re/.";
+
+    ck_assert_str_eq(s21_trim(string, trim_chars), "Nincompoop");
+}
+
 START_TEST(test_sprintf) {
     char orig[100] = {0};
     char res[100] = {0};
@@ -397,6 +404,7 @@ Suite *test_suite(void) {
     TCase *tc_strcat;
     TCase *tc_strncat;
     TCase *tc_strtok;
+    TCase *tc_trim;
     TCase *tc_sprintf;
 
     s = suite_create("String lib tests");
@@ -488,6 +496,10 @@ Suite *test_suite(void) {
     tc_strtok = tcase_create("strtok");
     tcase_add_test(tc_strtok, test_strtok);
     suite_add_tcase(s, tc_strtok);
+
+    tc_trim = tcase_create("trim");
+    tcase_add_test(tc_trim, test_trim);
+    suite_add_tcase(s, tc_trim);
 
     tc_sprintf = tcase_create("sprintf");
     tcase_add_test(tc_sprintf, test_sprintf);
