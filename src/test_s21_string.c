@@ -178,7 +178,9 @@ START_TEST(test_insert) {
     char to_insert[20] = "No keyboard. ";
     char expected[100] = "Error. No keyboard. Press F1 to continue";
 
-    ck_assert_str_eq(expected, s21_insert(string, to_insert, 7));
+    char *res = s21_insert(string, to_insert, 7);
+    ck_assert_str_eq(expected, res);
+    if (res) free(res);
 }
 END_TEST
 
@@ -278,7 +280,9 @@ START_TEST(test_trim) {
     char string[] = "./Nincompooper";
     char trim_chars[] = "re/.";
 
-    ck_assert_str_eq(s21_trim(string, trim_chars), "Nincompoop");
+    char *res = s21_trim(string, trim_chars);
+    ck_assert_str_eq(res, "Nincompoop");
+    if (res) free(res);
 }
 
 START_TEST(test_sprintf) {
