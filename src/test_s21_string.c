@@ -269,9 +269,11 @@ END_TEST
 START_TEST(test_strtok) {
     char p[15] = "VK is Bad Guy";
     char exp[15] = "VK is Bad Guy";
-    char *delim = "B";
+    char *delim = "Visay";
 
     ck_assert_pstr_eq(s21_strtok(p, delim), strtok(exp, delim));
+    ck_assert_pstr_eq(s21_strtok(NULL, delim), strtok(NULL, delim));
+    ck_assert_pstr_eq(s21_strtok(NULL, delim), strtok(NULL, delim));
     ck_assert_pstr_eq(s21_strtok(NULL, delim), strtok(NULL, delim));
 }
 END_TEST
