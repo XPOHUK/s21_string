@@ -3,10 +3,10 @@
 
 // Выполняет поиск первого вхождения символа c (беззнаковый тип)
 // в первых n байтах строки, на которую указывает аргумент str.
-void *s21_memchr(const void *str, int c, size_t n) {
+void *s21_memchr(const void *str, int c, s21_size_t n) {
     unsigned char *p;
     unsigned char *res = NULL;
-    size_t i;
+    s21_size_t i;
 
     i = 0;
     p = (unsigned char *)str;
