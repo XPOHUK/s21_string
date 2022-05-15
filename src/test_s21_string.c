@@ -8,7 +8,7 @@
 START_TEST(test_memchr) {
     char *ch;
     char *s = "21school";
-    extern void *s21_memchr(const void *str, int c, size_t n);
+    extern void *s21_memchr(const void *str, int c, s21_size_t n);
 
     ch = s21_memchr(s, 's', strlen(s));
     ck_assert_str_eq(ch, "school");
@@ -24,7 +24,7 @@ START_TEST(test_memcmp) {
     char *str1 = "21school";
     char *str2 = "21school";
     char *str3 = "42school";
-    extern int s21_memcmp(const void *str1, const void *str2, size_t n);
+    extern int s21_memcmp(const void *str1, const void *str2, s21_size_t n);
 
     result = s21_memcmp(str1, str2, strlen(str1));
     ck_assert_int_eq(result, 0);
@@ -42,7 +42,7 @@ START_TEST(test_memcpy) {
     char *s = "Deadline is approaching!";
     char d[25] = {0};
     char e[25] = {0};
-    extern void *s21_memcpy(void *dest, const void *src, size_t n);
+    extern void *s21_memcpy(void *dest, const void *src, s21_size_t n);
 
     ck_assert_str_eq(s21_memcpy(d, s, 8), memcpy(e, s, 8));
 }
@@ -53,7 +53,7 @@ START_TEST(test_memmove) {
     char dst1[15] = "";
     char dst2[15] = "";
     int n = 5;
-    extern void *s21_memmove(void *dest, const void *src, size_t n);
+    extern void *s21_memmove(void *dest, const void *src, s21_size_t n);
 
     ck_assert_str_eq(s21_memmove(dst1, src, n), memmove(dst2, src, n));
 
@@ -74,7 +74,7 @@ START_TEST(test_memset) {
     char array2[5] = "ABCD";
     char expected[5] = "000D";
     int n = 3;
-    extern void *s21_memset(void *str, int c, size_t n);
+    extern void *s21_memset(void *str, int c, s21_size_t n);
 
     s21_memset(array, '0', n);
     ck_assert_str_eq(expected, array);
@@ -105,7 +105,7 @@ START_TEST(test_strncmp) {
     char *str2 = "1234507890";
     int n1 = 5;
     int n2 = 6;
-    extern int s21_strncmp(const char *str1, const char *str2, size_t n);
+    extern int s21_strncmp(const char *str1, const char *str2, s21_size_t n);
 
     result = s21_strncmp(str1, str2, n1);
     ck_assert_int_eq(result, 0);
@@ -136,7 +136,7 @@ START_TEST(test_strncpy) {
     char res[25] = {0};
     char expected[25] = "Hello w";
     int n = 7;
-    extern char *s21_strncpy(char *dest, const char *src, size_t n);
+    extern char *s21_strncpy(char *dest, const char *src, s21_size_t n);
 
     s21_strncpy(dest, src, n);
     ck_assert_str_eq(expected, dest);
