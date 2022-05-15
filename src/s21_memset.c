@@ -3,9 +3,9 @@
 
 // Копирует символ c (беззнаковый тип) в первые n символов строки,
 // на которую указывает аргумент str.
-void *s21_memset(void *str, int c, size_t n) {
+void *s21_memset(void *str, int c, s21_size_t n) {
     char *p;
-    size_t i;
+    s21_size_t i;
 
     p = str;
     i = 0;
