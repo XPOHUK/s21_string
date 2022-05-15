@@ -196,7 +196,7 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
                     to_append = _float_to_str(p, fmt);
                     break;
             }
-            if (fmt->width != 0 && (size_t)fmt->width > s21_strlen(to_append)) {
+            if (fmt->width != 0 && (s21_size_t)fmt->width > s21_strlen(to_append)) {
                 // Добавить пробелы слева или справа
                 int spaces_len = fmt->width - s21_strlen(to_append);
                 char *spaces = malloc(sizeof(char) * (spaces_len + 1));
