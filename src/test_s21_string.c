@@ -13,9 +13,10 @@ START_TEST(test_memchr) {
     ch = s21_memchr(s, 's', strlen(s));
     ck_assert_str_eq(ch, "school");
     ck_assert_str_eq(ch, memchr(s, 's', 8));
-    ch = s21_memchr(s, 'k', strlen(s));
+    ch = s21_memchr(s, 'k', 10);
     ck_assert_pstr_eq(ch, NULL);
-    ck_assert_pstr_eq(ch, memchr(s, 'k', 8));
+    ck_assert_pstr_eq(ch, memchr(s, 'k', 9));
+    // ck_assert_pstr_eq(s21_memchr(NULL, 'k', 10), memchr(NULL, 'k', 10));
 }
 END_TEST
 
@@ -35,6 +36,9 @@ START_TEST(test_memcmp) {
     result = s21_memcmp(str3, str1, strlen(str1));
     ck_assert_int_gt(result, 0);
     ck_assert(result > 0 && memcmp(str3, str1, 8) > 0);
+    result = s21_memcmp(str1, str3, 0);
+    ck_assert_int_eq(result, 0);
+    ck_assert_int_eq(result, memcmp(str1, str3, 0));
 }
 END_TEST
 
