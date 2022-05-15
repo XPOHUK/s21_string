@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdlib.h>
 
 #include "s21_string.h"
 
@@ -377,8 +376,8 @@ START_TEST(test_sprintf) {
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%10s %-10.s %10.2s %10.0s", "-1.123f", "-1.123f", "-1.125f", "-1.123f");
-    sprintf(orig, "%10s %-10.s %10.2s %10.0s", "-1.123f", "-1.123f", "-1.125f", "-1.123f");
+    s21_sprintf(res, "%10s %-10.s %10.2s %10.0s %d", "-1.123f", "-1.123f", "-1.125f", "-1.123f", 5);
+    sprintf(orig, "%10s %-10.s %10.2s %10.0s %d", "-1.123f", "-1.123f", "-1.125f", "-1.123f", 5);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
