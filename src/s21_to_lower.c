@@ -4,16 +4,17 @@
 // Возвращает копию строки (str), преобразованной в нижний регистр.
 // В случае какой-либо ошибки следует вернуть значение NULL
 void *s21_to_lower(const char *str) {
-    char *copy = malloc(s21_strlen(str) + 1);
-    char *res = copy;
-    if (copy) {
-        s21_strcpy(copy, str);
-        while (*copy != '\0') {
-            if (*copy >= 'A' && *copy <= 'Z') {
-                *copy = *copy + 32;
+    char *res = NULL;
+    if (str) {
+        res = malloc(s21_strlen(str) + 1);
+        if (res) {
+            s21_strcpy(res, str);
+            for (char *to_lower = res; *to_lower; ++to_lower) {
+                if (*to_lower >= 65 && *to_lower <= 90) {
+                    *to_lower = *to_lower + 32;
+                }
             }
-            ++copy;
         }
     }
-    return res;
+    return (res);
 }
