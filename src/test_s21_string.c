@@ -278,6 +278,16 @@ START_TEST(test_strtok) {
 }
 END_TEST
 
+START_TEST(test_strerror) {
+    int errno = 0;
+    int ERRMAX = 100;
+    while (errno < ERRMAX) {
+        ck_assert_str_eq(strerror(errno), s21_strerror(errno));
+        errno++;
+    }
+}
+END_TEST
+
 START_TEST(test_trim) {
     char string[] = "./Nincompooper";
     char trim_chars[] = "re/.";
@@ -411,6 +421,7 @@ Suite *test_suite(void) {
     TCase *tc_strncat;
     TCase *tc_strtok;
     TCase *tc_trim;
+    TCase *tc_strerror;
     TCase *tc_sprintf;
 
     s = suite_create("String lib tests");
@@ -443,11 +454,11 @@ Suite *test_suite(void) {
     tcase_add_test(tc_strncmp, test_strncmp);
     suite_add_tcase(s, tc_strncmp);
 
-    tc_strcpy = tcase_create("Strcpy");
+    tc_strcpy = tcase_create("strcpy");
     tcase_add_test(tc_strcpy, test_strcpy);
     suite_add_tcase(s, tc_strcpy);
 
-    tc_strncpy = tcase_create("Strncpy");
+    tc_strncpy = tcase_create("strncpy");
     tcase_add_test(tc_strncpy, test_strncpy);
     suite_add_tcase(s, tc_strncpy);
 
@@ -502,6 +513,10 @@ Suite *test_suite(void) {
     tc_strtok = tcase_create("strtok");
     tcase_add_test(tc_strtok, test_strtok);
     suite_add_tcase(s, tc_strtok);
+
+    tc_strerror = tcase_create("strerror");
+    tcase_add_test(tc_strerror, test_strerror);
+    suite_add_tcase(s, tc_strerror);
 
     tc_trim = tcase_create("trim");
     tcase_add_test(tc_trim, test_trim);

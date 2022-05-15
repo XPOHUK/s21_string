@@ -1,12 +1,18 @@
-#include "s21_string.h"
-#include <string.h>  // Удалить при начале разработки эту заглушку
+#include "s21_strerror.h"
 
-// Выполняет поиск во внутреннем массиве номера ошибки errnum
-// и возвращает указатель на строку с сообщением об ошибке.
-// Нужно объявить макросы, содержащие массивы сообщений об ошибке
-// для операционных систем mac и linux.
-// Описания ошибок есть в оригинальной библиотеке.
-// Проверка текущей ОС осуществляется с помощью директив.
+#include <string.h>
+#include <errno.h>
+#include <stdio.h>
+
+#include "s21_string.h"
+
+char message[MAX_MESSAGE];
+
 char *s21_strerror(int errnum) {
-    return strerror(errnum);  // Удалить при начале разработки эту заглушку
+    if ((errnum > 0) && (errnum <= ERRMAX)) {
+        s21_strcpy(message, errors[errnum]);
+    } else {
+        s21_sprintf(message, "Undefined error: %d", errnum);
+    }
+    return message;
 }
