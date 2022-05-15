@@ -5,7 +5,7 @@
 
 #ifdef __linux__
 
-#define ERRMAX 134
+#define ERRMAX 135
 
 #define EPERM 1            /* Operation not permitted */
 #define ENOENT 2           /* No such file or directory */
@@ -274,7 +274,8 @@ const char *errors[ERRMAX] = {"Success",
                               "Owner died",
                               "State not recoverable",
                               "Operation not possible due to RF-kill",
-                              "Memory page has hardware error"};
+                              "Memory page has hardware error",
+                              "Unknown error"};
 
 #else  //  MacOS
 
@@ -495,7 +496,8 @@ const char *errors[ERRMAX] = {"Undefined error: 0",
                               "Policy not found",
                               "State not recoverable",
                               "Previous owner died",
-                              "Interface output queue is full"};
+                              "Interface output queue is full",
+                              "Unknown error:"};
 
 #endif  //  __linux__
 
