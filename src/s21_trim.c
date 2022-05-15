@@ -6,10 +6,10 @@
 // вхождения набора заданных символов (trim_chars) из данной строки (src).
 // В случае какой-либо ошибки следует вернуть значение NULL
 void *s21_trim(const char *src, const char *trim_chars) {
-    size_t lead = 0;
-    size_t trail = s21_strlen(src);
+    s21_size_t lead = 0;
+    s21_size_t trail = s21_strlen(src);
     char *res = NULL;
-    size_t i = 0;
+    s21_size_t i = 0;
     while (src[lead] && s21_strchr(trim_chars, src[lead])) {
         lead++;
     }

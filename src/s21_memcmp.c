@@ -2,10 +2,10 @@
 #include "s21_string.h"
 
 // Сравнивает первые n байтов str1 и str2.
-int s21_memcmp(const void *str1, const void *str2, size_t n) {
+int s21_memcmp(const void *str1, const void *str2, s21_size_t n) {
     const unsigned char *p1;
     const unsigned char *p2;
-    size_t i;
+    s21_size_t i;
 
     p1 = (const unsigned char *)str1;
     p2 = (const unsigned char *)str2;
