@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "s21_string.h"
 
@@ -280,7 +281,7 @@ END_TEST
 
 START_TEST(test_strerror) {
     int errno = 0;
-    int ERRMAX = 100;
+    int ERRMAX = 150;
     while (errno < ERRMAX) {
         ck_assert_str_eq(strerror(errno), s21_strerror(errno));
         errno++;
