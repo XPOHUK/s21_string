@@ -1,5 +1,5 @@
-#ifndef _SRC_S21_STRING_H_
-#define _SRC_S21_STRING_H_
+#ifndef SRC_S21_STRING_H_
+#define SRC_S21_STRING_H_
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -27,7 +27,6 @@ s21_size_t s21_strspn(const char *str1, const char *str2);
 char *s21_strstr(const char *haystack, const char *needle);
 char *s21_strtok(char *str, const char *delim);
 
-int s21_sscanf(const char *str, const char *format, ...);
 int s21_sprintf(char *str, const char *format, ...);
 
 void *s21_to_upper(const char *str);
@@ -35,4 +34,4 @@ void *s21_to_lower(const char *str);
 void *s21_insert(const char *src, const char *str, s21_size_t start_index);
 void *s21_trim(const char *src, const char *trim_chars);
 
-#endif  // _SRC_S21_STRING_H_
+#endif  // SRC_S21_STRING_H_
