@@ -11,7 +11,7 @@ void *s21_memmove(void *dest, const void *src, s21_size_t n) {
 
     d = (char *)dest;
     s = (const char *)src;
-    tmp  = (char *)malloc(sizeof(char ) * n);
+    tmp  = malloc(sizeof(char) * n);
     for (i = 0; i < n; ++i) {
         *(tmp + i) = *(s + i);
         }
@@ -19,5 +19,5 @@ void *s21_memmove(void *dest, const void *src, s21_size_t n) {
             *(d + i) = *(tmp + i);
         }
     free(tmp);
-    return ((void *)dest);
+    return (dest);
 }
