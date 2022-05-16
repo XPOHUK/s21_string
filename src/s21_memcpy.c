@@ -14,5 +14,5 @@ void *s21_memcpy(void *dest, const void *src, s21_size_t n) {
         dest2[i] = src2[i];
         i++;
     }
-    return ((void *)dest);
+    return (dest);
 }
