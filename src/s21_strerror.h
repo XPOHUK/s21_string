@@ -279,7 +279,7 @@ const char *errors[ERRMAX] = {"Success",
 
 #else  //  MacOS
 
-#define ERRMAX 107
+#define ERRMAX 108
 
 #define EPERM 1             /* Operation not permitted */
 #define ENOENT 2            /* No such file or directory */

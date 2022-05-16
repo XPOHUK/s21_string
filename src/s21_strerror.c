@@ -7,7 +7,7 @@ char *s21_strerror(int errnum) {
     if ((errnum >= 0) && (errnum < ERRMAX - 1)) {
         s21_strcpy(message, errors[errnum]);
     } else {
-        s21_sprintf(message, "%s %d", errors[134], errnum);
+        s21_sprintf(message, "%s %d", errors[ERRMAX - 1], errnum);
     }
     return message;
 }
