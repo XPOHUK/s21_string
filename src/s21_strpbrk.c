@@ -7,11 +7,11 @@ char *s21_strpbrk(const char *str1, const char *str2) {
     char *res = NULL;
     while (*str1 != '\0') {
         if (s21_strchr(str2, *str1)) {
-            res = ((char *)str1);
+            res = (char *)str1;
             break;
-            } else {
+        } else {
             ++str1;
         }
     }
-    return ((char *)res);
+    return (res);
 }
