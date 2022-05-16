@@ -7,7 +7,7 @@ int s21_strcmp(const char *str1, const char *str2) {
     const char *p = str1;
     const char *q = str2;
     while (*p == *q) {
-        if (*p == '\0') {
+        if (*p == '\0' && *q == '\0') {
             return 0;
         }
         p++;

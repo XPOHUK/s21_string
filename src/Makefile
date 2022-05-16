@@ -32,5 +32,5 @@ fclean: clean
 	rm -f $(LIB)
 
 rebuild:
-	make -B all
+	make -B
 
