@@ -1,5 +1,5 @@
-#ifndef _SRC_S21_STRERROR_H_
-#define _SRC_S21_STRERROR_H_
+#ifndef SRC_S21_STRERROR_H_
+#define SRC_S21_STRERROR_H_
 
 #define MAX_MESSAGE 200
 
@@ -501,4 +501,4 @@ const char *errors[ERRMAX] = {"Undefined error: 0",
 
 #endif  //  __linux__
 
-#endif  // _SRC_S21_STRERROR_H_
+#endif  // SRC_S21_STRERROR_H_

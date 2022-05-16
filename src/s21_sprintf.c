@@ -141,14 +141,12 @@ int _get_flags(fmt_t *fmt, const char **from) {
                 fmt->flag_space = 0;
             } else {
                 res = 1;
-                break;
             }
         } else if (**from == '-') {
             if (fmt->flag_left == 0) {
                 fmt->flag_left = 1;
             } else {
                 res = 1;
-                break;
             }
         } else {
             if (fmt->flag_space == 0) {
@@ -157,9 +155,10 @@ int _get_flags(fmt_t *fmt, const char **from) {
                 }
             } else {
                 res = 1;
-                break;
             }
         }
+        if (res == 1)
+            break;
         (*from)++;
     }
     return res;

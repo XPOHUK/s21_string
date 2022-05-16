@@ -1,9 +1,4 @@
 #include "s21_strerror.h"
-
-#include <errno.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "s21_string.h"
 
 char message[MAX_MESSAGE];

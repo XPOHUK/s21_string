@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #include "s21_string.h"
 
 START_TEST(test_memchr) {
     char *ch;
     char *s = "21school";
-    extern void *s21_memchr(const void *str, int c, s21_size_t n);
 
     ch = s21_memchr(s, 's', strlen(s));
     ck_assert_str_eq(ch, "school");
@@ -90,7 +90,7 @@ START_TEST(test_strcmp) {
     int result;
     char *str1 = "school21";
     char *str2 = "school21";
-    char *str3 = "school42";
+    char *str3 = "school211";
     extern int s21_strcmp(const char *str1, const char *str2);
 
     result = s21_strcmp(str1, str2);
@@ -109,11 +109,16 @@ START_TEST(test_strncmp) {
     char *str2 = "1234507890";
     int n1 = 5;
     int n2 = 6;
+    int n3 = 0;
     extern int s21_strncmp(const char *str1, const char *str2, s21_size_t n);
 
     result = s21_strncmp(str1, str2, n1);
     ck_assert_int_eq(result, 0);
     ck_assert_int_eq(result, strncmp(str1, str2, n1));
+
+    result = s21_strncmp(str1, str2, n3);
+    ck_assert_int_eq(result, 0);
+    ck_assert_int_eq(result, strncmp(str1, str2, n3));
 
     result = s21_strncmp(str1, str2, n2);
     ck_assert_int_gt(result, 0);
@@ -135,16 +140,12 @@ START_TEST(test_strcpy) {
 END_TEST
 
 START_TEST(test_strncpy) {
-    char src[25] = "Hello world!";
-    char dest[25] = "";
-    char res[25] = {0};
-    char expected[25] = "Hello w";
-    int n = 7;
-    extern char *s21_strncpy(char *dest, const char *src, s21_size_t n);
+    char src[13] = "Hello world!";
+    char dest[25] = "aaaaaaaaaaaaaaaaaaaa";
+    char res[25] = "aaaaaaaaaaaaaaaaaaaa";
+    int n = 25;
 
-    s21_strncpy(dest, src, n);
-    ck_assert_str_eq(expected, dest);
-    ck_assert_str_eq(dest, strncpy(res, src, n));
+    ck_assert_int_eq(s21_strncpy(dest, src, n)[15], strncpy(res, src, n)[15]);
 }
 END_TEST
 
@@ -185,22 +186,38 @@ START_TEST(test_insert) {
     char *res = s21_insert(string, to_insert, 7);
     ck_assert_str_eq(expected, res);
     if (res) free(res);
+
+    res = s21_insert(NULL, to_insert, 7);
+    ck_assert_pstr_eq(NULL, res);
+    if (res) free(res);
+
+    res = s21_insert(string, NULL, 7);
+    ck_assert_pstr_eq(NULL, res);
+    if (res) free(res);
 }
 END_TEST
 
 START_TEST(test_strpbrk) {
     char string[] = "Functions that will make our lives easier!";
-    char chars[] = "rsaf";
+    char chars[] = "";
 
-    ck_assert_str_eq(s21_strpbrk(string, chars), strpbrk(string, chars));
+    ck_assert_pstr_eq(s21_strpbrk(string, chars), strpbrk(string, chars));
+    char chars2[] = "t";
+    ck_assert_pstr_eq(s21_strpbrk(string, chars2), strpbrk(string, chars2));
+    char chars3[2];
+    chars3[0] = '\0';
+    ck_assert_pstr_eq(s21_strpbrk(string, chars3), strpbrk(string, chars3));
 }
 END_TEST
 
 START_TEST(test_strrchr) {
     char *string = "Snickersnee";
     char search_for = 'n';
+    char string2[20] = "Snickersnee";
+    string2[5] = '\0';
 
-    ck_assert_str_eq(s21_strrchr(string, search_for), strrchr(string, search_for));
+    ck_assert_pstr_eq(s21_strrchr(string, search_for), strrchr(string, search_for));
+    ck_assert_pstr_eq(s21_strrchr(string2, '\0'), strrchr(string2, '\0'));
 }
 END_TEST
 
@@ -244,10 +261,12 @@ START_TEST(test_strstr) {
     char *haystack = "This is Sparta!";
     char *haystack2 = "";
     char *needle = "is S";
-    char *needle2 = "is S";
+    char *needle2 = "is S ";
+    char *needle3 = "";
 
     ck_assert_pstr_eq(s21_strstr(haystack, needle), strstr(haystack, needle));
     ck_assert_pstr_eq(s21_strstr(haystack, needle2), strstr(haystack, needle2));
+    ck_assert_pstr_eq(s21_strstr(haystack, needle3), strstr(haystack, needle3));
     ck_assert_pstr_eq(s21_strstr(haystack2, needle), strstr(haystack2, needle));
 }
 END_TEST
@@ -299,6 +318,19 @@ START_TEST(test_trim) {
     char *res = s21_trim(string, trim_chars);
     ck_assert_str_eq(res, "Nincompoop");
     if (res) free(res);
+
+    res = s21_trim(NULL, trim_chars);
+    ck_assert_pstr_eq(res, NULL);
+    if (res) free(res);
+
+    res = s21_trim(string, NULL);
+    ck_assert_pstr_eq(res, NULL);
+    if (res) free(res);
+
+    char string2[] = "./er";
+    res = s21_trim(string2, trim_chars);
+    ck_assert_str_eq(res, "");
+    if (res) free(res);
 }
 
 START_TEST(test_sprintf) {
@@ -318,21 +350,21 @@ START_TEST(test_sprintf) {
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%5.2d %-5.2d %+5.2d % 5.2d", 123, 123, 123, 123);
-    sprintf(orig, "%5.2d %-5.2d %+5.2d % 5.2d", 123, 123, 123, 123);
+    s21_sprintf(res, "%5.2d %-5.2d %+5.2d % 5.2d", 123, 123, 123, INT_MAX);
+    sprintf(orig, "%5.2d %-5.2d %+5.2d % 5.2d", 123, 123, 123, INT_MAX);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%5.2d %-5.2d %+5.2d % 5.2d", -123, -123, -123, -123);
-    sprintf(orig, "%5.2d %-5.2d %+5.2d % 5.2d", -123, -123, -123, -123);
+    s21_sprintf(res, "%5.2d %-5.2d %+5.2d % 5.2d", -123, -123, -123, INT_MIN);
+    sprintf(orig, "%5.2d %-5.2d %+5.2d % 5.2d", -123, -123, -123, INT_MIN);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%5.2ld %-5.2ld %+5.2ld % 5.2ld", (long int)123, (long int)123, (long int)123,
+    s21_sprintf(res, "%5.2ld %-5.2ld %+5.7li % 5.2ld", (long int)123, (long int)123, (long int)123,
                 (long int)123);
-    sprintf(orig, "%5.2ld %-5.2ld %+5.2ld % 5.2ld", (long int)123, (long int)123, (long int)123,
+    sprintf(orig, "%5.2ld %-5.2ld %+5.7li % 5.2ld", (long int)123, (long int)123, (long int)123,
             (long int)123);
     ck_assert_str_eq(res, orig);
 
@@ -348,6 +380,12 @@ START_TEST(test_sprintf) {
     memset(res, 0, sizeof(res));
     s21_sprintf(res, "%% %5.2u %-5.2u %%", 123, 123);
     sprintf(orig, "%% %5.2u %-5.2u %%", 123, 123);
+    ck_assert_str_eq(res, orig);
+
+    memset(orig, 0, sizeof(orig));
+    memset(res, 0, sizeof(res));
+    s21_sprintf(res, "%% %5.2lu %-5.5lu %%", (long unsigned int)123, (long unsigned int)123);
+    sprintf(orig, "%% %5.2lu %-5.5lu %%", (long unsigned int)123, (long unsigned int)123);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
@@ -376,8 +414,8 @@ START_TEST(test_sprintf) {
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%10s %-10.s %10.2s %10.0s %d", "-1.123f", "-1.123f", "-1.125f", "-1.123f", 5);
-    sprintf(orig, "%10s %-10.s %10.2s %10.0s %d", "-1.123f", "-1.123f", "-1.125f", "-1.123f", 5);
+    s21_sprintf(res, "%10s %-10.s %10.2s %10.10s %d", "-1.123f", "-1.123f", "-1.125f", "-1.123f", 5);
+    sprintf(orig, "%10s %-10.s %10.2s %10.10s %d", "-1.123f", "-1.123f", "-1.125f", "-1.123f", 5);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));

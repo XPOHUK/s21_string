@@ -7,7 +7,7 @@ char *s21_strrchr(const char *str, int c) {
     char *last_occ = NULL;
     while (*str != '\0') {
         if (*str == c) {
-        last_occ = (char *)str;
+            last_occ = (char *)str;
         }
         ++str;
     }
