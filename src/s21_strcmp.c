@@ -13,5 +13,5 @@ int s21_strcmp(const char *str1, const char *str2) {
         p++;
         q++;
     }
-    return *(unsigned char*)p - *(unsigned char*)q;
+    return *(unsigned char *)p - *(unsigned char *)q;
 }
