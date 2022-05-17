@@ -12,20 +12,19 @@ char *s21_strtok(char *str, const char *delim) {
     } else {
         str = ptr;
     }
-    while (str != NULL && *str != '\0' && s21_strchr(delim, *str)) {
+    while (str != S21_NULL && *str != '\0' && s21_strchr(delim, *str)) {
         str++;
     }
-    if (str != NULL && s21_strpbrk(str, delim)) {
+    if (str != S21_NULL && s21_strpbrk(str, delim)) {
         char *del = s21_strpbrk(str, delim);
         *del = '\0';
         if (*(del + 1) != '\0') {
             ptr = del + 1;
         } else {
-            ptr = NULL;
+            ptr = S21_NULL;
         }
     } else {
-        ptr = NULL;
+        ptr = S21_NULL;
     }
     return str;
 }
-

@@ -5,12 +5,12 @@
 // в первых n байтах строки, на которую указывает аргумент str.
 void *s21_memchr(const void *str, int c, s21_size_t n) {
     unsigned char *p;
-    unsigned char *res = NULL;
+    unsigned char *res = S21_NULL;
     s21_size_t i;
 
     i = 0;
     p = (unsigned char *)str;
-    while (i < n && p[i] != '\0' && p != NULL) {
+    while (i < n && p[i] != '\0' && p != S21_NULL) {
         if (p[i] == (unsigned char)c) {
             res = p + i;
         }
