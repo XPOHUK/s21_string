@@ -1,8 +1,8 @@
 #include <check.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
 
 #include "s21_string.h"
 
@@ -78,11 +78,16 @@ START_TEST(test_memset) {
     char array2[5] = "ABCD";
     char expected[5] = "000D";
     int n = 3;
-    extern void *s21_memset(void *str, int c, s21_size_t n);
+    double d[2] = {0.5, 0.6};
+    double d2[2] = {0.5, 0.6};
+    int d3[5] = {1, 1, 1, 1, 1};
+    int d4[5] = {1, 1, 1, 1, 1};
 
     s21_memset(array, '0', n);
     ck_assert_str_eq(expected, array);
     ck_assert_str_eq(array, memset(array2, '0', n));
+    ck_assert_str_eq(s21_memset(d, '0', n), memset(d2, '0', n));
+    ck_assert_str_eq(s21_memset(d3, '0', n), memset(d4, '0', n));
 }
 END_TEST
 
@@ -91,7 +96,6 @@ START_TEST(test_strcmp) {
     char *str1 = "school21";
     char *str2 = "school21";
     char *str3 = "school211";
-    extern int s21_strcmp(const char *str1, const char *str2);
 
     result = s21_strcmp(str1, str2);
     ck_assert_int_eq(result, 0);
@@ -110,7 +114,6 @@ START_TEST(test_strncmp) {
     int n1 = 5;
     int n2 = 6;
     int n3 = 0;
-    extern int s21_strncmp(const char *str1, const char *str2, s21_size_t n);
 
     result = s21_strncmp(str1, str2, n1);
     ck_assert_int_eq(result, 0);
@@ -131,7 +134,6 @@ START_TEST(test_strcpy) {
     char dest[25] = "";
     char res[25] = {0};
     char expected[25] = "Hello world!";
-    extern char *s21_strcpy(char *dest, const char *src);
 
     s21_strcpy(dest, src);
     ck_assert_str_eq(expected, dest);

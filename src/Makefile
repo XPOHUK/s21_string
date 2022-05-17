@@ -19,7 +19,7 @@ s21_string.a: $(LIBOBJ)
 	gcc $(CFLAGS) -c -o $@ $<
 
 test: tests_lib test_s21_string.o
-	gcc $(CFLAGS) test_s21_string.o -L. -l:s21_string.a -lcheck -lm -lpthread -lgcov -o $@
+	gcc $(CFLAGS) test_s21_string.o s21_string.a -lcheck -lm -lpthread -lgcov -o $@
 	./$@
 	rm -f *.o *.a
 
