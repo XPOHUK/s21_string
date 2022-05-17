@@ -13,13 +13,14 @@ void *s21_memmove(void *dest, const void *src, s21_size_t n) {
     d = (char *)dest;
     s = (const char *)src;
     tmp = (char *)malloc(sizeof(char) * n);
-
-    for (i = 0; i < n; ++i) {
-        *(tmp + i) = *(s + i);
+    if (tmp) {
+        for (i = 0; i < n; ++i) {
+            *(tmp + i) = *(s + i);
+        }
+        for (i = 0; i < n; ++i) {
+            *(d + i) = *(tmp + i);
+        }
+        free(tmp);
     }
-    for (i = 0; i < n; ++i) {
-        *(d + i) = *(tmp + i);
-    }
-    free(tmp);
     return (dest);
 }
