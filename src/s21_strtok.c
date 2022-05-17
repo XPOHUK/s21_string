@@ -28,20 +28,4 @@ char *s21_strtok(char *str, const char *delim) {
     }
     return str;
 }
-//     while (s21_strchr(delim, *str)) str++;
-//     if (ptr = s21_strpbrk(str, delim)) {
-//         ptr = s21_strpbrk(str, delim) + 1;
 
-//         while (s21_strchr(delim, *ptr)) ptr++;
-
-//     } else if (ptr) {
-//         str = ptr;
-//         if (s21_strpbrk(str, delim)) {
-//             ptr = s21_strpbrk(str, delim) + 1;
-//             *s21_strpbrk(str, delim) = '\0';
-//             while (s21_strchr(delim, *ptr)) ptr++;
-//         }
-//     }
-
-//     return str;
-// }

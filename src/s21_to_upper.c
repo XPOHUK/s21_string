@@ -6,7 +6,7 @@
 void *s21_to_upper(const char *str) {
     char *res = NULL;
     if (str) {
-        res = malloc(s21_strlen(str) + 1);
+        res = (char*)malloc(s21_strlen(str) + 1);
         if (res) {
             s21_strcpy(res, str);
             for (char *to_upper = res; *to_upper; ++to_upper) {
