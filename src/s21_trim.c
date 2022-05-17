@@ -3,9 +3,9 @@
 
 // Возвращает новую строку, в которой удаляются все начальные и конечные
 // вхождения набора заданных символов (trim_chars) из данной строки (src).
-// В случае какой-либо ошибки следует вернуть значение NULL
+// В случае какой-либо ошибки следует вернуть значение S21_NULL
 void *s21_trim(const char *src, const char *trim_chars) {
-    char *res = NULL;
+    char *res = S21_NULL;
     if (src && trim_chars) {
         size_t lead = 0;
         size_t trail = s21_strlen(src);

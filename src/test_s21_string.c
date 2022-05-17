@@ -14,9 +14,9 @@ START_TEST(test_memchr) {
     ck_assert_str_eq(ch, "school");
     ck_assert_str_eq(ch, memchr(s, 's', 8));
     ch = s21_memchr(s, 'k', 10);
-    ck_assert_pstr_eq(ch, NULL);
+    ck_assert_pstr_eq(ch, S21_NULL);
     ck_assert_pstr_eq(ch, memchr(s, 'k', 9));
-    // ck_assert_pstr_eq(s21_memchr(NULL, 'k', 10), memchr(NULL, 'k', 10));
+    // ck_assert_pstr_eq(s21_memchr(S21_NULL, 'k', 10), memchr(S21_NULL, 'k', 10));
 }
 END_TEST
 
@@ -189,12 +189,12 @@ START_TEST(test_insert) {
     ck_assert_str_eq(expected, res);
     if (res) free(res);
 
-    res = s21_insert(NULL, to_insert, 7);
-    ck_assert_pstr_eq(NULL, res);
+    res = s21_insert(S21_NULL, to_insert, 7);
+    ck_assert_pstr_eq(S21_NULL, res);
     if (res) free(res);
 
-    res = s21_insert(string, NULL, 7);
-    ck_assert_pstr_eq(NULL, res);
+    res = s21_insert(string, S21_NULL, 7);
+    ck_assert_pstr_eq(S21_NULL, res);
     if (res) free(res);
 }
 END_TEST
@@ -297,9 +297,9 @@ START_TEST(test_strtok) {
     char *delim = "Visay";
 
     ck_assert_pstr_eq(s21_strtok(p, delim), strtok(exp, delim));
-    ck_assert_pstr_eq(s21_strtok(NULL, delim), strtok(NULL, delim));
-    ck_assert_pstr_eq(s21_strtok(NULL, delim), strtok(NULL, delim));
-    ck_assert_pstr_eq(s21_strtok(NULL, delim), strtok(NULL, delim));
+    ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+    ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+    ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
 }
 END_TEST
 
@@ -321,12 +321,12 @@ START_TEST(test_trim) {
     ck_assert_str_eq(res, "Nincompoop");
     if (res) free(res);
 
-    res = s21_trim(NULL, trim_chars);
-    ck_assert_pstr_eq(res, NULL);
+    res = s21_trim(S21_NULL, trim_chars);
+    ck_assert_pstr_eq(res, S21_NULL);
     if (res) free(res);
 
-    res = s21_trim(string, NULL);
-    ck_assert_pstr_eq(res, NULL);
+    res = s21_trim(string, S21_NULL);
+    ck_assert_pstr_eq(res, S21_NULL);
     if (res) free(res);
 
     char string2[] = "./er";

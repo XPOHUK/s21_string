@@ -13,11 +13,11 @@ int s21_sprintf(char *str, const char *format, ...) {
     const char *f_start = format;
     va_list p;
     va_start(p, format);
-    fmt_t *fmt = NULL;
+    fmt_t *fmt = S21_NULL;
     int res;
     res = _parse(format, &fmt);
     if (res == 0) {
-        if (fmt == NULL) {
+        if (fmt == S21_NULL) {
             // Форматов нет, просто копируем строку
             s21_strcpy(str, format);
         } else {
@@ -38,7 +38,7 @@ void _clear_list(fmt_t *fmt) {
 int _parse(const char *format, fmt_t **fmt) {
     char *perc;
     int res = 0;
-    if ((perc = s21_strchr(format, '%')) != NULL) {
+    if ((perc = s21_strchr(format, '%')) != S21_NULL) {
         fmt_t *nfmt = _new_fmt();
         if (nfmt) {
             *fmt = nfmt;
@@ -55,7 +55,7 @@ int _parse(const char *format, fmt_t **fmt) {
                 format++;
             }
             if (res == 0) {
-                while ((perc = s21_strchr(format, '%')) != NULL) {
+                while ((perc = s21_strchr(format, '%')) != S21_NULL) {
                     nfmt->next = _new_fmt();
                     if (nfmt->next) {
                         nfmt = nfmt->next;
@@ -87,9 +87,9 @@ int _parse(const char *format, fmt_t **fmt) {
 fmt_t *_new_fmt() {
     fmt_t *s = (fmt_t *)malloc(sizeof(fmt_t));
     if (s) {
-        s->next = NULL;
-        s->begin = NULL;
-        s->end = NULL;
+        s->next = S21_NULL;
+        s->begin = S21_NULL;
+        s->end = S21_NULL;
         s->flag_left = 0;
         s->flag_sign = 0;
         s->flag_space = 0;
@@ -181,7 +181,7 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
         // Копируем обычные символы до формата
         s21_strncat(str, format, fmt->begin - format);
         format = fmt->end + 1;
-        char *to_append = NULL;
+        char *to_append = S21_NULL;
         if (fmt->end - fmt->begin == 1 && fmt->specifier == '0') {
             if ((to_append = (char *)malloc(sizeof(char) * 2))) {
                 to_append[0] = '%';
@@ -211,7 +211,7 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
             if (to_append && fmt->width != 0 && (s21_size_t)fmt->width > s21_strlen(to_append)) {
                 // Добавить пробелы слева или справа
                 // Всё это можно переделать на использование memset
-                int spaces_len = fmt->width - s21_strlen(to_append);
+                int spaces_len = (s21_size_t)fmt->width - s21_strlen(to_append);
                 char *spaces = (char *)malloc(sizeof(char) * (spaces_len + 1));
                 if (spaces) {
                     for (int i = 0; i < spaces_len; i++) spaces[i] = ' ';
@@ -252,7 +252,7 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
 }
 
 char *_char_to_str(va_list p, fmt_t *fmt) {
-    char *res = NULL;
+    char *res = S21_NULL;
     if (fmt->length == 'l') {
         wchar_t *str = (wchar_t *)malloc(sizeof(wint_t) + sizeof(char));
         if (str) {
@@ -280,9 +280,13 @@ char *_int_to_str(va_list p, fmt_t *fmt) {
         arg = va_arg(p, int);
     }
     char *str = (arg < 0) ? _itoa(-arg) : _itoa(arg);
-    int len = s21_strlen(str);
-    if (fmt->precision > len) len = len + (fmt->precision - len);
-    if ((arg >= 0 && (fmt->flag_sign || fmt->flag_space)) || arg < 0) len++;
+    long long len = s21_strlen(str);
+    if (fmt->precision > len) {
+        len = len + (fmt->precision - len);
+    }
+    if ((arg >= 0 && (fmt->flag_sign || fmt->flag_space)) || arg < 0) {
+        len++;
+    }
     char *res = (char *)malloc(sizeof(char) * (len + 1));
     if (res) {
         *res = '\0';
@@ -296,7 +300,7 @@ char *_int_to_str(va_list p, fmt_t *fmt) {
             }
         }
         // Записать нули если надо
-        if (fmt->precision > (int)s21_strlen(str)) {
+        if (fmt->precision > (long long)s21_strlen(str)) {
             for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
         }
         s21_strcat(res, str);
@@ -313,11 +317,11 @@ char *_uint_to_str(va_list p, fmt_t *fmt) {
         arg = va_arg(p, unsigned int);
     }
     char *str = _itoa(arg);
-    int len = s21_strlen(str);
-    if (fmt->precision > len) len = len + (fmt->precision - len);
+    s21_size_t len = s21_strlen(str);
+    if ((s21_size_t)fmt->precision > len) len = len + (fmt->precision - len);
     char *res = (char *)malloc(sizeof(char) * (len + 1));
     *res = '\0';
-    if (fmt->precision > (int)s21_strlen(str)) {
+    if ((s21_size_t)fmt->precision > s21_strlen(str)) {
         for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
     }
     s21_strcat(res, str);
@@ -334,7 +338,7 @@ char *_str_to_str(va_list p, fmt_t *fmt) {
     } else if (fmt->precision == 0) {
         res = (char *)malloc(sizeof(char));
         *res = '\0';
-    } else if (fmt->precision < (int)s21_strlen(str)) {
+    } else if ((s21_size_t)fmt->precision < s21_strlen(str)) {
         res = (char *)malloc(sizeof(char) * (fmt->precision + 1));
         *res = '\0';
         s21_strncat(res, str, fmt->precision);
@@ -347,14 +351,14 @@ char *_str_to_str(va_list p, fmt_t *fmt) {
 
 char *_float_to_str(va_list p, fmt_t *fmt) {
     int precision = (fmt->precision == -1) ? 6 : fmt->precision;
-    int len = 1;
+    s21_size_t len = 1;
     double arg = va_arg(p, double);
     arg = _round_double(arg, precision);
     int int_part = (int)arg;
     double float_part = arg - (double)int_part;
     char *int_part_str = (int_part >= 0) ? _itoa(int_part) : _itoa(-int_part);
     len = s21_strlen(int_part_str);
-    char *float_part_str = NULL;
+    char *float_part_str = S21_NULL;
     if (precision != 0) {
         float_part = float_part * pow(10, precision);
         float_part_str = (float_part >= 0) ? _itoa((int)float_part) : _itoa((int)-float_part);
@@ -386,7 +390,7 @@ char *_itoa(long long int i) {
     int dig;
     char *res = (char *)malloc(sizeof(char));
     int len = 1;
-    long unsigned int k = 0;
+    s21_size_t k = 0;
     do {
         res = realloc(res, sizeof(char) * (len + 1));
         len++;
