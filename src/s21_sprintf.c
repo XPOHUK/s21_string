@@ -49,6 +49,7 @@ int _parse(const char *format, fmt_t **fmt) {
                 }
             } else {
                 nfmt->end = format;
+                nfmt->specifier = '%';
                 format++;
             }
             *fmt = nfmt;
@@ -158,68 +159,68 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
     while (fmt) {
         // Копируем обычные символы до формата
         s21_strncat(str, format, fmt->begin - format);
+        // Передвигаем указатель на символ следующий за форматом
         format = fmt->end + 1;
         char *to_append = S21_NULL;
-        if (fmt->end - fmt->begin == 1 && fmt->specifier == '0') {
-            if ((to_append = (char *)malloc(sizeof(char) * 2))) {
-                to_append[0] = '%';
-                to_append[1] = '\0';
-            } else {
-                res = 1;
-            }
-        } else {
-            switch (fmt->specifier) {
-                case 'c':
-                    to_append = _char_to_str(p, fmt);
-                    break;
-                case 'd':
-                case 'i':
-                    to_append = _int_to_str(p, fmt);
-                    break;
-                case 'u':
-                    to_append = _uint_to_str(p, fmt);
-                    break;
-                case 's':
-                    to_append = _str_to_str(p, fmt);
-                    break;
-                case 'f':
-                    to_append = _float_to_str(p, fmt);
-                    break;
-            }
-            if (to_append && fmt->width != 0 && (s21_size_t)fmt->width > s21_strlen(to_append)) {
-                // Добавить пробелы слева или справа
-                // Всё это можно переделать на использование memset
-                int spaces_len = (s21_size_t)fmt->width - s21_strlen(to_append);
-                char *spaces = (char *)malloc(sizeof(char) * (spaces_len + 1));
-                if (spaces) {
-                    for (int i = 0; i < spaces_len; i++) spaces[i] = ' ';
-                    spaces[spaces_len] = '\0';
-                    char *new_str = (char *)malloc(sizeof(char) * (fmt->width + 1));
-                    if (new_str) {
-                        new_str[0] = '\0';
-                        if (fmt->flag_left) {
-                            s21_strcat(new_str, to_append);
-                            s21_strcat(new_str, spaces);
-                        } else {
-                            s21_strcat(new_str, spaces);
-                            s21_strcat(new_str, to_append);
-                        }
-                        free(to_append);
-                        free(spaces);
-                        to_append = new_str;
-                    } else {
-                        res = 1;
-                    }
+        switch (fmt->specifier) {
+            case 'c':
+                to_append = _char_to_str(p, fmt);
+                break;
+            case 'd':
+            case 'i':
+                to_append = _int_to_str(p, fmt);
+                break;
+            case 'u':
+                to_append = _uint_to_str(p, fmt);
+                break;
+            case 's':
+                to_append = _str_to_str(p, fmt);
+                break;
+            case 'f':
+                to_append = _float_to_str(p, fmt);
+                break;
+            case '%':
+                if ((to_append = (char *)malloc(sizeof(char) * 2))) {
+                    to_append[0] = '%';
+                    to_append[1] = '\0';
                 } else {
                     res = 1;
                 }
-            } else if (!to_append) {
+                break;
+        }
+        if (to_append && fmt->width != 0 && (s21_size_t)fmt->width > s21_strlen(to_append)) {
+            // Добавить пробелы слева или справа
+            // Всё это можно переделать на использование memset
+            int spaces_len = (s21_size_t)fmt->width - s21_strlen(to_append);
+            char *spaces = (char *)malloc(sizeof(char) * (spaces_len + 1));
+            if (spaces) {
+                for (int i = 0; i < spaces_len; i++) spaces[i] = ' ';
+                spaces[spaces_len] = '\0';
+                char *new_str = (char *)malloc(sizeof(char) * (fmt->width + 1));
+                if (new_str) {
+                    new_str[0] = '\0';
+                    if (fmt->flag_left) {
+                        s21_strcat(new_str, to_append);
+                        s21_strcat(new_str, spaces);
+                    } else {
+                        s21_strcat(new_str, spaces);
+                        s21_strcat(new_str, to_append);
+                    }
+                    free(to_append);
+                    free(spaces);
+                    to_append = new_str;
+                } else {
+                    res = 1;
+                }
+            } else {
                 res = 1;
             }
         }
         if (to_append) {
             s21_strcat(str, to_append);
             free(to_append);
+        } else {
+            res = 1;
         }
         fmt = fmt->next;
         if (res) break;
