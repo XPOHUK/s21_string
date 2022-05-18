@@ -340,8 +340,8 @@ START_TEST(test_sprintf) {
     char res[100] = {0};
     extern int s21_sprintf(char *str, const char *format, ...);
 
-    s21_sprintf(res, "%d %-d %+d % d", 123, 123, 123, 123);
-    sprintf(orig, "%d %-d %+d % d", 123, 123, 123, 123);
+    s21_sprintf(res, "%% %d %-d %+d % d", 123, 123, 123, 123);
+    sprintf(orig, "%% %d %-d %+d % d", 123, 123, 123, 123);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
