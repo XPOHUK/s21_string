@@ -38,48 +38,26 @@ void _clear_list(fmt_t *fmt) {
 int _parse(const char *format, fmt_t **fmt) {
     char *perc;
     int res = 0;
-    if ((perc = s21_strchr(format, '%')) != S21_NULL) {
-        fmt_t *nfmt = _new_fmt();
+    while ((perc = s21_strchr(format, '%')) != S21_NULL) {
+        fmt_t* nfmt = _new_fmt();
         if (nfmt) {
-            *fmt = nfmt;
             nfmt->begin = perc;
             format = perc + 1;
             if (*format != '%') {
-                if (_parse_fmt(nfmt, &format) == 0) {
+                if ((res = _parse_fmt(nfmt, &format)) == 0) {
                     nfmt->end = format - 1;
-                } else {
-                    res = 1;
                 }
             } else {
                 nfmt->end = format;
                 format++;
             }
-            if (res == 0) {
-                while ((perc = s21_strchr(format, '%')) != S21_NULL) {
-                    nfmt->next = _new_fmt();
-                    if (nfmt->next) {
-                        nfmt = nfmt->next;
-                        nfmt->begin = perc;
-                        format = perc + 1;
-                        if (*format != '%') {
-                            if (_parse_fmt(nfmt, &format) == 0) {
-                                nfmt->end = format - 1;
-                            } else {
-                                res = 1;
-                                break;
-                            }
-                        } else {
-                            nfmt->end = format;
-                            format++;
-                        }
-                    } else {
-                        res = 1;
-                    }
-                }
-            }
+            *fmt = nfmt;
+            fmt = &(nfmt->next);
         } else {
             res = 1;
         }
+        if (res)
+            break;
     }
     return res;
 }
