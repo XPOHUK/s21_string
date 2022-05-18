@@ -196,6 +196,10 @@ START_TEST(test_insert) {
     res = s21_insert(string, S21_NULL, 7);
     ck_assert_pstr_eq(S21_NULL, res);
     if (res) free(res);
+
+    res = s21_insert(string, to_insert, 100);
+    ck_assert_pstr_eq(S21_NULL, res);
+    if (res) free(res);
 }
 END_TEST
 
@@ -232,28 +236,32 @@ START_TEST(test_strchr) {
 END_TEST
 
 START_TEST(test_to_upper) {
-    char str[] = "this is sparta!";
-    char *expected = "THIS IS SPARTA!";
+    char str[] = "this IS 5parta|";
+    char *expected = "THIS IS 5PARTA|";
     char str2[] = "";
 
     char *res1 = s21_to_upper(str);
     char *res2 = s21_to_upper(str2);
+    char *res3 = s21_to_upper(S21_NULL);
     ck_assert_pstr_eq(res1, expected);
     ck_assert_pstr_eq(res2, "");
+    ck_assert_pstr_eq(res3, S21_NULL);
     if (res1) free(res1);
     if (res2) free(res2);
 }
 END_TEST
 
 START_TEST(test_to_lower) {
-    char str[] = "THIS IS SPARTA!";
+    char str[] = "THIS is SPARTA!";
     char *expected = "this is sparta!";
     char str2[] = "";
 
     char *res1 = s21_to_lower(str);
     char *res2 = s21_to_lower(str2);
+    char *res3 = s21_to_lower(S21_NULL);
     ck_assert_pstr_eq(res1, expected);
     ck_assert_pstr_eq(res2, "");
+    ck_assert_pstr_eq(res3, S21_NULL);
     if (res1) free(res1);
     if (res2) free(res2);
 }
@@ -288,6 +296,9 @@ START_TEST(test_strncat) {
     char *src = " World!";
 
     ck_assert_str_eq(s21_strncat(dst, src, 3), strncat(dst2, src, 3));
+    char dst3[100] = "Hello";
+    char dst4[100] = "Hello";
+    ck_assert_str_eq(s21_strncat(dst3, src, 10), strncat(dst4, src, 10));
 }
 END_TEST
 
@@ -304,7 +315,7 @@ START_TEST(test_strtok) {
 END_TEST
 
 START_TEST(test_strerror) {
-    int errno = 0;
+    int errno = -1;
     int ERRMAX = 150;
     while (errno < ERRMAX) {
         ck_assert_str_eq(strerror(errno), s21_strerror(errno));
