@@ -5,20 +5,7 @@
 #include <string.h>
 
 #include "s21_string.h"
-
-START_TEST(test_memchr) {
-    char *ch;
-    char *s = "21school";
-
-    ch = s21_memchr(s, 's', strlen(s));
-    ck_assert_str_eq(ch, "school");
-    ck_assert_str_eq(ch, memchr(s, 's', 8));
-    ch = s21_memchr(s, 'k', 10);
-    ck_assert_pstr_eq(ch, S21_NULL);
-    ck_assert_pstr_eq(ch, memchr(s, 'k', 9));
-    // ck_assert_pstr_eq(s21_memchr(S21_NULL, 'k', 10), memchr(S21_NULL, 'k', 10));
-}
-END_TEST
+#include "test_memchr.h"
 
 START_TEST(test_memcmp) {
     int result;
@@ -160,7 +147,7 @@ END_TEST
 
 START_TEST(test_strcspn) {
     char str[25] = "Hello world!";
-    char rej[5] = "ab cd";
+    char rej[6] = "ab cd";
     char empty[] = "";
 
     ck_assert_int_eq(s21_strcspn(str, rej), strcspn(str, rej));
@@ -171,7 +158,7 @@ END_TEST
 
 START_TEST(test_strspn) {
     char str[25] = "Hello world!";
-    char acc[5] = "eollH";
+    char acc[6] = "eollH";
     char empty[] = "";
 
     ck_assert_int_eq(s21_strspn(str, acc), strspn(str, acc));
