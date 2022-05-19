@@ -4,17 +4,20 @@
 // Выполняет поиск первого вхождения символа c (беззнаковый тип)
 // в первых n байтах строки, на которую указывает аргумент str.
 void *s21_memchr(const void *str, int c, s21_size_t n) {
-    unsigned char *p;
-    unsigned char *res = S21_NULL;
-    s21_size_t i;
-
-    i = 0;
-    p = (unsigned char *)str;
-    while (i < n && p[i] != '\0' && p != S21_NULL) {
-        if (p[i] == (unsigned char)c) {
-            res = p + i;
+    char *p = (char *)str;
+    char *res = S21_NULL;
+    if (p) {
+        if (c) {
+            while (n-- && *p) {
+                if (*p == c) {
+                    res = p;
+                    break;
+                }
+                p++;
+            }
+        } else if (s21_strlen(p) < n) {
+            res = p + s21_strlen(p);
         }
-        i++;
     }
-    return (res);
+    return res;
 }
