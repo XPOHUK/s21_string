@@ -39,7 +39,7 @@ int _parse(const char *format, fmt_t **fmt) {
     char *perc;
     int res = 0;
     while ((perc = s21_strchr(format, '%')) != S21_NULL) {
-        fmt_t* nfmt = _new_fmt();
+        fmt_t *nfmt = _new_fmt();
         if (nfmt) {
             nfmt->begin = perc;
             format = perc + 1;
@@ -57,8 +57,7 @@ int _parse(const char *format, fmt_t **fmt) {
         } else {
             res = 1;
         }
-        if (res)
-            break;
+        if (res) break;
     }
     return res;
 }
@@ -188,11 +187,11 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
         }
         if (to_append) {
             if (fmt->width != 0 && (s21_size_t)fmt->width > s21_strlen(to_append)) {
-            // Добавить пробелы слева или справа
+                // Добавить пробелы слева или справа
                 s21_size_t to_append_len = s21_strlen(to_append);
                 int spaces_len = (s21_size_t)fmt->width - to_append_len;
-                char* to_append_ext = (char *)realloc(to_append,
-                    sizeof(char) * (spaces_len + 1 + to_append_len));
+                char *to_append_ext =
+                    (char *)realloc(to_append, sizeof(char) * (spaces_len + 1 + to_append_len));
                 if (to_append_ext) {
                     to_append = to_append_ext;
                     if (fmt->flag_left) {
@@ -322,21 +321,46 @@ char *_str_to_str(va_list p, fmt_t *fmt) {
 char *_float_to_str(va_list p, fmt_t *fmt) {
     int precision = (fmt->precision == -1) ? 6 : fmt->precision;
     s21_size_t len = 1;
-    double arg = va_arg(p, double);
-    arg = _round_double(arg, precision);
-    int int_part = (int)arg;
-    double float_part = arg - (double)int_part;
-    char *int_part_str = (int_part >= 0) ? _itoa(int_part) : _itoa(-int_part);
-    len = s21_strlen(int_part_str);
+    int sign = 0;
     char *float_part_str = S21_NULL;
-    if (precision != 0) {
-        float_part = float_part * pow(10, precision);
-        float_part_str = (float_part >= 0) ? _itoa((int)float_part) : _itoa((int)-float_part);
-        len += s21_strlen(float_part_str) + 1;
-    }
-    char *res = (char *)malloc(sizeof(char) * (len + 2));
-    *res = '\0';
+    long double arg = va_arg(p, double);
     if (arg < 0) {
+        sign = -1;
+        arg = 0 - arg;
+    }
+    // printf("returned: %.3Lf\n", arg);
+    long int_part = (long)arg;
+    // printf("long int_part: %li\n", int_part);
+    long double float_part_pow = (arg - int_part) * pow(10, precision);
+    // printf("long double float_part_pow: %Lf\n", float_part_pow);
+    long long float_part = (long long)float_part_pow;
+    // printf("long long float_part: %lli\n", float_part);
+    long double diff = float_part_pow - float_part;
+    // printf("long double diff: %Lf\n", diff);
+    if (diff > 0.5) {
+        float_part++;
+        if (float_part >= pow(10, precision)) {
+            float_part = 0;
+            int_part++;
+        }
+    }
+    if (precision == 0) {
+        diff = arg - (long double)int_part;
+        // Если дробная часть 0.5 или более И число нечётное
+        if ((!(diff < 0.5) || (diff > 0.5)) && (int_part & 1)) {
+            // округляем в большую сторону
+            int_part++;
+        }
+    } else {
+        float_part_str = _itoa(float_part);
+    }
+    char *int_part_str = _itoa(int_part);
+
+    len = s21_strlen(int_part_str) + ((float_part_str) ? s21_strlen(float_part_str) : 0);
+
+    char *res = (char *)malloc(sizeof(char) * (len + 3));
+    *res = '\0';
+    if (sign == -1) {
         s21_strcat(res, "-");
     } else {
         if (fmt->flag_sign) {
@@ -356,7 +380,7 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
 }
 
 // ТОЛЬКО для положительных чисел!
-char *_itoa(long long int i) {
+char *_itoa(long long i) {
     int dig;
     char *res = (char *)malloc(sizeof(char));
     int len = 1;
@@ -376,8 +400,4 @@ char *_itoa(long long int i) {
         res[s21_strlen(res) - k - 1] = tmp;
     }
     return res;
-}
-
-double _round_double(double arg, int precision) {
-    return round(arg * pow(10, precision)) / pow(10, precision);
 }
