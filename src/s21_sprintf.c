@@ -287,10 +287,10 @@ char *_uint_to_str(va_list p, fmt_t *fmt) {
     }
     char *str = _itoa(arg);
     s21_size_t len = s21_strlen(str);
-    if ((s21_size_t)fmt->precision > len) len = len + (fmt->precision - len);
+    if (fmt->precision > (int)len) len = len + (fmt->precision - len);
     char *res = (char *)malloc(sizeof(char) * (len + 1));
     *res = '\0';
-    if ((s21_size_t)fmt->precision > s21_strlen(str)) {
+    if (fmt->precision > (int)s21_strlen(str)) {
         for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
     }
     s21_strcat(res, str);
