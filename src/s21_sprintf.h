@@ -27,7 +27,6 @@ char* _float_to_str(va_list p, fmt_t* fmt);
 char* _char_to_str(va_list p, fmt_t* fmt);
 char* _str_to_str(va_list p, fmt_t* fmt);
 char* _itoa(long long int i);
-double _round_double(double arg, int precision);
 void _clear_list(fmt_t* fmt);
 
 #endif  // _SRC_S21_SPRINTF_H_

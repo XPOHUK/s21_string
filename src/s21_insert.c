@@ -3,11 +3,11 @@
 
 // Возвращает новую строку, в которой указанная строка (str)
 // вставлена в указанную позицию (start_index) в данной строке (src).
-// В случае какой-либо ошибки следует вернуть значение NULL
-void *s21_insert(const char *src, const char *str, size_t start_index) {
-    char *res = NULL;
+// В случае какой-либо ошибки следует вернуть значение S21_NULL
+void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
+    char *res = S21_NULL;
     if (src && str && start_index <= s21_strlen(src)) {
-        res = malloc((s21_strlen(src) + s21_strlen(str) + 1));
+        res = (char *)malloc((s21_strlen(src) + s21_strlen(str) + 1));
         if (res) {
             s21_strncpy(res, src, start_index);
             *(res + start_index) = '\0';
