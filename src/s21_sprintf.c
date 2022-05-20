@@ -25,6 +25,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         }
     }
     _clear_list(fmt);
+    va_end(p);
     return res;
 }
 
