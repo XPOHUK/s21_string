@@ -7,6 +7,140 @@
 #include "s21_string.h"
 #include "test_memchr.h"
 
+#define compare_print_func(f1, str_sprintf, f2, str_csprintf, fmt, ...) \
+    str_sprintf[0] = 0;                                                 \
+    str_csprintf[0] = 0;                                                \
+    f1(str_sprintf, fmt, __VA_ARGS__);                                  \
+    f2(str_csprintf, fmt, __VA_ARGS__);                                 \
+    ck_assert_str_eq(str_sprintf, str_csprintf);
+
+START_TEST(test_integer) {
+    char str_sprintf[512];
+    char str_csprintf[512];
+    // INTEGERS
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %d", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%d:%d:%d", 7, 4, 0);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MAX %d", INT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MIN %d", INT_MIN);
+    // %i
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %i", 3534555);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %+d", 3534555);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5d'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5d'", INT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5d'", INT_MIN);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%05d'", 7);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%05d'", INT_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%05d'", INT_MIN);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5d'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5d'", INT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5d'", INT_MIN);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5d'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5d'", INT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5d'", INT_MIN);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5d'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5d'", INT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5d'", INT_MIN);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5d'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5d'", INT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5d'", INT_MIN);
+
+    // Unsigned integers
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %u", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%u:%u:%u", 7, 4, 0);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MAX %u", UINT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MIN %u", 0);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5u'", UINT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5u'", 0);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5u'", UINT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5u'", 0);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5u'", UINT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5u'", 0);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5u'", UINT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5u'", 0);
+
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5u'", UINT_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5u'", 0);
+}
+END_TEST
+
+START_TEST(test_long) {
+    char str_sprintf[512];
+    char str_csprintf[512];
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %ld", 3534535547l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%ld:%ld:%ld", 7l, 34543245324l, 0l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%ld", -5435432542l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MAX %ld", LONG_MAX);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MIN %ld", LONG_MIN);
+    // %i
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %li", 3534535547l);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5ld'", 72342l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5ld'", LONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5ld'", LONG_MIN);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%05ld'", 72342l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%05ld'", LONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%05ld'", LONG_MIN);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5ld'", 742343l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5ld'", LONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5ld'", LONG_MIN);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5ld'", 754354l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5ld'", LONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5ld'", LONG_MIN);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5ld'", 7343l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5ld'", LONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5ld'", LONG_MIN);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5ld'", 754354l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5ld'", LONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5ld'", LONG_MIN);
+
+    // Unsigned integers
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %lu", 7l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%lu:%lu:%lu", 7l, 4l, 0l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MAX %lu", ULONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MIN %lu", 0l);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5lu'", 7l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5lu'", ULONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5lu'", 0l);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5lu'", 7l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5lu'", ULONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5lu'", 0l);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5lu'", 7l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5lu'", ULONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5lu'", 0l);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5lu'", 7l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5lu'", ULONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5lu'", 0l);
+
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5lu'", 7l);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5lu'", ULONG_MAX);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5lu'", 0l);
+}
+END_TEST
+
 START_TEST(test_memcmp) {
     int result;
     char *str1 = "21school";
@@ -578,6 +712,8 @@ Suite *test_suite(void) {
 
     tc_sprintf = tcase_create("sprintf");
     tcase_add_test(tc_sprintf, test_sprintf);
+    tcase_add_test(tc_sprintf, test_integer);
+    tcase_add_test(tc_sprintf, test_long);
     suite_add_tcase(s, tc_sprintf);
 
     return s;
