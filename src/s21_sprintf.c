@@ -4,6 +4,7 @@
 #include <stdio.h>  // TODO(Rambtono) Delete after debug
 #include <stdlib.h>
 #include <wchar.h>
+#include <float.h>
 
 #include "s21_string.h"
 
@@ -242,13 +243,13 @@ char *_char_to_str(va_list p, fmt_t *fmt) {
 }
 
 char *_int_to_str(va_list p, fmt_t *fmt) {
-    long int arg;
+    long long arg;
     if (fmt->length == 'l') {
-        arg = va_arg(p, long int);
+        arg = va_arg(p, long long);
     } else {
         arg = va_arg(p, int);
     }
-    char *str = (arg < 0) ? _itoa(-arg) : _itoa(arg);
+    char *str = _itoa(arg);
     long long len = s21_strlen(str);
     if (fmt->precision > len) {
         len = len + (fmt->precision - len);
@@ -260,7 +261,7 @@ char *_int_to_str(va_list p, fmt_t *fmt) {
     if (res) {
         *res = '\0';
         if (arg < 0) {
-            s21_strcat(res, "-");
+            // s21_strcat(res, "-");
         } else {
             if (fmt->flag_sign) {
                 s21_strcat(res, "+");
@@ -280,13 +281,36 @@ char *_int_to_str(va_list p, fmt_t *fmt) {
 }
 
 char *_uint_to_str(va_list p, fmt_t *fmt) {
-    unsigned long int arg;
+    unsigned long long arg;
     if (fmt->length == 'l') {
-        arg = va_arg(p, unsigned long int);
+        arg = va_arg(p, unsigned long long);
     } else {
         arg = va_arg(p, unsigned int);
     }
-    char *str = _itoa(arg);
+    // char *str = _itoa(arg);
+    int dig;
+    s21_size_t k = 0;
+    char *str = (char *)malloc(sizeof(char) * 2);
+    int l = 1;
+
+    do {
+        str = realloc(str, sizeof(char) * (l + 1));
+        l++;
+        dig = arg % 10;
+        if (dig < 0)
+            dig *= -1;
+        str[k] = dig + '0';
+        k++;
+        arg /= 10;
+    } while (arg != 0);
+
+    str[k] = '\0';
+
+    for (k = 0; k < s21_strlen(str) / 2; k++) {
+        char tmp = str[k];
+        str[k] = str[s21_strlen(str) - k - 1];
+        str[s21_strlen(str) - k - 1] = tmp;
+    }
     s21_size_t len = s21_strlen(str);
     if (fmt->precision > (int)len) len = len + (fmt->precision - len);
     char *res = (char *)malloc(sizeof(char) * (len + 1));
@@ -302,7 +326,10 @@ char *_uint_to_str(va_list p, fmt_t *fmt) {
 char *_str_to_str(va_list p, fmt_t *fmt) {
     char *str = va_arg(p, char *);
     char *res;
-    if (fmt->precision == -1) {
+    if (!str) {
+        res = malloc(sizeof(char) * 7);
+        s21_strcpy(res, "(null)");
+    } else if (fmt->precision == -1) {
         res = (char *)malloc(sizeof(char) * (s21_strlen(str) + 1));
         res = s21_strcpy(res, str);
     } else if (fmt->precision == 0) {
@@ -329,15 +356,16 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
         sign = -1;
         arg = 0 - arg;
     }
-    // printf("returned: %.3Lf\n", arg);
+    char* res = S21_NULL;
+    printf("arg: %.3Lf\n", arg);
     long int_part = (long)arg;
-    // printf("long int_part: %li\n", int_part);
+    printf("long int_part: %li\n", int_part);
     long double float_part_pow = (arg - int_part) * pow(10, precision);
-    // printf("long double float_part_pow: %Lf\n", float_part_pow);
+    printf("long double float_part_pow: %Lf\n", float_part_pow);
     long long float_part = (long long)float_part_pow;
-    // printf("long long float_part: %lli\n", float_part);
+    printf("long long float_part: %lli\n", float_part);
     long double diff = float_part_pow - float_part;
-    // printf("long double diff: %Lf\n", diff);
+    printf("long double diff: %Lf\n", diff);
     if (diff > 0.5) {
         float_part++;
         if (float_part >= pow(10, precision)) {
@@ -359,7 +387,7 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
 
     len = s21_strlen(int_part_str) + ((float_part_str) ? s21_strlen(float_part_str) : 0);
 
-    char *res = (char *)malloc(sizeof(char) * (len + 3));
+    res = (char *)malloc(sizeof(char) * (len + 3 + precision ));
     *res = '\0';
     if (sign == -1) {
         s21_strcat(res, "-");
@@ -370,35 +398,51 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
             s21_strcat(res, " ");
         }
     }
+
     s21_strcat(res, int_part_str);
     free(int_part_str);
     if (float_part_str) {
         s21_strcat(res, ".");
         s21_strcat(res, float_part_str);
+        int need_zero = precision - s21_strlen(float_part_str);
+        while (need_zero) {
+            s21_strcat(res, "0");
+            need_zero--;
+        }
         free(float_part_str);
     }
     return res;
 }
 
-// ТОЛЬКО для положительных чисел!
 char *_itoa(long long i) {
+    long long arg = i;
     int dig;
-    char *res = (char *)malloc(sizeof(char));
-    int len = 1;
     s21_size_t k = 0;
+    char *res = (char *)malloc(sizeof(char) * 2);
+    int len = 1;
+
     do {
         res = realloc(res, sizeof(char) * (len + 1));
         len++;
-        dig = i % 10;
+        dig = arg % 10;
+        if (dig < 0)
+            dig *= -1;
         res[k] = dig + '0';
         k++;
-        i /= 10;
-    } while (i > 0);
+        arg /= 10;
+    } while (arg != 0);
+
     res[k] = '\0';
+
     for (k = 0; k < s21_strlen(res) / 2; k++) {
         char tmp = res[k];
         res[k] = res[s21_strlen(res) - k - 1];
         res[s21_strlen(res) - k - 1] = tmp;
+    }
+    if (i < 0) {
+        char* tmp = s21_insert(res, "-", 0);
+        free(res);
+        res = tmp;
     }
     return res;
 }

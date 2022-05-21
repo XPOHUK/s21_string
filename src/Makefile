@@ -27,7 +27,7 @@ tests_lib: tests_obj
 	ar rcs $(LIB) $(LIBOBJ)
 
 tests_obj: $(LIBSRC)
-	gcc $(CFLAGS) -O0 -std=c11 -pedantic -Wno-stringop-truncation -ftrapv -Wfloat-equal -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $^
+	gcc $(CFLAGS) -O0 -std=c11 -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $^
 
 cpplint: $(LIBSRC)
 	cp ../materials/linters/CPPLINT.cfg ./
