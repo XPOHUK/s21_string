@@ -9,11 +9,11 @@ void *s21_trim(const char *src, const char *trim_chars) {
     if (src && trim_chars) {
         size_t lead = 0;
         size_t trail = s21_strlen(src);
-        size_t i = 0;
         while (src[lead] != '\0' && s21_strchr(trim_chars, src[lead])) lead++;
         while (trail > lead && s21_strchr(trim_chars, src[trail - 1])) trail--;
         res = (char *)malloc(sizeof(char) * (trail - lead + 1));
         if (res) {
+            size_t i = 0;
             while (lead < trail) res[i++] = src[lead++];
             res[i] = '\0';
         }

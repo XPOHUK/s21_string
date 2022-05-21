@@ -288,15 +288,18 @@ char *_uint_to_str(va_list p, fmt_t *fmt) {
         arg = va_arg(p, unsigned int);
     }
     // char *str = _itoa(arg);
-    int dig;
+    // int dig;
     s21_size_t k = 0;
     char *str = (char *)malloc(sizeof(char) * 2);
     int l = 1;
 
     do {
-        str = realloc(str, sizeof(char) * (l + 1));
+        char *str_tmp = realloc(str, sizeof(char) * (l + 1));
+        if (str_tmp) {
+            str = str_tmp;
+        }
         l++;
-        dig = arg % 10;
+        int dig = arg % 10;
         if (dig < 0)
             dig *= -1;
         str[k] = dig + '0';
@@ -376,7 +379,8 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
     if (precision == 0) {
         diff = arg - (long double)int_part;
         // Если дробная часть 0.5 или более И число нечётное
-        if ((!(diff < 0.5) || (diff > 0.5)) && (int_part & 1)) {
+        // if ((!(diff < 0.5) || (diff > 0.5)) && (int_part & 1)) {
+        if (diff >= 0.5 && (int_part & 1)) {
             // округляем в большую сторону
             int_part++;
         }
@@ -416,15 +420,18 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
 
 char *_itoa(long long i) {
     long long arg = i;
-    int dig;
+    // int dig;
     s21_size_t k = 0;
     char *res = (char *)malloc(sizeof(char) * 2);
     int len = 1;
 
     do {
-        res = realloc(res, sizeof(char) * (len + 1));
+        char* res_tmp = realloc(res, sizeof(char) * (len + 1));
+        if (res_tmp) {
+            res = res_tmp;
+        }
         len++;
-        dig = arg % 10;
+        int dig = arg % 10;
         if (dig < 0)
             dig *= -1;
         res[k] = dig + '0';

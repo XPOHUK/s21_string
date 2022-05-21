@@ -19,7 +19,7 @@ s21_string.a: $(LIBOBJ)
 	gcc $(CFLAGS) -c -o $@ $<
 
 test: tests_lib test_s21_string.o
-	gcc $(CFLAGS) test_s21_string.o s21_string.a -g -lcheck -lm -lpthread -lgcov -o $@
+	gcc $(CFLAGS) test_s21_string.o s21_string.a -fsanitize=address -g -lcheck -lm -lpthread -lgcov -o $@
 	./$@
 	rm -f *.o *.a
 
@@ -27,7 +27,7 @@ tests_lib: tests_obj
 	ar rcs $(LIB) $(LIBOBJ)
 
 tests_obj: $(LIBSRC)
-	gcc $(CFLAGS) -O0 -std=c11 -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $^
+	gcc $(CFLAGS) -O0 -std=c11 -fsanitize=address -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $^
 
 cpplint: $(LIBSRC)
 	cp ../materials/linters/CPPLINT.cfg ./

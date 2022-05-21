@@ -51,30 +51,30 @@ START_TEST(test_integer) {
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5d'", INT_MIN);
 
     // Unsigned integers
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %u", 7);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%u:%u:%u", 7, 4, 0);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %u", 7u);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%u:%u:%u", 7u, 4u, 0u);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MAX %u", UINT_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MIN %u", 0);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MIN %u", 0u);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5u'", 7u);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5u'", UINT_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5u'", 0);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5u'", 0u);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5u'", 7u);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5u'", UINT_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5u'", 0);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5u'", 0u);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5u'", 7u);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5u'", UINT_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5u'", 0);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5u'", 0u);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5u'", 7u);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5u'", UINT_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5u'", 0);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5u'", 0u);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5u'", 7);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5u'", 7u);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5u'", UINT_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5u'", 0);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5u'", 0u);
 }
 END_TEST
 
@@ -114,36 +114,36 @@ START_TEST(test_long) {
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5ld'", LONG_MIN);
 
     // Unsigned integers
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %lu", 7l);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%lu:%lu:%lu", 7l, 4l, 0l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %lu", 7ul);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%lu:%lu:%lu", 7ul, 4ul, 0ul);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MAX %lu", ULONG_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MIN %lu", 0l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "MIN %lu", 0ul);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5lu'", 7l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5lu'", 7ul);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5lu'", ULONG_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5lu'", 0l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5lu'", 0ul);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5lu'", 7l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5lu'", 7ul);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5lu'", ULONG_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5lu'", 0l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%-5lu'", 0ul);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5lu'", 7l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5lu'", 7ul);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5lu'", ULONG_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5lu'", 0l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%.5lu'", 0ul);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5lu'", 7l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5lu'", 7ul);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5lu'", ULONG_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5lu'", 0l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%3.5lu'", 0ul);
 
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5lu'", 7l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5lu'", 7ul);
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5lu'", ULONG_MAX);
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5lu'", 0l);
+    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "precision '%-3.5lu'", 0ul);
 
-    const char * NULL_STR = NULL;
+    // const char * NULL_STR = NULL;
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Hola %s", "Mundo");
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "%s:%s:%s", "Mi Mundo", "es", "asin");
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "Nothing '%s'", "");
-    compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "NULL '%s'", NULL_STR);
+    // compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "NULL '%s'", NULL_STR);
 
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5s'", "bar");
     compare_print_func(sprintf, str_sprintf, s21_sprintf, str_csprintf, "padding '%5s'", "barfoobar");
@@ -225,7 +225,6 @@ START_TEST(test_memcmp) {
     char *str1 = "21school";
     char *str2 = "21school";
     char *str3 = "42school";
-    extern int s21_memcmp(const void *str1, const void *str2, s21_size_t n);
 
     result = s21_memcmp(str1, str2, strlen(str1));
     ck_assert_int_eq(result, 0);
@@ -591,8 +590,8 @@ START_TEST(test_sprintf) {
 
     memset(orig, 0, sizeof(orig));
     memset(res, 0, sizeof(res));
-    s21_sprintf(res, "%% %5.2u %-5.2u %%", 123, 123);
-    sprintf(orig, "%% %5.2u %-5.2u %%", 123, 123);
+    s21_sprintf(res, "%% %5.2u %-5.2u %%", 123u, 123U);
+    sprintf(orig, "%% %5.2u %-5.2u %%", 123U, 123U);
     ck_assert_str_eq(res, orig);
 
     memset(orig, 0, sizeof(orig));
