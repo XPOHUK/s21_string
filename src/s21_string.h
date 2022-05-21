@@ -8,7 +8,7 @@
 typedef long unsigned s21_size_t;
 
 // Part 1
-void *s21_memchr(const void *str, int c, s21_size_t n);
+void *s21_memchr(const void *str, int c, s21_size_t n);  // __attribute__((nonnull(1)));
 int s21_memcmp(const void *str1, const void *str2, s21_size_t n);
 void *s21_memcpy(void *dest, const void *src, s21_size_t n);
 void *s21_memmove(void *dest, const void *src, s21_size_t n);
@@ -30,7 +30,7 @@ char *s21_strstr(const char *haystack, const char *needle);
 char *s21_strtok(char *str, const char *delim);
 
 // Part 2/3
-int s21_sprintf(char *str, const char *format, ...);
+int s21_sprintf(char *str, const char *format, ...);  // __attribute__((format(printf, 2, 3)));
 
 // Part 4
 int s21_sscanf(const char *str, const char *format, ...);
