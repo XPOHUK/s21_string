@@ -1,10 +1,10 @@
 #include "s21_sprintf.h"
 
+#include <float.h>
 #include <math.h>
 #include <stdio.h>  // TODO(Rambtono) Delete after debug
 #include <stdlib.h>
 #include <wchar.h>
-#include <float.h>
 
 #include "s21_string.h"
 
@@ -287,8 +287,6 @@ char *_uint_to_str(va_list p, fmt_t *fmt) {
     } else {
         arg = va_arg(p, unsigned int);
     }
-    // char *str = _itoa(arg);
-    // int dig;
     s21_size_t k = 0;
     char *str = (char *)malloc(sizeof(char) * 2);
     int l = 1;
@@ -300,8 +298,7 @@ char *_uint_to_str(va_list p, fmt_t *fmt) {
         }
         l++;
         int dig = arg % 10;
-        if (dig < 0)
-            dig *= -1;
+        if (dig < 0) dig *= -1;
         str[k] = dig + '0';
         k++;
         arg /= 10;
@@ -359,16 +356,11 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
         sign = -1;
         arg = 0 - arg;
     }
-    char* res = S21_NULL;
-    printf("arg: %.3Lf\n", arg);
+    char *res = S21_NULL;
     long int_part = (long)arg;
-    printf("long int_part: %li\n", int_part);
     long double float_part_pow = (arg - int_part) * pow(10, precision);
-    printf("long double float_part_pow: %Lf\n", float_part_pow);
     long long float_part = (long long)float_part_pow;
-    printf("long long float_part: %lli\n", float_part);
     long double diff = float_part_pow - float_part;
-    printf("long double diff: %Lf\n", diff);
     if (diff > 0.5) {
         float_part++;
         if (float_part >= pow(10, precision)) {
@@ -391,7 +383,7 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
 
     len = s21_strlen(int_part_str) + ((float_part_str) ? s21_strlen(float_part_str) : 0);
 
-    res = (char *)malloc(sizeof(char) * (len + 3 + precision ));
+    res = (char *)malloc(sizeof(char) * (len + 3 + precision));
     *res = '\0';
     if (sign == -1) {
         s21_strcat(res, "-");
@@ -426,14 +418,13 @@ char *_itoa(long long i) {
     int len = 1;
 
     do {
-        char* res_tmp = realloc(res, sizeof(char) * (len + 1));
+        char *res_tmp = realloc(res, sizeof(char) * (len + 1));
         if (res_tmp) {
             res = res_tmp;
         }
         len++;
         int dig = arg % 10;
-        if (dig < 0)
-            dig *= -1;
+        if (dig < 0) dig *= -1;
         res[k] = dig + '0';
         k++;
         arg /= 10;
@@ -447,7 +438,7 @@ char *_itoa(long long i) {
         res[s21_strlen(res) - k - 1] = tmp;
     }
     if (i < 0) {
-        char* tmp = s21_insert(res, "-", 0);
+        char *tmp = s21_insert(res, "-", 0);
         free(res);
         res = tmp;
     }

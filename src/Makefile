@@ -18,8 +18,8 @@ s21_string.a: $(LIBOBJ)
 %.o: %.c
 	gcc $(CFLAGS) -c -o $@ $<
 
-test: tests_lib test_s21_string.o
-	gcc $(CFLAGS) test_s21_string.o s21_string.a -fsanitize=address -g -lcheck -lm -lpthread -lgcov -o $@
+test: tests_lib test_s21_string.o suite_mem.o suite_str.o suite_sharp.o suite_sprintf.o
+	gcc $(CFLAGS) test_s21_string.o suite_mem.o suite_str.o suite_sharp.o suite_sprintf.o s21_string.a -fsanitize=address -g -lcheck -lm -lpthread -lgcov -o $@
 	./$@
 	rm -f *.o *.a
 
