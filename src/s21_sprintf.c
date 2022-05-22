@@ -2,7 +2,6 @@
 
 #include <float.h>
 #include <math.h>
-#include <stdio.h>  // TODO(Rambtono) Delete after debug
 #include <stdlib.h>
 #include <wchar.h>
 
