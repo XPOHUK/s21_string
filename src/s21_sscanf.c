@@ -72,18 +72,18 @@ void parse_spec(char *from, int size, struct Spec *s) {
 int format_to_array(const char *format, struct Spec **specs) {
     int result = 0;
     char *from = malloc((s21_strlen(format) + 1) * sizeof(char));
-    char *next = malloc((s21_strlen(format) + 1) * sizeof(char));
+    char *next = S21_NULL;
     from = s21_strcpy(from, format);
     while (*from) {
         from = s21_strchr(from, '%');
         if (from == S21_NULL) {
             break;
         }
-        next = s21_strchr(from, '%');
+        next = s21_strchr(from + 1, '%');
         if (next == S21_NULL) {
             next = from + s21_strlen(from) - 1;
         }
-        parse_spec(from, next - from, *specs + result * sizeof(struct Spec));
+        parse_spec(from, next - from, *specs + result);
         result++;
         from++;
     }
@@ -91,7 +91,7 @@ int format_to_array(const char *format, struct Spec **specs) {
         result = 0;
     }
     free(from);
-    free(next);
+    // free(next);
     return result;
 }
 
