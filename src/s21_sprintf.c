@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include <locale.h>
 
 #include "s21_string.h"
 
@@ -85,7 +86,7 @@ int _parse_fmt(fmt_t *fmt, const char **from) {
     if (s21_strchr("+- ", **from)) {
         res = _get_flags(fmt, from);
     }
-    if (**from > '0' && **from <= '9') {
+    if (**from >= '0' && **from <= '9') {
         int width = 0;
         while (**from >= '0' && **from <= '9') {
             width = width * 10 + (**from - '0');
@@ -221,9 +222,10 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
 }
 
 char *_char_to_str(va_list p, fmt_t *fmt) {
+    setlocale(LC_ALL, "");
     char *res = S21_NULL;
     if (fmt->length == 'l') {
-        wchar_t *str = (wchar_t *)malloc(sizeof(wint_t) + sizeof(char));
+        wchar_t* str = (wchar_t*)malloc(sizeof(wint_t) + sizeof(char));
         if (str) {
             str[0] = va_arg(p, wint_t);
             res = (char *)str;
@@ -243,38 +245,48 @@ char *_char_to_str(va_list p, fmt_t *fmt) {
 
 char *_int_to_str(va_list p, fmt_t *fmt) {
     long long arg;
+    char *res = S21_NULL;
     if (fmt->length == 'l') {
         arg = va_arg(p, long long);
+    } else if (fmt->length == 'h') {
+        int tmp = va_arg(p, int);
+        short int tmp2 = (short int)tmp;
+        arg = tmp2;
     } else {
         arg = va_arg(p, int);
     }
-    char *str = _itoa(arg);
-    long long len = s21_strlen(str);
-    if (fmt->precision > len) {
-        len = len + (fmt->precision - len);
-    }
-    if ((arg >= 0 && (fmt->flag_sign || fmt->flag_space)) || arg < 0) {
-        len++;
-    }
-    char *res = (char *)malloc(sizeof(char) * (len + 1));
-    if (res) {
+    if (arg == 0 && fmt->precision == 0) {
+        res = malloc(sizeof(char));
         *res = '\0';
-        if (arg < 0) {
-            // s21_strcat(res, "-");
-        } else {
-            if (fmt->flag_sign) {
-                s21_strcat(res, "+");
-            } else if (fmt->flag_space) {
-                s21_strcat(res, " ");
+    } else {
+        char *str = _itoa(arg);
+        long long len = s21_strlen(str);
+        if (fmt->precision > len) {
+            len = len + (fmt->precision - len);
+        }
+        if ((arg >= 0 && (fmt->flag_sign || fmt->flag_space)) || arg < 0) {
+            len++;
+        }
+        res = (char *)malloc(sizeof(char) * (len + 1));
+        if (res) {
+            *res = '\0';
+            if (arg < 0) {
+                // s21_strcat(res, "-");
+            } else {
+                if (fmt->flag_sign) {
+                    s21_strcat(res, "+");
+                } else if (fmt->flag_space) {
+                    s21_strcat(res, " ");
+                }
             }
+            // Записать нули если надо
+            if (fmt->precision > (long long)s21_strlen(str)) {
+                // Можно было бы использовать memset, но потом ещё терминатор придётся дописывать
+                for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
+            }
+            s21_strcat(res, str);
+            free(str);
         }
-        // Записать нули если надо
-        if (fmt->precision > (long long)s21_strlen(str)) {
-            // Можно было бы использовать memset, но потом ещё терминатор придётся дописывать
-            for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
-        }
-        s21_strcat(res, str);
-        free(str);
     }
     return res;
 }
@@ -382,7 +394,7 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
 
     len = s21_strlen(int_part_str) + ((float_part_str) ? s21_strlen(float_part_str) : 0);
 
-    res = (char *)malloc(sizeof(char) * (len + 3 + precision));
+    res = (char *)malloc(sizeof(char) * (len + 13 + precision));
     *res = '\0';
     if (sign == -1) {
         s21_strcat(res, "-");
@@ -398,12 +410,19 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
     free(int_part_str);
     if (float_part_str) {
         s21_strcat(res, ".");
-        s21_strcat(res, float_part_str);
-        int need_zero = precision - s21_strlen(float_part_str);
-        while (need_zero) {
+        // Пробуем пофиксить одну десятитысячную
+        s21_size_t fp_len = s21_strlen(float_part_str);
+        while ((int)fp_len < precision) {
             s21_strcat(res, "0");
-            need_zero--;
+            fp_len++;
         }
+        // Конец фикса
+        s21_strcat(res, float_part_str);
+        // int need_zero = precision - s21_strlen(float_part_str);
+        // while (need_zero) {
+        //     s21_strcat(res, "0");
+        //     need_zero--;
+        // }
         free(float_part_str);
     }
     return res;

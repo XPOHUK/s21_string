@@ -12,7 +12,7 @@ int main(void) {
     srunner_add_suite(runner, make_mem_suite());
     srunner_add_suite(runner, make_str_suite());
     srunner_add_suite(runner, make_sharp_suite());
-    srunner_add_suite(runner, make_sscanf_suite());
+    // srunner_add_suite(runner, make_sscanf_suite());
 
     srunner_set_fork_status(runner, CK_NOFORK);
     srunner_run_all(runner, CK_VERBOSE);  // CK_SILENT CK_MINIMAL CK_NORMAL CK_VERBOSE
