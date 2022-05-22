@@ -8,6 +8,8 @@ endif
 CFLAGS = -Wall -Wextra -Werror
 LIBSRC = $(wildcard s21_*.c)
 LIBOBJ = $(LIBSRC:.c=.o)
+SUITESRC = $(wildcard suite_*.c)
+SUITEOBJ = $(SUITESRC:.c=.o)
 LIB = s21_string.a
 
 all: cpplint test gcov_report s21_string.a
@@ -18,13 +20,16 @@ s21_string.a: $(LIBOBJ)
 %.o: %.c
 	gcc $(CFLAGS) -c -o $@ $<
 
-test: tests_lib test_s21_string.o suite_mem.o suite_str.o suite_sharp.o suite_sprintf.o suite_sscanf.o
-	gcc $(CFLAGS) test_s21_string.o suite_mem.o suite_str.o suite_sharp.o suite_sprintf.o suite_sscanf.o s21_string.a -fsanitize=address -g -lcheck -lm -lpthread -lgcov -o $@
+test: test_$(LIB) test_s21_string.o $(SUITEOBJ)
+	gcc $(CFLAGS) tests/$(LIB) test_s21_string.o $(SUITEOBJ) -fsanitize=address -g -lcheck -lm -lpthread -lgcov -o $@
 	./$@
 	rm -f *.o *.a
 
-tests_lib: tests_obj
-	ar rcs $(LIB) $(LIBOBJ)
+test_$(LIB): $(addprefix tests/,$(LIBOBJ))
+	ar rcs tests/$(LIB) $^
+
+tests/%.o: %.c
+	gcc $(CFLAGS) -O0 -std=c11 -fsanitize=address -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $< -o $@
 
 tests_obj: $(LIBSRC)
 	gcc $(CFLAGS) -O0 -std=c11 -fsanitize=address -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $^

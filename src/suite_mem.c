@@ -1,7 +1,7 @@
 #include <string.h>
 
-#include "s21_string.h"
 #include "test_s21_string.h"
+#include "tests/s21_string.h"
 
 START_TEST(test_memcmp) {
     int result;
