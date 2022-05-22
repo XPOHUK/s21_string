@@ -4,43 +4,57 @@
 #include <float.h>
 
 struct Spec {
-    char *str;          // Вся строка
     char type;          // Спецификатор: c, d, i, e, E, f, g, G, o, s, u, x, X, p, n
     s21_size_t width;   // Ширина
     char length;        // Длина: h, l, L
     int is_star;        // Указана ли звезда после %: 0 - не указана, 1 - указана
+    char *str;          // Указатель на блок строки, относящейся к этому спецификатору
 };
 
-void match_string(const char* *p_here, char* str, int *p_error) {
-//    if (flags & FLAG_IS_WS_STRING) {
-//        // Skip all whitespaces
-//        s21_size_t space_count = s21_strspn(*p_here, ' ');
-//        *p_here += space_count;
-//    } else {  // NOT (spec.flags & FLAG_IS_WS_STRING)
-        // Must match test string
-        s21_size_t str_len = s21_strlen(str);
-        if (s21_strncmp(*p_here, str, str_len)) {  //  cmp != 0 --> different
-            *p_error = 5;
-        } else {
-            *p_here += str_len;
+int string_to_int(char *string) {
+    int result = -1;
+    int sign = 1;
+    if (string) {
+        result = 0;
+        if (*string == '+') {
+            string++;
+        } else if (*string == '-') {
+            sign = -1;
+            string++;
         }
-//    }
+        while (*string) {
+            if (*string < '0' || *string > '1') {
+                break;
+            } else {
+                result = result * 10 + *string - '0';
+            }
+        }
+    }
+    return sign * result;
+}
+
+void match_string(const char* *p_here, char* str, int *p_error) {
+    s21_size_t str_len = s21_strlen(str);
+    if (s21_strncmp(*p_here, str, str_len)) {
+        *p_error = 5;
+    } else {
+        *p_here += str_len;
+    }
 }
 
 void parse_spec(char *from, int size, struct Spec *s) {
-    char *str = (char *) malloc ((size + 1) * sizeof(char));
-    s21_strncpy(str, from, size);
-    str[size] = '\0';
+    s->str = (char *) malloc ((size + 1) * sizeof(char));
+    s21_strncpy(s->str, from, size);
+    s->str[size] = '\0';
 
-    char *this = str;
-    s21_strcpy(s->str, str);
+    char *this = s->str;
     if (*this == '*') {
         s->is_star = 1;
     } else {
         s->is_star = 0;
-        if (*this >= '1' && *this <= '0') {
-            s->width = atoi(this);
-            while (*this >= '1' && *this <= '0') {
+        if (*this >= '0' && *this <= '1') {
+            s->width = string_to_int(this);
+            while (*this >= '0' && *this <= '1') {
                 this++;
             }
         }
@@ -50,41 +64,32 @@ void parse_spec(char *from, int size, struct Spec *s) {
         }
         if (s21_strchr("cdieEfgGosuxXpn%", *this) != S21_NULL) {
             s->type = *this;
-        } else {
-            // printf("Спецификатор %c не определен", *this);
         }
     }
-    free(str);
     return;
 }
 
 int format_to_array(const char *format, struct Spec **specs) {
     int result = 0;
-    char *temp = malloc(s21_strlen(format + 1) * sizeof(char));
-    char *from = malloc(s21_strlen(format + 1) * sizeof(char));
-    char *next = malloc(s21_strlen(format + 1) * sizeof(char));
-    s21_strcpy(temp, format);
-    while (temp) {
-        from = s21_strchr(temp, '%');
+    char *from = malloc((s21_strlen(format) + 1) * sizeof(char));
+    char *next = malloc((s21_strlen(format) + 1) * sizeof(char));
+    from = s21_strcpy(from, format);
+    while (*from) {
+        from = s21_strchr(from, '%');
         if (from == S21_NULL) {
             break;
         }
         next = s21_strchr(from, '%');
         if (next == S21_NULL) {
-            next = temp + s21_strlen(temp) - 1;
+            next = from + s21_strlen(from) - 1;
         }
         parse_spec(from, next - from, *specs + result * sizeof(struct Spec));
         result++;
-        temp = from + 1;
+        from++;
     }
-//    if (*temp) {
-//        parse_spec(from, s21_strlen(from), *specs + result * sizeof(struct Spec));
-//    }
-    specs = (struct Spec**) realloc(specs, result * sizeof(struct Spec));
     if (!specs) {
         result = 0;
     }
-    free(temp);
     free(from);
     free(next);
     return result;
@@ -177,7 +182,7 @@ int s21_sscanf(const char *str, const char *format, ...) {
                 s21_size_t count = specs[i].width ? specs[i].width : 1;
                 if (s21_strlen(here) >= count) {
                     if (!(specs[i].is_star)) {
-                      char *there = va_arg(args, char *);
+                      there = va_arg(args, char *);
                       s21_strncpy(there, here, count);
                       ++result;
                     }
@@ -197,7 +202,7 @@ int s21_sscanf(const char *str, const char *format, ...) {
                 }
                 s21_size_t count = specs[i].width ? count_width : non_space_count;
                 if (!(specs[i].is_star)) {
-                  char *there = va_arg(args, char *);
+                  there = va_arg(args, char *);
                   s21_strncpy(there, here, count);
                   ++result;
                 }
