@@ -1,13 +1,12 @@
 #include "s21_string.h"
 #include <stdarg.h>
-#include <math.h>
-#include <float.h>
 
 struct Spec {
-    char type;          // Спецификатор: c, d, i, e, E, f, g, G, o, s, u, x, X, p, n
+    char type;          // Спецификатор: c, d, i, e, E, f, g, G, o, s, u, x, X, p, n, %
     s21_size_t width;   // Ширина
     char length;        // Длина: h, l, L
     int is_star;        // Указана ли звезда после %: 0 - не указана, 1 - указана
+    int is_space;       // Состоит ли этот блок только из пробелов
     char *str;          // Указатель на блок строки, относящейся к этому спецификатору
 };
 
@@ -33,12 +32,30 @@ int string_to_int(char *string) {
     return sign * result;
 }
 
-void match_string(const char* *p_here, char* str, int *p_error) {
-    s21_size_t str_len = s21_strlen(str);
-    if (s21_strncmp(*p_here, str, str_len)) {
-        *p_error = 5;
+s21_size_t parse_save_whitespaces(char *from, struct Spec *s) {
+    s21_size_t space_count = s21_strspn(from, " ");
+    if (space_count) {
+        char *str = (char *) malloc((space_count + 1) * sizeof(char));
+        s21_strncpy(str, from, space_count);
+        str[space_count] = '\0';
+        s->str = str;
+        s->is_space = 1;
+        *from += space_count;
+    }
+    return space_count;
+}
+
+void match_string(const char* *p_here, char* str, int spaces, int *p_error) {
+    if (spaces) {
+        s21_size_t space_count = s21_strspn(*p_here, " ");
+        *p_here += space_count;
     } else {
-        *p_here += str_len;
+        s21_size_t str_len = s21_strlen(str);
+        if (s21_strncmp(*p_here, str, str_len)) {
+            *p_error = 5;
+        } else {
+            *p_here += str_len;
+        }
     }
 }
 
@@ -48,7 +65,10 @@ void parse_spec(char *from, int size, struct Spec *s) {
     s->str[size] = '\0';
 
     char *this = s->str;
-    if (*this == '*') {
+    if (*this == '%') {
+        s->is_star = 0;
+        s->type = '%';
+    } else if (*this == '*') {
         s->is_star = 1;
     } else {
         s->is_star = 0;
@@ -62,7 +82,7 @@ void parse_spec(char *from, int size, struct Spec *s) {
             s->length = *this;
             this++;
         }
-        if (s21_strchr("cdieEfgGosuxXpn%", *this) != S21_NULL) {
+        if (s21_strchr("cdieEfgGosuxXpn", *this) != S21_NULL) {
             s->type = *this;
         }
     }
@@ -75,23 +95,27 @@ int format_to_array(const char *format, struct Spec **specs) {
     char *next = S21_NULL;
     from = s21_strcpy(from, format);
     while (*from) {
-        from = s21_strchr(from, '%');
-        if (from == S21_NULL) {
-            break;
+        int spaces = parse_save_whitespaces(from, *specs + result);
+        if (spaces) {
+            from += spaces;
+        } else {
+            from = s21_strchr(from, '%');
+            if (from == S21_NULL) {
+                break;
+            }
+            next = s21_strchr(from + 1, '%');
+            if (next == S21_NULL) {
+                next = from + s21_strlen(from) - 1;
+            }
+            parse_spec(from, next - from, *specs + result);
+            result++;
+            from++;
         }
-        next = s21_strchr(from + 1, '%');
-        if (next == S21_NULL) {
-            next = from + s21_strlen(from) - 1;
-        }
-        parse_spec(from, next - from, *specs + result);
-        result++;
-        from++;
     }
     if (!specs) {
         result = 0;
     }
     free(from);
-    // free(next);
     return result;
 }
 
@@ -120,17 +144,17 @@ int s21_sscanf(const char *str, const char *format, ...) {
                 if (here != there) {
                     if (specs[i].length == 'l') {
                         if (!(specs[i].is_star)) {
-                            ++result;
+                            result++;
                             *(va_arg(args, long *)) = _var1;
                         }
                     } else if (specs[i].length == 'h') {
                         if (!(specs[i].is_star)) {
-                            ++result;
+                            result++;
                             *(va_arg(args, short *)) = (short) _var1;
                         }
                     } else {
                         if (!(specs[i].is_star)) {
-                            ++result;
+                            result++;
                             *(va_arg(args, int *)) = (int) _var1;
                         }
                     }
@@ -144,7 +168,7 @@ int s21_sscanf(const char *str, const char *format, ...) {
                 unsigned long long _var2 = strtoull(here, &there, 16);
                 if (here != there) {
                     if (!(specs[i].is_star)) {
-                        ++result;
+                        result++;
                         *(va_arg(args, unsigned long long *)) = _var2;
                     }
                     here = there;
@@ -158,17 +182,17 @@ int s21_sscanf(const char *str, const char *format, ...) {
                 if (here != there) {
                     if (specs[i].length == 'L') {
                         if (!(specs[i].is_star)) {
-                            ++result;
+                            result++;
                             *(va_arg(args, long double *)) = _var3;
                         }
                     } else if (specs[i].length == 'l') {
                         if (!(specs[i].is_star)) {
-                            ++result;
+                            result++;
                             *(va_arg(args, double *)) = _var3;
                         }
                     } else {
                         if (!(specs[i].is_star)) {
-                            ++result;
+                            result++;
                             *(va_arg(args, float *)) = _var3;
                         }
                     }
@@ -184,7 +208,7 @@ int s21_sscanf(const char *str, const char *format, ...) {
                     if (!(specs[i].is_star)) {
                       there = va_arg(args, char *);
                       s21_strncpy(there, here, count);
-                      ++result;
+                      result++;
                     }
                     here += count;
                 } else {
@@ -204,17 +228,17 @@ int s21_sscanf(const char *str, const char *format, ...) {
                 if (!(specs[i].is_star)) {
                   there = va_arg(args, char *);
                   s21_strncpy(there, here, count);
-                  ++result;
+                  result++;
                 }
                 here += count;
                 break;
             }
             case '\0': {
-                match_string(&here, specs[i].str, &error);
+                match_string(&here, specs[i].str, specs[i].is_space, &error);
                 break;
             }
             case '%': {
-                match_string(&here, "%", &error);
+                match_string(&here, "%", specs[i].is_space, &error);
                 break;
             }
             case 'n': {
@@ -223,12 +247,15 @@ int s21_sscanf(const char *str, const char *format, ...) {
             }
             default: {}
         }
+        if (error > 0) {
+            break;
+        }
     }
+    va_end(args);
     if (error > 0) {
         result = -1 * error;
     }
 
-    va_end(args);
     free(specs);
     return result;
 }
