@@ -33,7 +33,7 @@ char *s21_strtok(char *str, const char *delim);
 int s21_sprintf(char *str, const char *format, ...);  // __attribute__((format(printf, 2, 3)));
 
 // Part 4
-// int s21_sscanf(const char *str, const char *format, ...);
+int s21_sscanf(const char *str, const char *format, ...);
 
 // Part 5
 void *s21_to_upper(const char *str);

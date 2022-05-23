@@ -5,9 +5,9 @@ endif
 ifeq ($(UNAME_S),Darwin)
     CMD = open ./coverage_report.html
 endif
-CFLAGS = -Wall -Wextra -Werror
-LIBSRC = $(filter-out s21_sscanf.c, $(wildcard s21_*.c))
-TESTSRC = $(filter-out suite_sscanf.c, $(wildcard suite*)) test_s21_string.c
+CFLAGS = -Wall -Wextra -Werror -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk $(shell pkg-config --cflags check)
+LIBSRC = $(wildcard s21_*.c)
+TESTSRC = $(wildcard suite*) test_s21_string.c
 LIBOBJ = $(LIBSRC:.c=.o)
 LIB = s21_string.a
 
@@ -20,7 +20,7 @@ s21_string.a: $(LIBOBJ)
 	gcc $(CFLAGS) -c -o $@ $<
 
 test: tests_lib $(TESTSRC:.c=.o)
-	gcc $(CFLAGS) $(TESTSRC:.c=.o) s21_string.a -fsanitize=address -g -lcheck -lm -lpthread -lgcov -o $@
+	gcc $(CFLAGS) $(TESTSRC:.c=.o) s21_string.a -fsanitize=address -g -lcheck -lm -lpthread --coverage -o $@ $(shell pkg-config --libs check)
 	./$@
 	rm -f *.o *.a
 
@@ -28,7 +28,7 @@ tests_lib: tests_obj
 	ar rcs $(LIB) $(LIBOBJ)
 
 tests_obj: $(LIBSRC)
-	gcc $(CFLAGS) -O0 -std=c11 -fsanitize=address -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $^
+	gcc $(CFLAGS) -O0 -std=c11 -fsanitize=address -pedantic -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $^
 
 cpplint: 
 	cp ../materials/linters/CPPLINT.cfg ./
