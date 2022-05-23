@@ -7,6 +7,7 @@ ifeq ($(UNAME_S),Darwin)
     CMD = open ./coverage_report.html
 endif
 CFLAGS = -Wall -Wextra -Werror
+LDFLAGS = -O0 -std=c11 -fanalyzer -fsanitize=address -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2
 LIBSRC = $(filter-out s21_sscanf.c, $(wildcard s21_*.c))
 TESTSRC = $(filter-out suite_sscanf.c, $(wildcard suite*.c)) test_s21_string.c
 LIBOBJ = $(LIBSRC:.c=.o)
@@ -31,7 +32,7 @@ test_$(LIB): $(addprefix test_, $(LIBOBJ))
 	ar rcs test_$(LIB) $(addprefix test_, $(LIBOBJ))
 
 test_%.o: %.c s21_string.h
-	gcc $(CFLAGS) -O0 -std=c11 -fanalyzer -fsanitize=address -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $< -o $@
+	gcc $(CFLAGS) $(LDFLAGS) -c -g -fprofile-arcs -ftest-coverage $< -o $@
 
 test_s21_strerror.o: s21_strerror.h
 test_s21_sprintf.o: s21_sprintf.h
@@ -50,8 +51,7 @@ clean:
 	rm -f coverage* test *.gcda *.gcno *.o
 
 fclean: clean
-	rm -f $(LIB)
+	rm -f *.a
 
 rebuild:
 	make -B
-
