@@ -4,7 +4,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <wchar.h>
-#include <locale.h>
 
 #include "s21_string.h"
 
@@ -222,7 +221,6 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
 }
 
 char *_char_to_str(va_list p, fmt_t *fmt) {
-    setlocale(LC_ALL, "");
     char *res = S21_NULL;
     if (fmt->length == 'l') {
         wchar_t* str = (wchar_t*)malloc(sizeof(wint_t) + sizeof(char));
