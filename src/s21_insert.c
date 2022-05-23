@@ -10,7 +10,7 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
         res = (char *)malloc((s21_strlen(src) + s21_strlen(str) + 1));
         if (res) {
             s21_strncpy(res, src, start_index);
-            *(res + start_index) = '\0';
+            res[start_index] = '\0';
             s21_strcat(res, str);
             s21_strcat(res, src + start_index);
         }
