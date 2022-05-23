@@ -1,3 +1,4 @@
+.PHONY: all cpplint gcov_report clean fclean rebuild
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
     CMD = xdg-open ./coverage_report.html
@@ -7,7 +8,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 CFLAGS = -Wall -Wextra -Werror
 LIBSRC = $(filter-out s21_sscanf.c, $(wildcard s21_*.c))
-TESTSRC = $(filter-out suite_sscanf.c, $(wildcard suite*)) test_s21_string.c
+TESTSRC = $(filter-out suite_sscanf.c, $(wildcard suite*.c)) test_s21_string.c
 LIBOBJ = $(LIBSRC:.c=.o)
 LIB = s21_string.a
 
@@ -16,19 +17,24 @@ all: cpplint test gcov_report s21_string.a
 s21_string.a: $(LIBOBJ)
 	ar rcs $(LIB) $(LIBOBJ)
 
-%.o: %.c
-	gcc $(CFLAGS) -c -o $@ $<
+s21_%.o: s21_%.c s21_string.h
+	gcc $(CFLAGS) -c $<
 
-test: tests_lib $(TESTSRC:.c=.o)
-	gcc $(CFLAGS) $(TESTSRC:.c=.o) s21_string.a -fsanitize=address -g -lcheck -lm -lpthread -lgcov -o $@
+# Нижеследующая цель просто добавляет зависимости (пререквизиты) для двух объектных файлов
+s21_strerror.o s21_sprintf.o: %.o: %.h
+
+test: test_$(LIB) $(TESTSRC:.c=.o)
+	gcc $(CFLAGS) $(TESTSRC:.c=.o) $< -fsanitize=address -g -lcheck -lm -lpthread -lgcov -o $@
 	./$@
-	rm -f *.o *.a
 
-tests_lib: tests_obj
-	ar rcs $(LIB) $(LIBOBJ)
+test_$(LIB): $(addprefix test_, $(LIBOBJ))
+	ar rcs test_$(LIB) $(addprefix test_, $(LIBOBJ))
 
-tests_obj: $(LIBSRC)
-	gcc $(CFLAGS) -O0 -std=c11 -fsanitize=address -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $^
+test_%.o: %.c s21_string.h
+	gcc $(CFLAGS) -O0 -std=c11 -fanalyzer -fsanitize=address -pedantic -Wno-stringop-truncation -ftrapv -Wundef -Wformat=2 -c -g -fprofile-arcs -ftest-coverage $< -o $@
+
+test_s21_strerror.o: s21_strerror.h
+test_s21_sprintf.o: s21_sprintf.h
 
 cpplint: 
 	cp ../materials/linters/CPPLINT.cfg ./
