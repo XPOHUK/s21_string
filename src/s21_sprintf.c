@@ -14,7 +14,7 @@ int s21_sprintf(char *str, const char *format, ...) {
     va_list p;
     va_start(p, format);
     fmt_t *fmt = S21_NULL;
-    int res;
+    long unsigned res;
     res = _parse(format, &fmt);
     if (res == 0) {
         if (fmt == S21_NULL) {
@@ -23,6 +23,9 @@ int s21_sprintf(char *str, const char *format, ...) {
         } else {
             _do_output(str, f_start, p, fmt);
         }
+        res = s21_strlen(str);
+    } else {
+        res = -1;
     }
     _clear_list(fmt);
     va_end(p);
@@ -223,7 +226,7 @@ int _do_output(char *str, const char *format, va_list p, fmt_t *fmt) {
 char *_char_to_str(va_list p, fmt_t *fmt) {
     char *res = S21_NULL;
     if (fmt->length == 'l') {
-        wchar_t* str = (wchar_t*)malloc(sizeof(wint_t) + sizeof(char));
+        wchar_t *str = (wchar_t *)malloc(sizeof(wint_t) + sizeof(char));
         if (str) {
             str[0] = va_arg(p, wint_t);
             res = (char *)str;
