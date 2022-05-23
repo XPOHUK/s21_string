@@ -9,7 +9,7 @@ START_TEST(EOF1) {
     char str[] = "        ";
 
     int16_t res1 = s21_sscanf(str, fstr, 0);
-    int16_t res2 = sscanf(str, fstr, 100);
+    int16_t res2 = sscanf(str, fstr, 0);
     ck_assert_int_eq(res1, res2);
 }
 END_TEST
