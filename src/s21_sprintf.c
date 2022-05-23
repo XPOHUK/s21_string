@@ -258,7 +258,7 @@ char *_int_to_str(va_list p, fmt_t *fmt) {
     }
     if (arg == 0 && fmt->precision == 0) {
         res = malloc(sizeof(char));
-        *res = '\0';
+        if (res) *res = '\0';
     } else {
         char *str = _itoa(arg);
         long long len = s21_strlen(str);
@@ -286,58 +286,62 @@ char *_int_to_str(va_list p, fmt_t *fmt) {
                 for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
             }
             s21_strcat(res, str);
-            free(str);
         }
+        free(str);
     }
     return res;
 }
 
 char *_uint_to_str(va_list p, fmt_t *fmt) {
+    char *res = S21_NULL;
     unsigned long long arg;
     if (fmt->length == 'l') {
         arg = va_arg(p, unsigned long long);
     } else {
         arg = va_arg(p, unsigned int);
     }
-    s21_size_t k = 0;
     char *str = (char *)malloc(sizeof(char) * 2);
-    int l = 1;
+    if (str) {
+        int l = 1;
+        s21_size_t k = 0;
+        do {
+            char *str_tmp = realloc(str, sizeof(char) * (l + 1));
+            if (str_tmp) {
+                str = str_tmp;
+            }
+            l++;
+            int dig = arg % 10;
+            if (dig < 0) dig *= -1;
+            str[k] = dig + '0';
+            k++;
+            arg /= 10;
+        } while (arg != 0);
 
-    do {
-        char *str_tmp = realloc(str, sizeof(char) * (l + 1));
-        if (str_tmp) {
-            str = str_tmp;
+        str[k] = '\0';
+
+        for (k = 0; k < s21_strlen(str) / 2; k++) {
+            char tmp = str[k];
+            str[k] = str[s21_strlen(str) - k - 1];
+            str[s21_strlen(str) - k - 1] = tmp;
         }
-        l++;
-        int dig = arg % 10;
-        if (dig < 0) dig *= -1;
-        str[k] = dig + '0';
-        k++;
-        arg /= 10;
-    } while (arg != 0);
-
-    str[k] = '\0';
-
-    for (k = 0; k < s21_strlen(str) / 2; k++) {
-        char tmp = str[k];
-        str[k] = str[s21_strlen(str) - k - 1];
-        str[s21_strlen(str) - k - 1] = tmp;
+        s21_size_t len = s21_strlen(str);
+        if (fmt->precision > (int)len) len = len + (fmt->precision - len);
+        res = (char *)malloc(sizeof(char) * (len + 1));
+        if (res) {
+            *res = '\0';
+            if (fmt->precision > (int)s21_strlen(str)) {
+                for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
+            }
+            s21_strcat(res, str);
+        }
+        free(str);
     }
-    s21_size_t len = s21_strlen(str);
-    if (fmt->precision > (int)len) len = len + (fmt->precision - len);
-    char *res = (char *)malloc(sizeof(char) * (len + 1));
-    *res = '\0';
-    if (fmt->precision > (int)s21_strlen(str)) {
-        for (long unsigned int i = 0; i < fmt->precision - s21_strlen(str); i++) s21_strcat(res, "0");
-    }
-    s21_strcat(res, str);
-    free(str);
     return res;
 }
 
 char *_str_to_str(va_list p, fmt_t *fmt) {
     char *str = va_arg(p, char *);
-    char *res;
+    char *res = S21_NULL;
     if (!str) {
         res = malloc(sizeof(char) * 7);
         s21_strcpy(res, "(null)");
@@ -346,14 +350,16 @@ char *_str_to_str(va_list p, fmt_t *fmt) {
         res = s21_strcpy(res, str);
     } else if (fmt->precision == 0) {
         res = (char *)malloc(sizeof(char));
-        *res = '\0';
+        if (res) *res = '\0';
     } else if ((s21_size_t)fmt->precision < s21_strlen(str)) {
         res = (char *)malloc(sizeof(char) * (fmt->precision + 1));
-        *res = '\0';
-        s21_strncat(res, str, fmt->precision);
+        if (res) {
+            *res = '\0';
+            s21_strncat(res, str, fmt->precision);
+        }
     } else {
         res = (char *)malloc(sizeof(char) * (s21_strlen(str) + 1));
-        res = s21_strcpy(res, str);
+        if (res) res = s21_strcpy(res, str);
     }
     return res;
 }
@@ -396,70 +402,74 @@ char *_float_to_str(va_list p, fmt_t *fmt) {
     len = s21_strlen(int_part_str) + ((float_part_str) ? s21_strlen(float_part_str) : 0);
 
     res = (char *)malloc(sizeof(char) * (len + 13 + precision));
-    *res = '\0';
-    if (sign == -1) {
-        s21_strcat(res, "-");
-    } else {
-        if (fmt->flag_sign) {
-            s21_strcat(res, "+");
-        } else if (fmt->flag_space) {
-            s21_strcat(res, " ");
+    if (res) {
+        *res = '\0';
+        if (sign == -1) {
+            s21_strcat(res, "-");
+        } else {
+            if (fmt->flag_sign) {
+                s21_strcat(res, "+");
+            } else if (fmt->flag_space) {
+                s21_strcat(res, " ");
+            }
         }
-    }
 
-    s21_strcat(res, int_part_str);
-    free(int_part_str);
-    if (float_part_str) {
-        s21_strcat(res, ".");
-        // Пробуем пофиксить одну десятитысячную
-        s21_size_t fp_len = s21_strlen(float_part_str);
-        while ((int)fp_len < precision) {
-            s21_strcat(res, "0");
-            fp_len++;
+        s21_strcat(res, int_part_str);
+
+        if (float_part_str) {
+            s21_strcat(res, ".");
+            // Пробуем пофиксить одну десятитысячную
+            s21_size_t fp_len = s21_strlen(float_part_str);
+            while ((int)fp_len < precision) {
+                s21_strcat(res, "0");
+                fp_len++;
+            }
+            // Конец фикса
+            s21_strcat(res, float_part_str);
+            // int need_zero = precision - s21_strlen(float_part_str);
+            // while (need_zero) {
+            //     s21_strcat(res, "0");
+            //     need_zero--;
+            // }
+            free(float_part_str);
         }
-        // Конец фикса
-        s21_strcat(res, float_part_str);
-        // int need_zero = precision - s21_strlen(float_part_str);
-        // while (need_zero) {
-        //     s21_strcat(res, "0");
-        //     need_zero--;
-        // }
-        free(float_part_str);
     }
+    if (int_part_str) free(int_part_str);
     return res;
 }
 
 char *_itoa(long long i) {
     long long arg = i;
     // int dig;
-    s21_size_t k = 0;
     char *res = (char *)malloc(sizeof(char) * 2);
-    int len = 1;
+    if (res) {
+        int len = 1;
+        s21_size_t k = 0;
+        do {
+            char *res_tmp = realloc(res, sizeof(char) * (len + 1));
+            if (res_tmp) {
+                res = res_tmp;
+            }
+            len++;
+            int dig = arg % 10;
+            if (dig < 0) dig *= -1;
+            res[k] = dig + '0';
+            k++;
+            arg /= 10;
+        } while (arg != 0);
 
-    do {
-        char *res_tmp = realloc(res, sizeof(char) * (len + 1));
-        if (res_tmp) {
-            res = res_tmp;
+        res[k] = '\0';
+
+        for (k = 0; k < s21_strlen(res) / 2; k++) {
+            char tmp = res[k];
+            res[k] = res[s21_strlen(res) - k - 1];
+            res[s21_strlen(res) - k - 1] = tmp;
         }
-        len++;
-        int dig = arg % 10;
-        if (dig < 0) dig *= -1;
-        res[k] = dig + '0';
-        k++;
-        arg /= 10;
-    } while (arg != 0);
-
-    res[k] = '\0';
-
-    for (k = 0; k < s21_strlen(res) / 2; k++) {
-        char tmp = res[k];
-        res[k] = res[s21_strlen(res) - k - 1];
-        res[s21_strlen(res) - k - 1] = tmp;
-    }
-    if (i < 0) {
-        char *tmp = s21_insert(res, "-", 0);
-        free(res);
-        res = tmp;
+        if (i < 0) {
+            char *tmp = s21_insert(res, "-", 0);
+            free(res);
+            res = tmp;
+        }
     }
     return res;
 }
