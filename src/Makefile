@@ -41,7 +41,7 @@ gcov_report: test
 	rm -f *.gcda *.gcno
 
 clean:
-	rm -f $(LIBOBJ) coverage* test *.gcda *.gcno test_s21_string.o test-s21_string.a
+	rm -f coverage* test *.gcda *.gcno *.o
 
 fclean: clean
 	rm -f $(LIB)
