@@ -7,8 +7,8 @@ ifeq ($(UNAME_S),Darwin)
     CMD = open ./coverage_report.html
 endif
 CFLAGS = -Wall -Wextra -Werror
-LIBSRC = $(filter-out s21_sscanf.c, $(wildcard s21_*.c))
-TESTSRC = $(filter-out suite_sscanf.c, $(wildcard suite*.c)) test_s21_string.c
+LIBSRC = $(wildcard s21_*.c)
+TESTSRC = $(wildcard suite*.c) test_s21_string.c
 LIBOBJ = $(LIBSRC:.c=.o)
 LIB = s21_string.a
 
@@ -36,7 +36,7 @@ test_%.o: %.c s21_string.h
 test_s21_strerror.o: s21_strerror.h
 test_s21_sprintf.o: s21_sprintf.h
 
-cpplint: 
+cpplint:
 	cp ../materials/linters/CPPLINT.cfg ./
 	python3 ../materials/linters/cpplint.py --extensions=c *.c *.h
 	rm ./CPPLINT.cfg
@@ -54,4 +54,3 @@ fclean: clean
 
 rebuild:
 	make -B
-
