@@ -1,7 +1,6 @@
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
-#include <locale.h>
 
 #include "s21_string.h"
 #include "test_s21_string.h"
@@ -1262,7 +1261,6 @@ START_TEST(width_char) {
     ck_assert_str_eq(str1, str2);
 }
 // START_TEST(minus_wide_char) {
-//     setlocale(LC_ALL, "");
 //     char str1[BUFF_SIZE];
 //     char str2[BUFF_SIZE];
 
@@ -1321,7 +1319,6 @@ START_TEST(width_char) {
 // END_TEST
 
 Suite *make_sprintf_suite(void) {
-    setlocale(LC_ALL, "");
     Suite *s = suite_create("Sprintf function tests");
     TCase *tc_sprintf;
 
