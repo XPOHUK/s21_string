@@ -18,6 +18,7 @@ START_TEST(test_memcmp) {
     result = s21_memcmp(str1, str2, 10);
     ck_assert_int_ne(result, 0);
     // ck_assert_int_eq(result, memcmp(str1, str2, 10));
+
     result = s21_memcmp(str1, str3, strlen(str1));
     ck_assert_int_lt(result, 0);
     ck_assert(result < 0 && memcmp(str1, str3, 8) < 0);
