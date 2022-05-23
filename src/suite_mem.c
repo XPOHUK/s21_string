@@ -6,12 +6,18 @@
 START_TEST(test_memcmp) {
     int result;
     char *str1 = "21school";
-    char *str2 = "21school";
+    char *str2 = "21school ";
     char *str3 = "42school";
 
     result = s21_memcmp(str1, str2, strlen(str1));
     ck_assert_int_eq(result, 0);
     ck_assert_int_eq(result, memcmp(str1, str2, 8));
+    result = s21_memcmp(str1, str2, 9);
+    ck_assert_int_ne(result, 0);
+    ck_assert_int_eq(result, memcmp(str1, str2, 9));
+    result = s21_memcmp(str1, str2, 10);
+    ck_assert_int_ne(result, 0);
+    // ck_assert_int_eq(result, memcmp(str1, str2, 10));
     result = s21_memcmp(str1, str3, strlen(str1));
     ck_assert_int_lt(result, 0);
     ck_assert(result < 0 && memcmp(str1, str3, 8) < 0);
