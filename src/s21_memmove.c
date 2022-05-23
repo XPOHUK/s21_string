@@ -8,12 +8,12 @@ void *s21_memmove(void *dest, const void *src, s21_size_t n) {
     char *d;
     const char *s;
     char *tmp;
-    s21_size_t i;
 
     d = (char *)dest;
     s = (const char *)src;
     tmp = (char *)malloc(sizeof(char) * n);
     if (tmp) {
+        s21_size_t i;
         for (i = 0; i < n; ++i) {
             *(tmp + i) = *(s + i);
         }

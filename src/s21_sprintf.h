@@ -1,5 +1,5 @@
-#ifndef _SRC_S21_SPRINTF_H_
-#define _SRC_S21_SPRINTF_H_
+#ifndef SRC_S21_SPRINTF_H_
+#define SRC_S21_SPRINTF_H_
 
 #include <stdarg.h>
 
@@ -29,4 +29,4 @@ char* _str_to_str(va_list p, fmt_t* fmt);
 char* _itoa(long long int i);
 void _clear_list(fmt_t* fmt);
 
-#endif  // _SRC_S21_SPRINTF_H_
+#endif  // SRC_S21_SPRINTF_H_
