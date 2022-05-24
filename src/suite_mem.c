@@ -10,13 +10,13 @@ START_TEST(test_memcmp) {
     char *str3 = "42school";
 
     ck_assert_int_eq(s21_memcmp(str1, str2, strlen(str1)), memcmp(str1, str2, 8));
-    ck_assert_int_eq(s21_memcmp(str1, str2, 9), memcmp(str1, str2, 9));
+    ck_assert(s21_memcmp(str1, str2, 9) < 0 && memcmp(str1, str2, 9) < 0);
     ck_assert_int_eq(s21_memcmp("", str2, 9), memcmp("", str2, 1));
     result = s21_memcmp(str1, str2, 10);
     ck_assert_int_ne(result, 0);
     // ck_assert_int_eq(result, memcmp(str1, str2, 10));
-    ck_assert_int_eq(s21_memcmp(str1, str3, strlen(str1)), memcmp(str1, str3, 8));
-    ck_assert_int_eq(s21_memcmp(str3, str1, strlen(str1)), memcmp(str3, str1, 8));
+    ck_assert(s21_memcmp(str1, str3, strlen(str1)) < 0 && memcmp(str1, str3, 8) < 0);
+    ck_assert(s21_memcmp(str3, str1, strlen(str1)) > 0 && memcmp(str3, str1, 8) > 0);
     ck_assert_int_eq(s21_memcmp(str1, str3, 0), memcmp(str1, str3, 0));
 }
 END_TEST

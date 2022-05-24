@@ -2,8 +2,8 @@
 
 #include <float.h>
 #include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <wchar.h>
 
 #include "s21_string.h"
@@ -341,19 +341,18 @@ char *_uint_to_str(va_list p, fmt_t *fmt) {
 }
 
 char *_str_to_str(va_list p, fmt_t *fmt) {
-    char* str = S21_NULL;
+    char *str = S21_NULL;
+    int flag = 0;
     if (fmt->length == 'l') {
-        wchar_t *wstr = va_arg(p, wchar_t*);
-        printf("wchar str: %ls\n", wstr);
+        wchar_t *wstr = va_arg(p, wchar_t *);
         // Идея: посимвольно записать
         // Нужна длина этой строки чтобы выделить место
         int j = 0;
-        while (wstr[j] != '\0')
-            j++;
-        printf("length: %d\n", j);
+        while (wstr[j] != '\0') j++;
         str = calloc(j + 1, sizeof(char));
         if (str) {
-            char* strp = str;
+            flag = 1;
+            char *strp = str;
             while (*wstr != '\0') {
                 *strp = *wstr;
                 strp++;
@@ -363,7 +362,6 @@ char *_str_to_str(va_list p, fmt_t *fmt) {
     } else {
         str = va_arg(p, char *);
     }
-    printf("str: %s\n", str);
     char *res = S21_NULL;
     if (!str) {
         res = malloc(sizeof(char) * 7);
@@ -384,6 +382,7 @@ char *_str_to_str(va_list p, fmt_t *fmt) {
         res = (char *)malloc(sizeof(char) * (s21_strlen(str) + 1));
         if (res) res = s21_strcpy(res, str);
     }
+    if (flag) free(str);
     return res;
 }
 
