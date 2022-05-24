@@ -1,7 +1,7 @@
 #include "s21_string.h"
 #include <stdarg.h>
-//    #include <stdio.h>  // Только для тестов в main
-//    #include <string.h> // Только для тестов в main
+#include <stdio.h>   // Только для тестов в main
+#include <string.h>  // Только для тестов в main
 
 struct Spec {
     char type;          // Спецификатор: c, d, i, e, E, f, g, G, o, s, u, x, X, p, n, %
@@ -65,6 +65,11 @@ void parse_spec(char *from, int size, struct Spec *s, int *error) {
     s->str = (char *) malloc ((size + 1) * sizeof(char));
     s21_strncpy(s->str, from, size);
     s->str[size] = '\0';
+    s->type = ' ';
+    s->width = 0;
+    s->length = ' ';
+    s->is_star = 0;
+    s->is_space = 0;
 
     char *this = s->str;
     this++;
@@ -94,8 +99,8 @@ void parse_spec(char *from, int size, struct Spec *s, int *error) {
             *error = 6;
         }
     }
-//        printf("SPEC: %c - %c", s->type, s->length);
-//        printf(" - %d - %d - %d - '%s'\n", (int)s->width, s->is_star, s->is_space, s->str);
+    printf("SPEC: %c - %c", s->type, s->length);
+    printf(" - %d - %d - %d - '%s'\n", (int)s->width, s->is_star, s->is_space, s->str);
     return;
 }
 
@@ -147,6 +152,9 @@ int s21_sscanf(const char *str, const char *format, ...) {
         const char* const_here = here;
         s21_strcpy(here, str);
         int base = 10;
+        printf("=================================================================\n");
+        printf("FORMAT: '%s'\n", format);
+        printf("STRING: '%s'\n", str);
         for (int i = 0; i < spec_count; i++) {
             char *there;
             switch (specs[i].type) {
@@ -159,21 +167,22 @@ int s21_sscanf(const char *str, const char *format, ...) {
                     long _var1 = strtol(here, &there, base);
                     if (here != there) {
                         if (specs[i].length == 'l') {
-                            if (!(specs[i].is_star)) {
+                            if (specs[i].is_star == 0) {
                                 result++;
                                 *(va_arg(args, long *)) = _var1;
                             }
                         } else if (specs[i].length == 'h') {
-                            if (!(specs[i].is_star)) {
+                            if (specs[i].is_star == 0) {
                                 result++;
                                 *(va_arg(args, short *)) = (short) _var1;
                             }
                         } else {
-                            if (!(specs[i].is_star)) {
+                            if (specs[i].is_star == 0) {
                                 result++;
                                 *(va_arg(args, int *)) = (int) _var1;
                             }
                         }
+                        printf("RESULT: %d - %c - %li\n", result, specs[i].type, _var1);
                         here = there;
                     } else { \
                         error = 1;
@@ -187,6 +196,7 @@ int s21_sscanf(const char *str, const char *format, ...) {
                             result++;
                             *(va_arg(args, unsigned long long *)) = _var2;
                         }
+                        printf("RESULT: %d - %c - %lli\n", result, specs[i].type, _var2);
                         here = there;
                     } else {
                         error = 2;
@@ -197,21 +207,22 @@ int s21_sscanf(const char *str, const char *format, ...) {
                     long double _var3 = strtold(here, &there);
                     if (here != there) {
                         if (specs[i].length == 'L') {
-                            if (!(specs[i].is_star)) {
+                            if (specs[i].is_star == 0) {
                                 result++;
                                 *(va_arg(args, long double *)) = _var3;
                             }
                         } else if (specs[i].length == 'l') {
-                            if (!(specs[i].is_star)) {
+                            if (specs[i].is_star == 0) {
                                 result++;
                                 *(va_arg(args, double *)) = _var3;
                             }
                         } else {
-                            if (!(specs[i].is_star)) {
+                            if (specs[i].is_star == 0) {
                                 result++;
                                 *(va_arg(args, float *)) = _var3;
                             }
                         }
+                        printf("RESULT: %d - %c - '%Lf'\n", result, specs[i].type, _var3);
                         here = there;
                     } else {
                         error = 3;
@@ -229,6 +240,7 @@ int s21_sscanf(const char *str, const char *format, ...) {
                             s21_strncpy(there, here, count);
                             result++;
                         }
+                        printf("RESULT: %d - %c - '%s'\n", result, specs[i].type, there);
                         here += count;
                     } else {
                         error = 4;
@@ -249,6 +261,7 @@ int s21_sscanf(const char *str, const char *format, ...) {
                         there[count] = '\0';
                         result++;
                     }
+                    printf("RESULT: %d - %c - '%s'\n", result, specs[i].type, there);
                     here += count;
                     break;
                 }
@@ -284,16 +297,26 @@ int s21_sscanf(const char *str, const char *format, ...) {
 }
 
 //    int main() {
-//        const char fstr[] = "%c %c %c      %c";
-//        const char str[] = "1 a 3   c           ";
-//        char a1 = 0, a2 = 5, b1 = 0, b2 = 5, c1 = 0, c2 = 5, d1 = 0, d2 = 5;
+//        char *fstr = "%x";
+//        char *str = "0x519";
+//        int a1 = 5, a2 = 5;
 //
-//        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+//        int16_t res1 = s21_sscanf(str, fstr, &a1);
+//        int16_t res2 = sscanf(str, fstr, &a2);
 //
-//        int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+//        printf("s21_sscanf: %d\t%d\n", res1, a1);
+//        printf("    sscanf: %d\t%d\n", res2, a2);
 //
-//        printf("s21_sscanf: %d\t%c\t%c\t%c\t%c\n", res1, a1, b1, c1, d1);
-//        printf("    sscanf: %d\t%c\t%c\t%c\t%c\n", res2, a2, b2, c2, d2);
+//    //    const char fstr[] = "%c %c %c      %c";
+//    //    const char str[] = "1 a 3   c           ";
+//    //    char a1 = 0, a2 = 5, b1 = 0, b2 = 5, c1 = 0, c2 = 5, d1 = 0, d2 = 5;
+//    //
+//    //    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+//    //
+//    //    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+//    //
+//    //    printf("s21_sscanf: %d\t%c\t%c\t%c\t%c\n", res1, a1, b1, c1, d1);
+//    //    printf("    sscanf: %d\t%c\t%c\t%c\t%c\n", res2, a2, b2, c2, d2);
 //
 //    //    ck_assert_int_eq(res1, res2);
 //    //    ck_assert_int_eq(a1, a2);
