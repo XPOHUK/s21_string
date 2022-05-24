@@ -132,153 +132,160 @@ int format_to_array(const char *format, struct Spec **specs, int *error) {
 // Считывает форматированный ввод из строки.
 int s21_sscanf(const char *str, const char *format, ...) {
     int result = 0;
-    int error = 0;
-    struct Spec *specs = malloc(s21_strlen(format) / 2 * sizeof(struct Spec));
-    int spec_count = format_to_array(format, &specs, &error);
+    if ((str == S21_NULL) || (format == S21_NULL)) {
+        result = -1;
+    } else {
+        int error = 0;
+        struct Spec *specs = malloc(s21_strlen(format) / 2 * sizeof(struct Spec));
+        int spec_count = format_to_array(format, &specs, &error);
 
-    va_list args;
-    va_start(args, format);
+        va_list args;
+        va_start(args, format);
 
-    char* here = malloc((s21_strlen(str) + 1) * sizeof(char));
-    here[s21_strlen(str)] = '\0';
-    const char* const_here = here;
-    s21_strcpy(here, str);
-    int base = 10;
-    for (int i = 0; i < spec_count; i++) {
-        char *there;
-        switch (specs[i].type) {
-            case 'o': case 'x': case 'X': case 'd': case 'i': case 'u': {
-                if (specs[i].type == 'o') {
-                    base = 8;
-                } else if (specs[i].type == 'x' || specs[i].type == 'X') {
-                    base = 16;
+        char* here = malloc((s21_strlen(str) + 1) * sizeof(char));
+        here[s21_strlen(str)] = '\0';
+        const char* const_here = here;
+        s21_strcpy(here, str);
+        int base = 10;
+        for (int i = 0; i < spec_count; i++) {
+            char *there;
+            switch (specs[i].type) {
+                case 'o': case 'x': case 'X': case 'd': case 'i': case 'u': {
+                    if (specs[i].type == 'o') {
+                        base = 8;
+                    } else if (specs[i].type == 'x' || specs[i].type == 'X') {
+                        base = 16;
+                    }
+                    long _var1 = strtol(here, &there, base);
+                    if (here != there) {
+                        if (specs[i].length == 'l') {
+                            if (!(specs[i].is_star)) {
+                                result++;
+                                *(va_arg(args, long *)) = _var1;
+                            }
+                        } else if (specs[i].length == 'h') {
+                            if (!(specs[i].is_star)) {
+                                result++;
+                                *(va_arg(args, short *)) = (short) _var1;
+                            }
+                        } else {
+                            if (!(specs[i].is_star)) {
+                                result++;
+                                *(va_arg(args, int *)) = (int) _var1;
+                            }
+                        }
+                        here = there;
+                    } else { \
+                        error = 1;
+                    }
+                    break;
                 }
-                long _var1 = strtol(here, &there, base);
-                if (here != there) {
-                    if (specs[i].length == 'l') {
-                        if (!(specs[i].is_star)) {
+                case 'p': {
+                    unsigned long long _var2 = strtoull(here, &there, 16);
+                    if (here != there) {
+                        if (specs[i].is_star == 0) {
                             result++;
-                            *(va_arg(args, long *)) = _var1;
+                            *(va_arg(args, unsigned long long *)) = _var2;
                         }
-                    } else if (specs[i].length == 'h') {
-                        if (!(specs[i].is_star)) {
-                            result++;
-                            *(va_arg(args, short *)) = (short) _var1;
-                        }
+                        here = there;
                     } else {
-                        if (!(specs[i].is_star)) {
-                            result++;
-                            *(va_arg(args, int *)) = (int) _var1;
-                        }
+                        error = 2;
                     }
-                    here = there;
-                } else { \
-                    error = 1;
+                    break;
                 }
-                break;
-            }
-            case 'p': {
-                unsigned long long _var2 = strtoull(here, &there, 16);
-                if (here != there) {
-                    if (specs[i].is_star == 0) {
-                        result++;
-                        *(va_arg(args, unsigned long long *)) = _var2;
-                    }
-                    here = there;
-                } else {
-                    error = 2;
-                }
-                break;
-            }
-            case 'f': case 'F': case 'g': case 'G': case 'e': case 'E': {
-                long double _var3 = strtold(here, &there);
-                if (here != there) {
-                    if (specs[i].length == 'L') {
-                        if (!(specs[i].is_star)) {
-                            result++;
-                            *(va_arg(args, long double *)) = _var3;
+                case 'f': case 'F': case 'g': case 'G': case 'e': case 'E': {
+                    long double _var3 = strtold(here, &there);
+                    if (here != there) {
+                        if (specs[i].length == 'L') {
+                            if (!(specs[i].is_star)) {
+                                result++;
+                                *(va_arg(args, long double *)) = _var3;
+                            }
+                        } else if (specs[i].length == 'l') {
+                            if (!(specs[i].is_star)) {
+                                result++;
+                                *(va_arg(args, double *)) = _var3;
+                            }
+                        } else {
+                            if (!(specs[i].is_star)) {
+                                result++;
+                                *(va_arg(args, float *)) = _var3;
+                            }
                         }
-                    } else if (specs[i].length == 'l') {
-                        if (!(specs[i].is_star)) {
-                            result++;
-                            *(va_arg(args, double *)) = _var3;
-                        }
+                        here = there;
                     } else {
-                        if (!(specs[i].is_star)) {
-                            result++;
-                            *(va_arg(args, float *)) = _var3;
-                        }
+                        error = 3;
                     }
-                    here = there;
-                } else {
-                    error = 3;
+                    break;
                 }
-                break;
-            }
-            case 'c': {
-                s21_size_t count = specs[i].width ? specs[i].width : 1;
-                while (*here == ' ') {
-                    here++;
+                case 'c': {
+                    s21_size_t count = specs[i].width ? specs[i].width : 1;
+                    while (*here == ' ') {
+                        here++;
+                    }
+                    if (s21_strlen(here) >= count) {
+                        if (specs[i].is_star == 0) {
+                            there = va_arg(args, char *);
+                            s21_strncpy(there, here, count);
+                            result++;
+                        }
+                        here += count;
+                    } else {
+                        error = 4;
+                    }
+                    break;
                 }
-                if (s21_strlen(here) >= count) {
+                case 's': {
+                    s21_size_t non_space_count = s21_strcspn(here, " ");
+                    s21_size_t count = 0;
+                    if (non_space_count < specs[i].width) {
+                        count = non_space_count;
+                    } else {
+                        count = specs[i].width;
+                    }
                     if (specs[i].is_star == 0) {
                         there = va_arg(args, char *);
                         s21_strncpy(there, here, count);
+                        there[count] = '\0';
                         result++;
                     }
                     here += count;
-                } else {
-                    error = 4;
+                    break;
                 }
-                break;
-            }
-            case 's': {
-                s21_size_t non_space_count = s21_strcspn(here, " ");
-                s21_size_t count = 0;
-                if (non_space_count < specs[i].width) {
-                    count = non_space_count;
-                } else {
-                    count = specs[i].width;
+                case '\0': {
+                    match_string(&const_here, specs[i].str, specs[i].is_space, &error);
+                    break;
                 }
-                if (specs[i].is_star == 0) {
-                    there = va_arg(args, char *);
-                    s21_strncpy(there, here, count);
-                    there[count] = '\0';
-                    result++;
+                case '%': {
+                    match_string(&const_here, "%", specs[i].is_space, &error);
+                    break;
                 }
-                here += count;
+                case 'n': {
+                    *(va_arg(args, int *)) = here - str;
+                    break;
+                }
+                default: {}
+            }
+            if (error > 0) {
                 break;
             }
-            case '\0': {
-                match_string(&const_here, specs[i].str, specs[i].is_space, &error);
-                break;
-            }
-            case '%': {
-                match_string(&const_here, "%", specs[i].is_space, &error);
-                break;
-            }
-            case 'n': {
-                *(va_arg(args, int *)) = here - str;
-                break;
-            }
-            default: {}
         }
+        va_end(args);
         if (error > 0) {
-            break;
+            result = -1 * error;
         }
-    }
-    va_end(args);
-    if (error > 0) {
-        result = -1 * error;
-    }
 
-    free(specs);
+        for (int i = 0; i < spec_count; i++) {
+            free(specs[i].str);
+        }
+        free(specs);
+    }
     return result;
 }
 
 //    int main() {
-//        char fstr[] = "%c %c %c      %c";
-//        char str[] = "1 a 3   c           ";
+//        const char fstr[] = "%c %c %c      %c";
+//        const char str[] = "1 a 3   c           ";
 //        char a1 = 0, a2 = 5, b1 = 0, b2 = 5, c1 = 0, c2 = 5, d1 = 0, d2 = 5;
 //
 //        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);

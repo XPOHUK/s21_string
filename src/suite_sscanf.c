@@ -7,9 +7,10 @@
 START_TEST(EOF1) {
     char fstr[] = "%d";
     char str[] = "        ";
+    int16_t a1 = 0, a2 = 0;
 
-    int16_t res1 = s21_sscanf(str, fstr, 0);
-    int16_t res2 = sscanf(str, fstr, 0);
+    int16_t res1 = s21_sscanf(str, fstr, a1);
+    int16_t res2 = sscanf(str, fstr, a2);
     ck_assert_int_eq(res1, res2);
 }
 END_TEST
