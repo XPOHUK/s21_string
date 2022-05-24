@@ -186,6 +186,7 @@ START_TEST(test_float) {
     double_test_pair tests_exp_numbers[] = {
         {"%.5f", 1, 3.5f, NULL},
         {"%.5f", 1, -3.5f, NULL},
+
         // {"%.5f", 1, 9999999999999999999999999999.99999999999f*9999999999999999.0f, NULL},
         // {"%.5f", 1, -9999999999999999999999999999.99999999999f*9999999999999999.0f, NULL},
         {"%.5f", 1, 0, NULL},
@@ -291,6 +292,12 @@ START_TEST(test_sprintf) {
 
     ck_assert_int_eq(s21_sprintf(res, "%5c %-5c %-5lc", 'a', 'b', L'c'),
                      sprintf(orig, "%5c %-5c %-5lc", 'a', 'b', L'c'));
+    ck_assert_str_eq(res, orig);
+
+    ck_assert_int_eq(s21_sprintf(res, "%5ls", L"string"),
+                     sprintf(orig, "%5ls", L"string"));
+    s21_sprintf(res, "%5ls", L"string");
+    sprintf(orig, "%5ls", L"string");
     ck_assert_str_eq(res, orig);
 
     ck_assert_int_eq(s21_sprintf(res, "Test string"), sprintf(orig, "Test string"));
