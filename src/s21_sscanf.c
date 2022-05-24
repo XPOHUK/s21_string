@@ -1,12 +1,10 @@
 #include "s21_string.h"
 #include <stdarg.h>
-#include <stdio.h>   // Только для тестов в main
-#include <string.h>  // Только для тестов в main
 
 struct Spec {
     char type;          // Спецификатор: c, d, i, e, E, f, g, G, o, s, u, x, X, p, n, %
     s21_size_t width;   // Ширина
-    char length;        // Длина: h, l, L
+    char length;        // Длина: h, l, L, ll(x)
     int is_star;        // Указана ли звезда после %: 0 - не указана, 1 - указана
     int is_space;       // Состоит ли этот блок только из пробелов
     char *str;          // Указатель на блок строки, относящейся к этому спецификатору
@@ -28,13 +26,14 @@ int string_to_int(char *string) {
                 break;
             } else {
                 result = result * 10 + *string - '0';
+                string++;
             }
         }
     }
     return sign * result;
 }
 
-s21_size_t parse_save_whitespaces(char *from, struct Spec *s) {
+s21_size_t save_spaces(char *from, struct Spec *s) {
     s21_size_t space_count = s21_strspn(from, " ");
     if (space_count) {
         char *str = (char *) malloc((space_count + 1) * sizeof(char));
@@ -91,6 +90,10 @@ void parse_spec(char *from, int size, struct Spec *s, int *error) {
             if (*this == 'h' || *this == 'l' || *this == 'L') {
                 s->length = *this;
                 this++;
+                if (*this == 'l') {
+                    s->length = 'x';
+                    this++;
+                }
             }
         }
         if (s21_strchr("cdieEfgGosuxXpn%\0", *this) != S21_NULL) {
@@ -99,8 +102,6 @@ void parse_spec(char *from, int size, struct Spec *s, int *error) {
             *error = 6;
         }
     }
-    printf("SPEC: %c - %c", s->type, s->length);
-    printf(" - %d - %d - %d - '%s'\n", (int)s->width, s->is_star, s->is_space, s->str);
     return;
 }
 
@@ -110,7 +111,7 @@ int format_to_array(const char *format, struct Spec **specs, int *error) {
     char *next = S21_NULL;
     from = s21_strcpy(from, format);
     while (*from) {
-        int spaces = parse_save_whitespaces(from, *specs + result);
+        int spaces = save_spaces(from, *specs + result);
         if (spaces) {
             from += spaces;
         } else {
@@ -143,7 +144,6 @@ int s21_sscanf(const char *str, const char *format, ...) {
         int error = 0;
         struct Spec *specs = malloc(s21_strlen(format) / 2 * sizeof(struct Spec));
         int spec_count = format_to_array(format, &specs, &error);
-
         va_list args;
         va_start(args, format);
 
@@ -152,11 +152,8 @@ int s21_sscanf(const char *str, const char *format, ...) {
         const char* const_here = here;
         s21_strcpy(here, str);
         int base = 10;
-        printf("=================================================================\n");
-        printf("FORMAT: '%s'\n", format);
-        printf("STRING: '%s'\n", str);
         for (int i = 0; i < spec_count; i++) {
-            char *there;
+            char *there = S21_NULL;
             switch (specs[i].type) {
                 case 'o': case 'x': case 'X': case 'd': case 'i': case 'u': {
                     if (specs[i].type == 'o') {
@@ -166,26 +163,35 @@ int s21_sscanf(const char *str, const char *format, ...) {
                     }
                     long _var1 = strtol(here, &there, base);
                     if (here != there) {
-                        if (specs[i].length == 'l') {
+                        if (specs[i].length == 'x') {
+                            long long _var1 = strtol(here, &there, base);
                             if (specs[i].is_star == 0) {
                                 result++;
-                                *(va_arg(args, long *)) = _var1;
-                            }
-                        } else if (specs[i].length == 'h') {
-                            if (specs[i].is_star == 0) {
-                                result++;
-                                *(va_arg(args, short *)) = (short) _var1;
+                                *(va_arg(args, long long *)) = (long long) _var1;
                             }
                         } else {
-                            if (specs[i].is_star == 0) {
-                                result++;
-                                *(va_arg(args, int *)) = (int) _var1;
+                            if (specs[i].length == 'l') {
+                                if (specs[i].is_star == 0) {
+                                    result++;
+                                    *(va_arg(args, long *)) = _var1;
+                                }
+                            } else if (specs[i].length == 'h') {
+                                if (specs[i].is_star == 0) {
+                                    result++;
+                                    *(va_arg(args, short *)) = (short) _var1;
+                                }
+                            } else {
+                                if (specs[i].is_star == 0) {
+                                    result++;
+                                    *(va_arg(args, int *)) = (int) _var1;
+                                }
                             }
                         }
-                        printf("RESULT: %d - %c - %li\n", result, specs[i].type, _var1);
                         here = there;
-                    } else { \
-                        error = 1;
+                    } else {
+                        if (specs[i].is_star == 0) {
+                            error = 1;
+                        }
                     }
                     break;
                 }
@@ -196,10 +202,11 @@ int s21_sscanf(const char *str, const char *format, ...) {
                             result++;
                             *(va_arg(args, unsigned long long *)) = _var2;
                         }
-                        printf("RESULT: %d - %c - %lli\n", result, specs[i].type, _var2);
                         here = there;
                     } else {
-                        error = 2;
+                        if (specs[i].is_star == 0) {
+                            error = 2;
+                        }
                     }
                     break;
                 }
@@ -222,28 +229,31 @@ int s21_sscanf(const char *str, const char *format, ...) {
                                 *(va_arg(args, float *)) = _var3;
                             }
                         }
-                        printf("RESULT: %d - %c - '%Lf'\n", result, specs[i].type, _var3);
                         here = there;
                     } else {
-                        error = 3;
+                        if (specs[i].is_star == 0) {
+                            error = 3;
+                        }
                     }
                     break;
                 }
                 case 'c': {
                     s21_size_t count = specs[i].width ? specs[i].width : 1;
-                    while (*here == ' ') {
-                        here++;
-                    }
                     if (s21_strlen(here) >= count) {
                         if (specs[i].is_star == 0) {
                             there = va_arg(args, char *);
                             s21_strncpy(there, here, count);
                             result++;
+                            there[count] = '\0';
                         }
-                        printf("RESULT: %d - %c - '%s'\n", result, specs[i].type, there);
                         here += count;
                     } else {
-                        error = 4;
+                        if (specs[i].is_star == 0) {
+                            error = 4;
+                        }
+                    }
+                    while (*here == ' ') {
+                        here++;
                     }
                     break;
                 }
@@ -261,7 +271,6 @@ int s21_sscanf(const char *str, const char *format, ...) {
                         there[count] = '\0';
                         result++;
                     }
-                    printf("RESULT: %d - %c - '%s'\n", result, specs[i].type, there);
                     here += count;
                     break;
                 }
@@ -285,7 +294,7 @@ int s21_sscanf(const char *str, const char *format, ...) {
         }
         va_end(args);
         if (error > 0) {
-            result = -1 * error;
+            result = -1;
         }
 
         for (int i = 0; i < spec_count; i++) {
@@ -295,33 +304,3 @@ int s21_sscanf(const char *str, const char *format, ...) {
     }
     return result;
 }
-
-//    int main() {
-//        char *fstr = "%x";
-//        char *str = "0x519";
-//        int a1 = 5, a2 = 5;
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1);
-//        int16_t res2 = sscanf(str, fstr, &a2);
-//
-//        printf("s21_sscanf: %d\t%d\n", res1, a1);
-//        printf("    sscanf: %d\t%d\n", res2, a2);
-//
-//    //    const char fstr[] = "%c %c %c      %c";
-//    //    const char str[] = "1 a 3   c           ";
-//    //    char a1 = 0, a2 = 5, b1 = 0, b2 = 5, c1 = 0, c2 = 5, d1 = 0, d2 = 5;
-//    //
-//    //    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
-//    //
-//    //    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
-//    //
-//    //    printf("s21_sscanf: %d\t%c\t%c\t%c\t%c\n", res1, a1, b1, c1, d1);
-//    //    printf("    sscanf: %d\t%c\t%c\t%c\t%c\n", res2, a2, b2, c2, d2);
-//
-//    //    ck_assert_int_eq(res1, res2);
-//    //    ck_assert_int_eq(a1, a2);
-//    //    ck_assert_int_eq(b1, b2);
-//    //    ck_assert_int_eq(c1, c2);
-//    //    ck_assert_int_eq(d1, d2);
-//        return 0;
-//    }

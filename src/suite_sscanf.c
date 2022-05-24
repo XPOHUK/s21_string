@@ -38,22 +38,22 @@ START_TEST(EOF3) {
 }
 END_TEST
 
-//    START_TEST(only_chars1) {
-//        char fstr[] = "%c %c %c %c";
-//        char str[] = "   a     b c d";
-//        int16_t a1 = 0, a2 = 5, b1 = 0, b2 = 5, c1 = 0, c2 = 5, d1 = 0, d2 = 5;
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
-//
-//        int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//        ck_assert_int_eq(b1, b2);
-//        ck_assert_int_eq(c1, c2);
-//        ck_assert_int_eq(d1, d2);
-//    }
-//    END_TEST
+START_TEST(only_chars1) {
+    char fstr[] = "%c %c %c %c";
+    char str[] = "   a     b c d";
+    int16_t a1 = 0, a2 = 5, b1 = 0, b2 = 5, c1 = 0, c2 = 5, d1 = 0, d2 = 5;
+
+    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+
+    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+    ck_assert_int_eq(d1, d2);
+}
+END_TEST
 
 START_TEST(only_chars2) {
     char fstr[] = "%c%c%c%c";
@@ -88,22 +88,22 @@ START_TEST(only_chars3) {
 }
 END_TEST
 
-//    START_TEST(only_chars4) {
-//        char fstr[] = "%c %c %c %c";
-//        char str[] = "   000 0    ";
-//        int16_t a1 = 0, a2 = 5, b1 = 0, b2 = 5, c1 = 0, c2 = 5, d1 = 0, d2 = 5;
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
-//
-//        int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//        ck_assert_int_eq(b1, b2);
-//        ck_assert_int_eq(c1, c2);
-//        ck_assert_int_eq(d1, d2);
-//    }
-//    END_TEST
+START_TEST(only_chars4) {
+    char fstr[] = "%c %c %c %c";
+    char str[] = "   000 0    ";
+    int16_t a1 = 0, a2 = 5, b1 = 0, b2 = 5, c1 = 0, c2 = 5, d1 = 0, d2 = 5;
+
+    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+
+    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+    ck_assert_int_eq(d1, d2);
+}
+END_TEST
 
 START_TEST(only_chars5) {
     char fstr[] = "%c %c %c %c";
@@ -186,21 +186,21 @@ START_TEST(chars_flags1) {
 }
 END_TEST
 
-//    START_TEST(chars_flags2) {
-//        char fstr[] = "%1c %c %c %0c";
-//        char str[] = "z *'@";
-//        int16_t a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
-//        int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//        ck_assert_int_eq(b1, b2);
-//        ck_assert_int_eq(c1, c2);
-//        ck_assert_int_eq(d1, d2);
-//    }
-//    END_TEST
+START_TEST(chars_flags2) {
+    char fstr[] = "%1c %c %c %0c";
+    char str[] = "z *'@";
+    int16_t a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
+
+    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+    ck_assert_int_eq(d1, d2);
+}
+END_TEST
 
 START_TEST(chars_flags3) {
     char fstr[] = "%c %c %c %c";
@@ -247,18 +247,18 @@ START_TEST(chars_flags5) {
 }
 END_TEST
 
-//    START_TEST(chars_aster1) {
-//        char fstr[] = "%*c%*c%*c%*c";
-//        char str[] = "   c ";
-//        int16_t a1 = 0, a2 = 0;
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1);
-//        int16_t res2 = sscanf(str, fstr, &a2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//    }
-//    END_TEST
+START_TEST(chars_aster1) {
+    char fstr[] = "%*c%*c%*c%*c";
+    char str[] = "   c ";
+    int16_t a1 = 0, a2 = 0;
+
+    int16_t res1 = s21_sscanf(str, fstr, &a1);
+    int16_t res2 = sscanf(str, fstr, &a2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+}
+END_TEST
 
 START_TEST(chars_aster2) {
     char fstr[] = "%*c%*c%*c%c";
@@ -305,21 +305,21 @@ START_TEST(only_ints2) {
 }
 END_TEST
 
-//    START_TEST(only_ints3) {
-//        long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
-//        const char str[] = "1337 21 5008 300004";
-//        const char fstr[] = "%lld %lld %lld %lld";
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
-//        int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//        ck_assert_int_eq(b1, b2);
-//        ck_assert_int_eq(c1, c2);
-//        ck_assert_int_eq(d1, d2);
-//    }
-//    END_TEST
+START_TEST(only_ints3) {
+    long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
+    const char str[] = "1337 21 5008 300004";
+    const char fstr[] = "%lld %lld %lld %lld";
+
+    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+    ck_assert_int_eq(d1, d2);
+}
+END_TEST
 
 //    START_TEST(ints_nwidth1) {
 //        long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
@@ -463,7 +463,7 @@ END_TEST
 //        ck_assert_int_eq(d1, d2);
 //    }
 //    END_TEST
-//
+
 //    START_TEST(signed_ints2) {
 //        long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
 //        const char str[] = "-1337 +1 -1 -1";
@@ -495,72 +495,72 @@ END_TEST
 //        ck_assert_int_eq(d1, d2);
 //    }
 //    END_TEST
-//
-//    START_TEST(signed_ints4) {
-//        long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
-//        const char str[] = "1 01 10 0";
-//        const char fstr[] = "%lld %lld %lld %lld";
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
-//        int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//        ck_assert_int_eq(b1, b2);
-//        ck_assert_int_eq(c1, c2);
-//        ck_assert_int_eq(d1, d2);
-//    }
-//    END_TEST
 
-//    START_TEST(spec_i_int1) {
-//        long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
-//        const char str[] = "300 500 -600 +700";
-//        const char fstr[] = "%lli %lli %lli %lli";
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
-//        int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//        ck_assert_int_eq(b1, b2);
-//        ck_assert_int_eq(c1, c2);
-//        ck_assert_int_eq(d1, d2);
-//    }
-//    END_TEST
-//
-//    START_TEST(spec_i_int2) {
-//        long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
-//        const char str[] = "300500-600+700 111";
-//        const char fstr[] = "%lli %lld %lld %lli";
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
-//        int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//        ck_assert_int_eq(b1, b2);
-//        ck_assert_int_eq(c1, c2);
-//        ck_assert_int_eq(d1, d2);
-//    }
-//    END_TEST
-//
-//    START_TEST(spec_i_int3) {
-//        long long a1 = 0, a2 = 0, c1 = 0, c2 = 0;
-//        char b1 = 0, b2 = 0, d1 = 0, d2 = 0;
-//        const char str[] = "300500-600+700+400";
-//        const char fstr[] = "%lli%c%lli%c";
-//
-//        int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
-//        int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//        ck_assert_int_eq(b1, b2);
-//        ck_assert_int_eq(c1, c2);
-//        ck_assert_int_eq(d1, d2);
-//    }
-//    END_TEST
-//
+START_TEST(signed_ints4) {
+    long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
+    const char str[] = "1 01 10 0";
+    const char fstr[] = "%lld %lld %lld %lld";
+
+    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+    ck_assert_int_eq(d1, d2);
+}
+END_TEST
+
+START_TEST(spec_i_int1) {
+    long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
+    const char str[] = "300 500 -600 +700";
+    const char fstr[] = "%lli %lli %lli %lli";
+
+    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+    ck_assert_int_eq(d1, d2);
+}
+END_TEST
+
+START_TEST(spec_i_int2) {
+    long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
+    const char str[] = "300500-600+700 111";
+    const char fstr[] = "%lli %lld %lld %lli";
+
+    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+    ck_assert_int_eq(d1, d2);
+}
+END_TEST
+
+START_TEST(spec_i_int3) {
+    long long a1 = 0, a2 = 0, c1 = 0, c2 = 0;
+    char b1 = 0, b2 = 0, d1 = 0, d2 = 0;
+    const char str[] = "300500-600+700+400";
+    const char fstr[] = "%lli%c%lli%c";
+
+    int16_t res1 = s21_sscanf(str, fstr, &a1, &b1, &c1, &d1);
+    int16_t res2 = sscanf(str, fstr, &a2, &b2, &c2, &d2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+    ck_assert_int_eq(d1, d2);
+}
+END_TEST
+
 //    START_TEST(spec_i_int4) {
 //        long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
 //        const char str[] = "  55555 f f f5555555 ddd   4    3    1 ";
@@ -576,7 +576,7 @@ END_TEST
 //        ck_assert_int_eq(d1, d2);
 //    }
 //    END_TEST
-//
+
 //    START_TEST(spec_i_hex1) {
 //        long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
 //        const char str[] = "0xFFF 0xA123123 0x123123 0x0";
@@ -668,7 +668,7 @@ END_TEST
 //        ck_assert_str_eq(s4, s8);
 //    }
 //    END_TEST
-
+//
 //    START_TEST(strings2) {
 //        char s1[BUFF_SIZE] = {'\0'};
 //        char s2[BUFF_SIZE] = {'\0'};
@@ -694,59 +694,59 @@ END_TEST
 //        ck_assert_str_eq(s4, s8);
 //    }
 //    END_TEST
-//
-//    START_TEST(strings3) {
-//        char s1[BUFF_SIZE] = {'\0'};
-//        char s2[BUFF_SIZE] = {'\0'};
-//        char s3[BUFF_SIZE] = {'\0'};
-//        char s4[BUFF_SIZE] = {'\0'};
-//
-//        char s5[BUFF_SIZE] = {'\0'};
-//        char s6[BUFF_SIZE] = {'\0'};
-//        char s7[BUFF_SIZE] = {'\0'};
-//        char s8[BUFF_SIZE] = {'\0'};
-//
-//        const char str[] = "aboba\tkepaboba floppa shleppa koooppa ap p p p p";
-//        const char fstr[] = "%*s%*s%*s%*s";
-//
-//        int16_t res1 = s21_sscanf(str, fstr);
-//        int16_t res2 = sscanf(str, fstr);
-//
-//        ck_assert_int_eq(res1, res2);
-//
-//        ck_assert_str_eq(s1, s5);
-//        ck_assert_str_eq(s2, s6);
-//        ck_assert_str_eq(s3, s7);
-//        ck_assert_str_eq(s4, s8);
-//    }
-//    END_TEST
 
-//    START_TEST(strings4) {
-//        char s1[BUFF_SIZE] = {'\0'};
-//        char s2[BUFF_SIZE] = {'\0'};
-//        char s3[BUFF_SIZE] = {'\0'};
-//        char s4[BUFF_SIZE] = {'\0'};
-//
-//        char s5[BUFF_SIZE] = {'\0'};
-//        char s6[BUFF_SIZE] = {'\0'};
-//        char s7[BUFF_SIZE] = {'\0'};
-//        char s8[BUFF_SIZE] = {'\0'};
-//
-//        const char str[] = "aboba\tshlepa\tasdfasdf\tasdfasdf";
-//        const char fstr[] = "%1s%1s%1s%1s";
-//
-//        int16_t res1 = s21_sscanf(str, fstr, s1, s2, s3, s4);
-//        int16_t res2 = sscanf(str, fstr, s5, s6, s7, s8);
-//
-//        ck_assert_int_eq(res1, res2);
-//
-//        ck_assert_str_eq(s1, s5);
-//        ck_assert_str_eq(s2, s6);
-//        ck_assert_str_eq(s3, s7);
-//        ck_assert_str_eq(s4, s8);
-//    }
-//    END_TEST
-//
+START_TEST(strings3) {
+    char s1[BUFF_SIZE] = {'\0'};
+    char s2[BUFF_SIZE] = {'\0'};
+    char s3[BUFF_SIZE] = {'\0'};
+    char s4[BUFF_SIZE] = {'\0'};
+
+    char s5[BUFF_SIZE] = {'\0'};
+    char s6[BUFF_SIZE] = {'\0'};
+    char s7[BUFF_SIZE] = {'\0'};
+    char s8[BUFF_SIZE] = {'\0'};
+
+    const char str[] = "aboba\tkepaboba floppa shleppa koooppa ap p p p p";
+    const char fstr[] = "%*s%*s%*s%*s";
+
+    int16_t res1 = s21_sscanf(str, fstr);
+    int16_t res2 = sscanf(str, fstr);
+
+    ck_assert_int_eq(res1, res2);
+
+    ck_assert_str_eq(s1, s5);
+    ck_assert_str_eq(s2, s6);
+    ck_assert_str_eq(s3, s7);
+    ck_assert_str_eq(s4, s8);
+}
+END_TEST
+
+START_TEST(strings4) {
+    char s1[BUFF_SIZE] = {'\0'};
+    char s2[BUFF_SIZE] = {'\0'};
+    char s3[BUFF_SIZE] = {'\0'};
+    char s4[BUFF_SIZE] = {'\0'};
+
+    char s5[BUFF_SIZE] = {'\0'};
+    char s6[BUFF_SIZE] = {'\0'};
+    char s7[BUFF_SIZE] = {'\0'};
+    char s8[BUFF_SIZE] = {'\0'};
+
+    const char str[] = "aboba\tshlepa\tasdfasdf\tasdfasdf";
+    const char fstr[] = "%1s%1s%1s%1s";
+
+    int16_t res1 = s21_sscanf(str, fstr, s1, s2, s3, s4);
+    int16_t res2 = sscanf(str, fstr, s5, s6, s7, s8);
+
+    ck_assert_int_eq(res1, res2);
+
+    ck_assert_str_eq(s1, s5);
+    ck_assert_str_eq(s2, s6);
+    ck_assert_str_eq(s3, s7);
+    ck_assert_str_eq(s4, s8);
+}
+END_TEST
+
 //    START_TEST(strings5) {
 //        char s1[BUFF_SIZE] = {'\0'};
 //        char s2[BUFF_SIZE] = {'\0'};
@@ -864,37 +864,37 @@ END_TEST
 //    }
 //    END_TEST
 
-//    START_TEST(strings_mixed3) {
-//        char s1[BUFF_SIZE] = {'\0'};
-//        char s2[BUFF_SIZE] = {'\0'};
-//        char s3[BUFF_SIZE] = {'\0'};
-//        char s4[BUFF_SIZE] = {'\0'};
-//
-//        char s5[BUFF_SIZE] = {'\0'};
-//        char s6[BUFF_SIZE] = {'\0'};
-//        char s7[BUFF_SIZE] = {'\0'};
-//        char s8[BUFF_SIZE] = {'\0'};
-//
-//        long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
-//
-//        const char str[] = "Aboba 123 Floppa -3 Keppa 4444Shleppa 333Anuroba 3";
-//        const char fstr[] = "%s%ld%s%d%s%d%s";
-//
-//        int16_t res1 = s21_sscanf(str, fstr, s1, &a1, s2, &b1, s3, &c1, s4, &d1);
-//        int16_t res2 = s21_sscanf(str, fstr, s5, &a2, s6, &b2, s7, &c2, s8, &d2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//        ck_assert_int_eq(b1, b2);
-//        ck_assert_int_eq(c1, c2);
-//        ck_assert_int_eq(d1, d2);
-//
-//        ck_assert_str_eq(s1, s5);
-//        ck_assert_str_eq(s2, s6);
-//        ck_assert_str_eq(s3, s7);
-//        ck_assert_str_eq(s4, s8);
-//    }
-//    END_TEST
+START_TEST(strings_mixed3) {
+    char s1[BUFF_SIZE] = {'\0'};
+    char s2[BUFF_SIZE] = {'\0'};
+    char s3[BUFF_SIZE] = {'\0'};
+    char s4[BUFF_SIZE] = {'\0'};
+
+    char s5[BUFF_SIZE] = {'\0'};
+    char s6[BUFF_SIZE] = {'\0'};
+    char s7[BUFF_SIZE] = {'\0'};
+    char s8[BUFF_SIZE] = {'\0'};
+
+    long long a1 = 0, a2 = 0, b1 = 0, b2 = 0, c1 = 0, c2 = 0, d1 = 0, d2 = 0;
+
+    const char str[] = "Aboba 123 Floppa -3 Keppa 4444Shleppa 333Anuroba 3";
+    const char fstr[] = "%s%ld%s%d%s%d%s";
+
+    int16_t res1 = s21_sscanf(str, fstr, s1, &a1, s2, &b1, s3, &c1, s4, &d1);
+    int16_t res2 = s21_sscanf(str, fstr, s5, &a2, s6, &b2, s7, &c2, s8, &d2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+    ck_assert_int_eq(b1, b2);
+    ck_assert_int_eq(c1, c2);
+    ck_assert_int_eq(d1, d2);
+
+    ck_assert_str_eq(s1, s5);
+    ck_assert_str_eq(s2, s6);
+    ck_assert_str_eq(s3, s7);
+    ck_assert_str_eq(s4, s8);
+}
+END_TEST
 
 /* [%n] */
 
@@ -1564,17 +1564,17 @@ START_TEST(lower_hex_long) {
 }
 END_TEST
 
-//    START_TEST(lower_hex_longlong) {
-//        unsigned long long int a1, a2;
-//        const char str[] = "faaaaaaaaaaaaf";
-//        const char fstr[] = "%llx";
-//        uint16_t res1 = s21_sscanf(str, fstr, &a1);
-//        uint16_t res2 = sscanf(str, fstr, &a2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_uint_eq(a1, a2);
-//    }
-//    END_TEST
+START_TEST(lower_hex_longlong) {
+    unsigned long long int a1, a2;
+    const char str[] = "faaaaaaaaaaaaf";
+    const char fstr[] = "%llx";
+    uint16_t res1 = s21_sscanf(str, fstr, &a1);
+    uint16_t res2 = sscanf(str, fstr, &a2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_uint_eq(a1, a2);
+}
+END_TEST
 
 START_TEST(lower_hex_2x) {
     uint32_t a1, a2;
@@ -1763,17 +1763,17 @@ START_TEST(octal_long) {
 }
 END_TEST
 
-//    START_TEST(octal_longlong) {
-//        unsigned long long int a1, a2;
-//        const char str[] = "12356226137";
-//        const char fstr[] = "%llo";
-//        uint16_t res1 = s21_sscanf(str, fstr, &a1);
-//        uint16_t res2 = sscanf(str, fstr, &a2);
-//
-//        ck_assert_int_eq(res1, res2);
-//        ck_assert_int_eq(a1, a2);
-//    }
-//    END_TEST
+START_TEST(octal_longlong) {
+    unsigned long long int a1, a2;
+    const char str[] = "12356226137";
+    const char fstr[] = "%llo";
+    uint16_t res1 = s21_sscanf(str, fstr, &a1);
+    uint16_t res2 = sscanf(str, fstr, &a2);
+
+    ck_assert_int_eq(res1, res2);
+    ck_assert_int_eq(a1, a2);
+}
+END_TEST
 
 START_TEST(octal_2x) {
     uint32_t a1, a2;
@@ -1986,23 +1986,22 @@ Suite *make_sscanf_suite(void) {
     // [Precision] - Any precision flag immediately stops sscanf (error)
     // [Length] - Does nothing
 
-//    tcase_add_test(tc, only_chars1);
+    tcase_add_test(tc, only_chars1);
     tcase_add_test(tc, only_chars2);
     tcase_add_test(tc, only_chars3);
-//    tcase_add_test(tc, only_chars4);
+    tcase_add_test(tc, only_chars4);
     tcase_add_test(tc, only_chars5);
     tcase_add_test(tc, special_symbols_as_chars1);
     tcase_add_test(tc, special_symbols_as_chars2);
     tcase_add_test(tc, special_symbols_as_chars3);
 
     tcase_add_test(tc, chars_flags1);  // Precision flags lead to fail
-//    tcase_add_test(tc, chars_flags2);  // Width flags do nothing (if <= 1)
-    tcase_add_test(
-        tc, chars_flags3);             // Demonstrates how (*) works. * - ignore the char
+    tcase_add_test(tc, chars_flags2);  // Width flags do nothing (if <= 1)
+    tcase_add_test(tc, chars_flags3);  // Demonstrates how (*) works. * - ignore the char
     tcase_add_test(tc, chars_flags4);  // Length flags do nothing
     tcase_add_test(tc, chars_flags5);  // * flags - ignores char
     // Test cases specifically for (%*c), as this is very important concept
-//    tcase_add_test(tc, chars_aster1);
+    tcase_add_test(tc, chars_aster1);
     tcase_add_test(tc, chars_aster2);
 
     // [%d]/[%i]
@@ -2012,31 +2011,31 @@ Suite *make_sscanf_suite(void) {
     // Length (h, l, ll)
     tcase_add_test(tc, only_ints1);
     tcase_add_test(tc, only_ints2);
-//    tcase_add_test(tc, only_ints3);
-    // // Width (N)
+    tcase_add_test(tc, only_ints3);
+    // Width (N)
 //    tcase_add_test(tc, ints_nwidth1);
 //    tcase_add_test(tc, ints_nwidth2);
 //    tcase_add_test(tc, ints_nwidth3);
 //    tcase_add_test(tc, ints_nwidth4);
-    // // Width (*)
+    // Width (*)
 //    tcase_add_test(tc, ints_astwidth1);
 //    tcase_add_test(tc, ints_astwidth2);
 //    tcase_add_test(tc, ints_astwidth3);
 //    tcase_add_test(tc, ints_astwidth4);
-    // // Negative & positive ints
+    // Negative & positive ints
 //    tcase_add_test(tc, signed_ints1);
 //    tcase_add_test(tc, signed_ints2);
 //    tcase_add_test(tc, signed_ints3);
-//    tcase_add_test(tc, signed_ints4);
+    tcase_add_test(tc, signed_ints4);
 
-    // // [%i] Specifier. It may be INT, OCT, HEX
+    // [%i] Specifier. It may be INT, OCT, HEX
 
-//    tcase_add_test(tc, spec_i_int1);
-//    tcase_add_test(tc, spec_i_int2);
+    tcase_add_test(tc, spec_i_int1);
+    tcase_add_test(tc, spec_i_int2);
     // // Mixed with chars & ints
-//    tcase_add_test(tc, spec_i_int3);
+    tcase_add_test(tc, spec_i_int3);
 //    tcase_add_test(tc, spec_i_int4);
-//
+
 //    tcase_add_test(tc, spec_i_oct1);
 //    tcase_add_test(tc, spec_i_oct2);
 //    tcase_add_test(tc, spec_i_hex1);
@@ -2050,8 +2049,8 @@ Suite *make_sscanf_suite(void) {
 
 //    tcase_add_test(tc, strings1);
 //    tcase_add_test(tc, strings2);
-//    tcase_add_test(tc, strings3);
-//    tcase_add_test(tc, strings4);
+    tcase_add_test(tc, strings3);
+    tcase_add_test(tc, strings4);
 //    tcase_add_test(tc, strings5);
 //    tcase_add_test(tc, strings6);
 //    tcase_add_test(tc, uint1);
@@ -2062,7 +2061,7 @@ Suite *make_sscanf_suite(void) {
 //    tcase_add_test(tc, uint6);
 //    tcase_add_test(tc, strings_mixed1);
 //    tcase_add_test(tc, strings_mixed2);
-//    tcase_add_test(tc, strings_mixed3);
+    tcase_add_test(tc, strings_mixed3);
 
     // [%f] [%g] [%G]
     // Width: (N) - parses N chars, (*) - skip string
@@ -2121,7 +2120,7 @@ Suite *make_sscanf_suite(void) {
     tcase_add_test(tc, lower_hex_spaces_tabs_sns);
     tcase_add_test(tc, lower_hex_short);
     tcase_add_test(tc, lower_hex_long);
-//    tcase_add_test(tc, lower_hex_longlong);
+    tcase_add_test(tc, lower_hex_longlong);
     tcase_add_test(tc, lower_hex_2x);
     tcase_add_test(tc, lower_hex_star);
 //    tcase_add_test(tc, lower_hex_nohex);
@@ -2138,7 +2137,7 @@ Suite *make_sscanf_suite(void) {
     tcase_add_test(tc, octal_spaces_tabs_sns);
     tcase_add_test(tc, octal_short);
     tcase_add_test(tc, octal_long);
-//    tcase_add_test(tc, octal_longlong);
+    tcase_add_test(tc, octal_longlong);
     tcase_add_test(tc, octal_2x);
     tcase_add_test(tc, octal_star);
 //    tcase_add_test(tc, octal_nohex);
