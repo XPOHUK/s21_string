@@ -3,6 +3,7 @@
 #include <float.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <wchar.h>
 
 #include "s21_string.h"
@@ -340,7 +341,29 @@ char *_uint_to_str(va_list p, fmt_t *fmt) {
 }
 
 char *_str_to_str(va_list p, fmt_t *fmt) {
-    char *str = va_arg(p, char *);
+    char* str = S21_NULL;
+    if (fmt->length == 'l') {
+        wchar_t *wstr = va_arg(p, wchar_t*);
+        printf("wchar str: %ls\n", wstr);
+        // Идея: посимвольно записать
+        // Нужна длина этой строки чтобы выделить место
+        int j = 0;
+        while (wstr[j] != '\0')
+            j++;
+        printf("length: %d\n", j);
+        str = calloc(j + 1, sizeof(char));
+        if (str) {
+            char* strp = str;
+            while (*wstr != '\0') {
+                *strp = *wstr;
+                strp++;
+                wstr++;
+            }
+        }
+    } else {
+        str = va_arg(p, char *);
+    }
+    printf("str: %s\n", str);
     char *res = S21_NULL;
     if (!str) {
         res = malloc(sizeof(char) * 7);
